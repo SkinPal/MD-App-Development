@@ -19,5 +19,6 @@
     <string name="title_product">Product</string>
     <string name="title_account">Account</string>
     <string name="title_reminder">Reminder</string>
+    <string name="fab_description">Tombol untuk membuka kamera</string>
     <string name="empty">" "</string>
 </resources>
