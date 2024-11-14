@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomFAB" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Custom.FAB</item>
+        <item name="backgroundTint">@color/on_primary_container</item>
+    </style>
+
+    <!-- Define the custom shape -->
+    <style name="ShapeAppearance.Custom.FAB" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">50%</item> <!-- This makes it a circular FAB -->
+    </style>
+</resources>

@@ -43,9 +43,10 @@
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/navbar"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="30dp"
-            app:fabCradleRoundedCornerRadius="20dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="20dp"
+            app:fabCradleMargin="0dp"
+            app:fabCradleRoundedCornerRadius="5dp"
             app:fabAlignmentMode="center"
             app:fabAnchorMode="cradle">
 
@@ -67,9 +68,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:clickable="true"
+            android:focusable="true"
             android:scaleType="center"
             android:src="@drawable/icon_camera"
             app:layout_anchor="@+id/navbar"
+            style="@style/CustomFAB"
+            app:fabSize="auto"
             app:layout_anchorGravity="center"
             tools:ignore="ContentDescription" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
