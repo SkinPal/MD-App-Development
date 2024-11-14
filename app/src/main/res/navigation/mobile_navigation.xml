@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.capstone.skinpal.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_product"
+            app:destination="@id/navigation_product" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_empty"
+            app:destination="@id/navigation_empty" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_reminder"
+            app:destination="@id/navigation_reminder" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_account"
+            app:destination="@id/navigation_account" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_product"
+        android:name="com.capstone.skinpal.ui.product.ProductFragment"
+        android:label="@string/title_product"
+        tools:layout="@layout/fragment_product" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_empty" >
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_reminder"
+        android:name="com.capstone.skinpal.ui.reminder.ReminderFragment"
+        android:label="@string/title_reminder"
+        tools:layout="@layout/fragment_account" >
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.capstone.skinpal.ui.setting.AccountFragment"
+        android:label="@string/title_account"
+        tools:layout="@layout/fragment_account" >
+    </fragment>
+</navigation>

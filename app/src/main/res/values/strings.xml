@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SkinPal</string>
+
+    <string name="title_home">Home</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="title_login_page">Login</string>
+    <string name="message_login_page">Fill your data</string>
+    <string name="email">Email</string>
+    <string name="email_error">Enter a valid email</string>
+    <string name="fill_email">Enter your email</string>
+    <string name="password_setting">Password must have at least 8 character</string>
+    <string name="fill_password">Enter your password</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="title_register_page">Register</string>
+    <string name="register">Register</string>
+    <string name="fill_name">Enter your name</string>
+    <string name="name">Name</string>
+    <string name="title_product">Product</string>
+    <string name="title_account">Account</string>
+    <string name="title_reminder">Reminder</string>
+    <string name="empty">" "</string>
+</resources>
