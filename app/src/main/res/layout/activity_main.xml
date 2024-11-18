@@ -59,6 +59,7 @@
             style="@style/CustomFAB"
             app:fabSize="auto"
             app:layout_anchorGravity="center"
+            android:contentDescription="@string/fab_description"
             tools:ignore="ContentDescription" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
