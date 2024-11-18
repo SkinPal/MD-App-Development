@@ -20,4 +20,8 @@
     <string name="title_account">Account</string>
     <string name="title_reminder">Reminder</string>
     <string name="empty">" "</string>
+    <string name="no_item_found">No item found.</string>
+    <string name="title_product2">Product</string>
+    <string name="product_name">Product</string>
+    <string name="greetings">Get ready to start your beauty journey with us!</string>
 </resources>

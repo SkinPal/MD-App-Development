@@ -25,19 +25,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolbar = findViewById<Toolbar>(R.id.my_toolbar)
-        setSupportActionBar(toolbar)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener {
-            onBackPressed()
-        }
-
-        supportActionBar?.apply {
-            title = "Home"
-            setDisplayHomeAsUpEnabled(true)
-        }
-
         if (!isConnectedToInternet()) {
             Toast.makeText(this, getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show()
         }
@@ -52,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_product, R.id.navigation_account, R.id.navigation_reminder
             )
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+
         navView.setupWithNavController(navController)
     }
 

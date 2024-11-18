@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -46,7 +47,16 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.room.ktx)
+    implementation(libs.okhttp)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.android.async.http    )
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.legacy.support.v4)
+    ksp(libs.room.compiler)
     implementation(libs.androidxFragmentKtx)
     implementation (libs.material3)
     implementation(libs.androidx.activity.ktx)
