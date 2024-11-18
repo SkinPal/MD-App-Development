@@ -8,8 +8,6 @@
     <style name="Theme.SkinPal" parent="Base.Theme.SkinPal">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorOnSecondary">@color/on_primary</item>
         <item name="colorContainer">@color/primary_container</item>
         <item name="colorOnSecondaryContainer">@color/primary</item>
         <item name="android:textSize">18sp</item>

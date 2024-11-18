@@ -11,12 +11,11 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="180dp"
-        android:layout_height="146dp"
+        android:layout_width="175dp"
+        android:layout_height="79dp"
         android:layout_marginVertical="20dp"
         android:padding="12dp"
-        android:src="@drawable/logo_white"
-        android:textColor="@color/primary"
+        android:src="@drawable/logo"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/frame_layout"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,39 +28,101 @@
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
         android:background="@drawable/home_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="-47dp" >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_item_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/logo"
-                android:text="Hello, User!"
-                android:textColor="@color/primary"/>
-            <TextView
-                android:id="@+id/tv_greetings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/logo"
-                android:text="@string/greetings"
-                android:textColor="@color/primary"/>
-        </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent" >
 
 
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/profile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/icon_person"
+        android:background="@drawable/round_bg"
+        app:layout_constraintTop_toBottomOf="@id/logo"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@id/profile"
+        app:layout_constraintTop_toTopOf="@id/profile"
+        android:text="@string/greeting"
+        android:textColor="@color/dark_red"/>
+
+    <TextView
+        android:id="@+id/tv_greetings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/greetings"
+        android:textColor="@color/dark_red"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@id/profile"
+        app:layout_constraintTop_toBottomOf="@id/tv_name" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_greetings"
+        app:layout_constraintBottom_toTopOf="@id/scan_box"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scan_box"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginVertical="30dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_height="100dp"
+        android:background="@drawable/square"
+        app:layout_constraintTop_toBottomOf="@id/calendarView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_check_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="10dp"
+            android:textSize="13sp"
+            android:text="@string/skin_check" />
+
+        <TextView
+            android:id="@+id/tv_check_text"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_check_title"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="10dp"
+            android:textAlignment="gravity"
+            android:textSize="13sp"
+            android:text="@string/skin_check_text" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:padding="0dp"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_check_text"
+            app:layout_constraintTop_toTopOf="@id/tv_check_text"
+            android:text="@string/scan_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

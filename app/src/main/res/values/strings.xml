@@ -24,4 +24,9 @@
     <string name="title_product2">Product</string>
     <string name="product_name">Product</string>
     <string name="greetings">Get ready to start your beauty journey with us!</string>
+    <string name="skin_check">Get to Know Your Skin Type</string>
+    <string name="skin_check_text">Do you know what your skin type? Scan your face and get the results to start using the right products.</string>
+    <string name="reminder">Schedule</string>
+    <string name="greeting">Hello, User!</string>
+    <string name="scan_button">Scan</string>
 </resources>
