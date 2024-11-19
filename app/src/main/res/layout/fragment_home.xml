@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="80dp"
     android:fitsSystemWindows="true"
     android:background="@color/primary"
     tools:context=".ui.product.ProductFragment">
@@ -13,116 +14,194 @@
         android:id="@+id/logo"
         android:layout_width="175dp"
         android:layout_height="79dp"
-        android:layout_marginVertical="20dp"
         android:padding="12dp"
         android:src="@drawable/logo"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/frame_layout"
+        app:layout_constraintBottom_toTopOf="@id/sv_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.484" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
+    <ScrollView
+        android:id="@+id/sv_content"
+        app:layout_constraintTop_toBottomOf="@id/logo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="80dp"
-        android:background="@drawable/home_layout"
-        app:layout_constraintBottom_toBottomOf="parent" >
+        android:layout_height="wrap_content">
 
-
-    </FrameLayout>
-
-    <ImageView
-        android:id="@+id/profile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/icon_person"
-        android:background="@drawable/round_bg"
-        app:layout_constraintTop_toBottomOf="@id/logo"/>
-
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="15dp"
-        app:layout_constraintStart_toEndOf="@id/profile"
-        app:layout_constraintTop_toTopOf="@id/profile"
-        android:text="@string/greeting"
-        android:textColor="@color/dark_red"/>
-
-    <TextView
-        android:id="@+id/tv_greetings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="@string/greetings"
-        android:textColor="@color/dark_red"
-        android:textSize="13sp"
-        app:layout_constraintStart_toEndOf="@id/profile"
-        app:layout_constraintTop_toBottomOf="@id/tv_name" />
-
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_greetings"
-        app:layout_constraintBottom_toTopOf="@id/scan_box"/>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/scan_box"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_marginTop="60dp"
-        android:layout_marginVertical="30dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_height="100dp"
-        android:background="@drawable/square"
-        app:layout_constraintTop_toBottomOf="@id/calendarView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/logo"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
+            android:background="@drawable/home_layout">
+        <ImageView
+            android:id="@+id/profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/icon_person"
+            android:background="@drawable/round_bg"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/tv_check_title"
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginHorizontal="10dp"
-            android:textSize="13sp"
-            android:text="@string/skin_check" />
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toEndOf="@id/profile"
+            app:layout_constraintTop_toTopOf="@id/profile"
+            android:text="@string/greeting"
+            android:textColor="@color/dark_red"/>
 
         <TextView
-            android:id="@+id/tv_check_text"
-            android:layout_width="220dp"
+            android:id="@+id/tv_greetings"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_check_title"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginHorizontal="10dp"
-            android:textAlignment="gravity"
+            android:layout_marginStart="15dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/greetings"
+            android:textColor="@color/dark_red"
             android:textSize="13sp"
-            android:text="@string/skin_check_text" />
+            app:layout_constraintStart_toEndOf="@id/profile"
+            app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:padding="0dp"
-            android:textSize="12sp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/skin_condition_box"
+                android:background="@drawable/square_stroke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_greetings">
+
+                <TextView
+                    android:id="@+id/skin_condition_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/skin_condition_title"
+                    android:textColor="@color/dark_red"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/skin_condition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/skin_condition"
+                    android:textColor="@color/dark_red"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@id/skin_condition_title"
+                    app:layout_constraintStart_toStartOf="@id/skin_condition_title"
+                    app:layout_constraintTop_toBottomOf="@id/skin_condition_title" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_article"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/article"
+            android:textColor="@color/dark_red"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/profile"
+            app:layout_constraintTop_toBottomOf="@id/scan_box" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvArticle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:paddingBottom="80dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_article"/>
+        <TextView
+            android:id="@+id/tv_no_article"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_events_found"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:paddingVertical="30dp"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintTop_toTopOf="@id/rvArticle"
+            app:layout_constraintBottom_toBottomOf="@id/rvArticle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/rvArticle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_check_text"
-            app:layout_constraintTop_toTopOf="@id/tv_check_text"
-            android:text="@string/scan_button" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/rvArticle"
+            tools:visibility="visible" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scan_box"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="30dp"
+            android:background="@drawable/square"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/skin_condition_box"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="533dp">
+
+            <TextView
+                android:id="@+id/tv_check_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/skin_check"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_check_text"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:text="@string/skin_check_text"
+                android:textAlignment="gravity"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_check_title" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:padding="0dp"
+                android:text="@string/scan_button"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_check_text"
+                app:layout_constraintTop_toTopOf="@id/tv_check_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+

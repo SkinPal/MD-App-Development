@@ -25,8 +25,15 @@
     <string name="product_name">Product</string>
     <string name="greetings">Get ready to start your beauty journey with us!</string>
     <string name="skin_check">Get to Know Your Skin Type</string>
-    <string name="skin_check_text">Do you know what your skin type? Scan your face and get the results to start using the right products.</string>
+    <string name="skin_check_text">Do you know what is your skin type? Scan your face and get the results to start using the right products.</string>
     <string name="reminder">Schedule</string>
     <string name="greeting">Hello, User!</string>
     <string name="scan_button">Scan</string>
+    <string name="no_events_found">No article</string>
+    <string name="article_title">article_title</string>
+    <string name="article">Read Articles about Beauty</string>
+    <string name="daily_streak">Daily Streak</string>
+    <string name="daily_point">11</string>
+    <string name="skin_condition">Healthy</string>
+    <string name="skin_condition_title">Your Skin Condition</string>
 </resources>
