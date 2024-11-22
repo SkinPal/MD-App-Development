@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.capstone.skinpal"
-        minSdk = 26
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -48,6 +49,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.play.services.auth)
     implementation(libs.room.ktx)
     implementation(libs.okhttp)
     implementation(libs.androidx.work.runtime)
@@ -57,6 +62,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.firebase.auth)
     ksp(libs.room.compiler)
     implementation(libs.androidxFragmentKtx)
     implementation (libs.material3)

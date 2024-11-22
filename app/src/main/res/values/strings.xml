@@ -36,4 +36,6 @@
     <string name="daily_point">11</string>
     <string name="skin_condition">Healthy</string>
     <string name="skin_condition_title">Your Skin Condition</string>
+    <string name="skin_type_title">Your Skin Type</string>
+    <string name="your_web_client_id">475162384274-ist1a36h9bnb7i9m2u8vaae4on1jmnno.apps.googleusercontent.com</string>
 </resources>

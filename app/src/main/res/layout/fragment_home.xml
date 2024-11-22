@@ -8,7 +8,7 @@
     android:layout_marginBottom="80dp"
     android:fitsSystemWindows="true"
     android:background="@color/primary"
-    tools:context=".ui.product.ProductFragment">
+    tools:layout="@layout/fragment_home">
 
     <ImageView
         android:id="@+id/logo"
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:fontFamily="sans-serif-light"
-                    android:text="@string/skin_condition_title"
+                    android:text="@string/skin_type_title"
                     android:textColor="@color/dark_red"
                     android:textSize="15sp"
                     android:textStyle="bold"
