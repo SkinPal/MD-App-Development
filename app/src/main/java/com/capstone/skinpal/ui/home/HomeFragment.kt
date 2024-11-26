@@ -1,15 +1,18 @@
 package com.capstone.skinpal.ui.home
 
+import com.capstone.skinpal.R
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.databinding.FragmentHomeBinding
 import com.capstone.skinpal.ui.ViewModelFactory
+import com.capstone.skinpal.ui.history.HistoryFragment
 
 class HomeFragment : Fragment() {
 
@@ -33,6 +36,9 @@ class HomeFragment : Fragment() {
 
         setupRecyclerView()
         observeArticles()
+        binding.buttonProgress.setOnClickListener {
+            navigateToHistoryFragment()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -67,6 +73,17 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    fun navigateToHistoryFragment() {
+        findNavController().navigate(
+            R.id.navigation_reminder,
+            null,
+            androidx.navigation.NavOptions.Builder()
+                .setPopUpTo(R.id.navigation_home, true)
+                .build()
+        )
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

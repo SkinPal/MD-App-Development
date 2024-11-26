@@ -1,6 +1,7 @@
 package com.capstone.skinpal.ui
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.capstone.skinpal.R
 import com.capstone.skinpal.databinding.ActivityMainBinding
+import com.capstone.skinpal.ui.camera.CameraActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,6 +41,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_product, R.id.navigation_account, R.id.navigation_reminder
             )
         )
+        binding.floatingActionButton.setOnClickListener{
+            val intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent)
+        }
 
         navView.setupWithNavController(navController)
     }

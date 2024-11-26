@@ -173,33 +173,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/skin_check"
+                android:text="@string/skin_update"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_check_text"
+                android:id="@+id/tv_update_text"
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="@string/skin_check_text"
+                android:text="@string/skin_update_text"
                 android:textAlignment="gravity"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_check_title" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/button_progress"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:padding="0dp"
-                android:text="@string/scan_button"
+                android:text="@string/start"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_check_text"
-                app:layout_constraintTop_toTopOf="@id/tv_check_text" />
+                app:layout_constraintStart_toEndOf="@id/tv_update_text"
+                app:layout_constraintTop_toTopOf="@id/tv_update_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

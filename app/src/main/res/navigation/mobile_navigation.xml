@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_reminder"
-        android:name="com.capstone.skinpal.ui.reminder.ReminderFragment"
+        android:name="com.capstone.skinpal.ui.history.HistoryFragment"
         android:label="@string/title_reminder"
         tools:layout="@layout/fragment_account" >
     </fragment>

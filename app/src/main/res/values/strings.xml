@@ -38,4 +38,14 @@
     <string name="skin_condition_title">Your Skin Condition</string>
     <string name="skin_type_title">Your Skin Type</string>
     <string name="your_web_client_id">475162384274-ist1a36h9bnb7i9m2u8vaae4on1jmnno.apps.googleusercontent.com</string>
+    <string name="gallery">gallery</string>
+    <string name="savedImage">Save image</string>
+    <string name="failed_take_photo">Failed to take a photo</string>
+    <string name="failed_load_camera">Failed to load camera</string>
+    <string name="camera">Camera</string>
+    <string name="permission_request_denied">Permission request denied</string>
+    <string name="image_saved">Image saved</string>
+    <string name="skin_update_text">Upload your face image and get the result of your skin progress every month.</string>
+    <string name="skin_update">Track Your Progress</string>
+    <string name="start">Start</string>
 </resources>
