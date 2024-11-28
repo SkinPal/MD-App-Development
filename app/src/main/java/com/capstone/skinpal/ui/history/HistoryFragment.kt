@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.databinding.FragmentHistoryBinding
 
 class HistoryFragment : Fragment() {

@@ -1,7 +1,6 @@
 package com.capstone.skinpal.ui.camera
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.databinding.ActivityCameraBinding
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.yalantis.ucrop.UCrop

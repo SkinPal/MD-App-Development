@@ -9,10 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.local.entity.ArticleEntity
-import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.databinding.FragmentProductBinding
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.capstone.skinpal.ui.home.HomeViewModel
