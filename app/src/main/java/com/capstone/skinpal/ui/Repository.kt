@@ -21,6 +21,15 @@ class Repository(
     private val imageDao: ImageDao
 ) {
 
+    fun getImage(week: Int): LiveData<Result<ImageEntity>> {
+        return imageDao.getItem().asLiveData().map { items ->
+            val filteredItem = items.find { it.week == week }
+            filteredItem?.let {
+                Result.Success(it)
+            } ?: Result.Error("No saved item for week $week")
+        }
+    }
+
     fun getArticle(): LiveData<Result<List<ArticleEntity>>> = liveData {
         emit(Result.Loading)
         try {
@@ -52,13 +61,6 @@ class Repository(
             imageDao.insertItem(image)
         }
     }
-
-    fun getPredictionItems(): LiveData<Result<List<ImageEntity>>> {
-        return imageDao.getItem().asLiveData().map { items ->
-            if (items.isNotEmpty()) Result.Success(items) else Result.Error("No saved items")
-        }
-    }
-
 
     suspend fun removePrediction(id: Int) {
         withContext(Dispatchers.IO) {

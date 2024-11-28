@@ -1,7 +1,6 @@
 package com.capstone.skinpal.ui.history
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -12,22 +11,22 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.capstone.skinpal.data.local.entity.ImageEntity
-import com.capstone.skinpal.databinding.ActivityCameraBinding
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.util.UUID
 import kotlin.getValue
 import com.capstone.skinpal.R
+import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
-import com.capstone.skinpal.ui.camera.CameraViewModel
 import com.capstone.skinpal.ui.camera.getImageUri
 
 class CameraWeeklyActivity : AppCompatActivity() {
     private var binding: ActivityWeeklyCameraBinding? = null
     private var currentImageUri: Uri? = null
-    private val cameraViewModel by viewModels<CameraViewModel> {
+    private val cameraWeeklyViewModel by viewModels<CameraWeeklyViewModel> {
         ViewModelFactory.Companion.getInstance(application)
     }
 
@@ -66,6 +65,8 @@ class CameraWeeklyActivity : AppCompatActivity() {
         binding = ActivityWeeklyCameraBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        val week = intent.getIntExtra("WEEK", 1)
+        setTitle("Week $week")
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
@@ -73,11 +74,21 @@ class CameraWeeklyActivity : AppCompatActivity() {
         currentImageUri = savedInstanceState?.getParcelable("CURRENT_IMAGE_URI")
         showImage()
         val imageUriString = intent.getStringExtra("IMAGE_URI")
+        if (imageUriString.isNullOrEmpty()) {
+            showImage()
+        } else {
+            showSavedImage(imageUriString, week)
+            disableButtons()
+        }
 
         binding?.galleryButton?.setOnClickListener { startGallery() }
         binding?.cameraButton?.setOnClickListener { startCamera() }
-        binding?.saveButton?.setOnClickListener { saveImage(imageUriString)}
-
+        binding?.saveButton?.setOnClickListener {
+            // Only save if the image URI is valid
+            currentImageUri?.let { uri ->
+                saveImage(uri.toString(), week)
+            } ?: showToast("Failed to save image. No image captured.")
+        }
     }
 
     private fun startCamera() {
@@ -120,6 +131,8 @@ class CameraWeeklyActivity : AppCompatActivity() {
             currentImageUri = uri
             showImage()
             startCrop(uri)
+        } else {
+            showToast("No image selected.")
         }
     }
 
@@ -129,17 +142,50 @@ class CameraWeeklyActivity : AppCompatActivity() {
         }
     }
 
+    private fun showSavedImage(imageUriString: String, week: Int) {
+        cameraWeeklyViewModel.getImage(week).observe(this) { result ->
+            when (result) {
+                is Result.Success -> {
+                    val imageUri = result.data // Adjust this if your result is different
+                    Glide.with(this)
+                        .load(imageUri)
+                        .into(binding?.previewImageView!!)
+                }
+                is Result.Error -> {
+                    showToast("Error loading image.")
+                }
+                is Result.Loading -> {
+                    showToast("Loading image...")
+                }
+            }
+        }
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun saveImage(imageUriString: String?) {
-        val predictionEntity = ImageEntity(
-            image = imageUriString ?: ""
-        )
-        Toast.makeText(this, getString(R.string.image_saved), Toast.LENGTH_SHORT).show()
-        cameraViewModel.saveItem(predictionEntity)
+    private fun saveImage(imageUriString: String, week: Int) {
+        if (imageUriString.isNotEmpty()) {
+            val imageEntity = ImageEntity(image = imageUriString, week = week)
+            cameraWeeklyViewModel.saveItem(imageEntity)
+            showToast("Image saved successfully!")
+            disableButtons()  // Disable buttons after saving
+        } else {
+            showToast("Failed to save image. Image URI is invalid.")
+        }
+    }
 
+    private fun disableButtons() {
+        binding?.galleryButton?.isEnabled = false
+        binding?.cameraButton?.isEnabled = false
+        binding?.saveButton?.isEnabled = false
+    }
+
+    private fun enableButtons() {
+        binding?.galleryButton?.isEnabled = true
+        binding?.cameraButton?.isEnabled = true
+        binding?.saveButton?.isEnabled = true
     }
 
     companion object {

@@ -12,5 +12,8 @@ data class ImageEntity(
     val id: Int = 0,
 
     @ColumnInfo(name = "image")
-    val image: String
+    val image: String,
+
+    @ColumnInfo(name = "week")
+    val week: Int,
 )

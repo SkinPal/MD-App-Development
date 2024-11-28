@@ -27,15 +27,30 @@ class HistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set click listener
-        binding.uploadPhoto.setOnClickListener {
-            cameraPreview()
-        }
+        binding.uploadPhoto1.setOnClickListener { cameraPreview1() }
+        binding.uploadPhoto2.setOnClickListener { cameraPreview2() }
+        binding.uploadPhoto3.setOnClickListener { cameraPreview3() }
+        binding.uploadPhoto4.setOnClickListener { cameraPreview4() }
     }
 
-    private fun cameraPreview() {
-        val intent = Intent(requireContext(), CameraWeeklyActivity::class.java).apply {
-            // Pass an extra if needed (adjust logic if `ImageEntity` is necessary)
-        }
+    private fun cameraPreview1() {
+        val intent = Intent(requireContext(), CameraWeeklyActivity::class.java)
+           intent.putExtra("WEEK", 1)
+        startActivity(intent)
+    }
+    private fun cameraPreview2() {
+        val intent = Intent(requireContext(), CameraWeeklyActivity::class.java)
+        intent.putExtra("WEEK", 2)
+        startActivity(intent)
+    }
+    private fun cameraPreview3() {
+        val intent = Intent(requireContext(), CameraWeeklyActivity::class.java)
+        intent.putExtra("WEEK", 3)
+        startActivity(intent)
+    }
+    private fun cameraPreview4() {
+        val intent = Intent(requireContext(), CameraWeeklyActivity::class.java)
+        intent.putExtra("WEEK", 4)
         startActivity(intent)
     }
 

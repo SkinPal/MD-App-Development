@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.capstone.skinpal.data.local.entity.ImageEntity
 import kotlin.also
 
-@Database(entities = [ImageEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ImageEntity::class], version = 2, exportSchema = false)
 abstract class ImageDatabase : RoomDatabase() {
 
     abstract fun imageDao(): ImageDao

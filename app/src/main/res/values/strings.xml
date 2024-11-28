@@ -16,7 +16,7 @@
     <string name="register">Register</string>
     <string name="fill_name">Enter your name</string>
     <string name="name">Name</string>
-    <string name="title_product">Product</string>
+    <string name="title_product">Product Recommendations</string>
     <string name="title_account">Account</string>
     <string name="title_reminder">Reminder</string>
     <string name="empty">" "</string>
@@ -48,4 +48,13 @@
     <string name="skin_update_text">Upload your face image and get the result of your skin progress every month.</string>
     <string name="skin_update">Track Your Progress</string>
     <string name="start">Start</string>
+    <string name="your_skin_progress">Your Skin Progress</string>
+    <string name="skin_condition_week_1">Skin Condition Week 1</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="skin_condition_week_2">Skin Condition Week 2</string>
+    <string name="skin_condition_week_3">Skin Condition Week 3</string>
+    <string name="skin_condition_week_4">Skin Condition Week 4</string>
+    <string name="cropping_failed">Cropping failed</string>
+    <string name="cropping_cancelled">Cropping canceled</string>
+    <string name="week_title">Week %a</string>
 </resources>

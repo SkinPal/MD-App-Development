@@ -1,4 +1,4 @@
-package com.capstone.skinpal.ui.camera
+package com.capstone.skinpal.ui.history
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,10 @@ import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.ui.Repository
 import kotlinx.coroutines.launch
 
-class CameraViewModel(private val repository: Repository) : ViewModel(){
+class CameraWeeklyViewModel(private val repository: Repository) : ViewModel(){
+
+    fun getImage(week: Int)= repository.getImage(week)
+
     fun saveItem(item: ImageEntity) {
         viewModelScope.launch {
             repository.saveImage(item)

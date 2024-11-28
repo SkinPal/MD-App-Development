@@ -54,7 +54,6 @@ dependencies {
     implementation(libs.camera.view)
     implementation (libs.ucrop)
     implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx.v283)
     annotationProcessor (libs.compiler)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)

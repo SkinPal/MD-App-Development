@@ -42,6 +42,10 @@ class ViewModelFactory private constructor(
                 com.capstone.skinpal.ui.camera.CameraViewModel(repository) as T
             }
 
+            modelClass.isAssignableFrom(com.capstone.skinpal.ui.history.CameraWeeklyViewModel::class.java) -> {
+                com.capstone.skinpal.ui.history.CameraWeeklyViewModel(repository) as T
+            }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }

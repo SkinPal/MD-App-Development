@@ -25,6 +25,9 @@ interface ImageDao {
     @Query("DELETE FROM image WHERE id = :itemId")
     suspend fun deleteItem(itemId: Int): Int
 
+    @Query("SELECT * FROM image WHERE week = :week LIMIT 1")
+    fun getImageByWeek(week: Int): LiveData<ImageEntity>
+
     @Query("SELECT * FROM image WHERE id = :itemId")
     fun getItemById(itemId: Int): LiveData<ImageEntity>
 }

@@ -129,14 +129,6 @@ class CameraActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun saveImage(imageUriString: String?) {
-        val predictionEntity = ImageEntity(
-            image = imageUriString ?: ""
-        )
-        Toast.makeText(this, "Prediction saved", Toast.LENGTH_SHORT).show()
-        cameraViewModel.saveItem(predictionEntity)
-
-    }
 
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
