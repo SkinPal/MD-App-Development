@@ -31,32 +31,40 @@
         app:srcCompat="@drawable/ic_place_holder"
         tools:ignore="ContentDescription" />
 
-    <Button
+    <ImageButton
         android:id="@+id/galleryButton"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
         android:layout_marginBottom="8dp"
         android:text="@string/gallery"
-        app:layout_constraintTop_toBottomOf="@id/previewImageView"
-        app:layout_constraintBottom_toTopOf="@+id/cameraButton"
+        android:src="@drawable/icon_image"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/analyzeButton"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/cameraButton"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/camera"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/icon_camera"
+        app:layout_constraintStart_toStartOf="@id/galleryButton"
+        app:layout_constraintBottom_toTopOf="@id/analyzeButton"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/analyzeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/galleryButton"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/analyze"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

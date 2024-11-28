@@ -17,14 +17,15 @@ import com.capstone.skinpal.ui.ViewModelFactory
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.util.UUID
-import kotlin.getValue
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
 import com.capstone.skinpal.ui.camera.getImageUri
 
 class CameraWeeklyActivity : AppCompatActivity() {
-    private var binding: ActivityWeeklyCameraBinding? = null
+    private var _binding: ActivityWeeklyCameraBinding? = null
+    private val binding get() = _binding!!
+
     private var currentImageUri: Uri? = null
     private val cameraWeeklyViewModel by viewModels<CameraWeeklyViewModel> {
         ViewModelFactory.Companion.getInstance(application)
@@ -32,14 +33,12 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
     private val cropImageLauncher = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            result.data?.let { intent ->
-                val croppedImageUri = UCrop.getOutput(intent)
-                if (croppedImageUri != null) {
-                    currentImageUri = croppedImageUri
-                    showImage()
-                } else {
-                    showToast("Cropping failed.")
-                }
+            val croppedImageUri = UCrop.getOutput(result.data!!)
+            if (croppedImageUri != null) {
+                currentImageUri = croppedImageUri
+                showImage()
+            } else {
+                showToast("Cropping failed.")
             }
         } else {
             showToast("Cropping was cancelled.")
@@ -48,9 +47,8 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            val granted = permissions.entries.all { it.value }
-            if (!granted) {
-                Toast.makeText(this, getString(R.string.permission_request_denied), Toast.LENGTH_LONG).show()
+            if (permissions.values.any { !it }) {
+                showToast(getString(R.string.permission_request_denied))
             }
         }
 
@@ -62,33 +60,54 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityWeeklyCameraBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        _binding = ActivityWeeklyCameraBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val week = intent.getIntExtra("WEEK", 1)
-        setTitle("Week $week")
+        title = "Week $week"
+
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
         currentImageUri = savedInstanceState?.getParcelable("CURRENT_IMAGE_URI")
-        showImage()
         val imageUriString = intent.getStringExtra("IMAGE_URI")
+
         if (imageUriString.isNullOrEmpty()) {
-            showImage()
+            loadPreviewImage(week)
         } else {
-            showSavedImage(imageUriString, week)
+            displaySavedImage(imageUriString)
             disableButtons()
         }
 
-        binding?.galleryButton?.setOnClickListener { startGallery() }
-        binding?.cameraButton?.setOnClickListener { startCamera() }
-        binding?.saveButton?.setOnClickListener {
-            // Only save if the image URI is valid
+        binding.galleryButton.setOnClickListener { startGallery() }
+        binding.cameraButton.setOnClickListener { startCamera() }
+        binding.saveButton.setOnClickListener {
             currentImageUri?.let { uri ->
                 saveImage(uri.toString(), week)
             } ?: showToast("Failed to save image. No image captured.")
         }
+    }
+
+    private fun loadPreviewImage(week: Int) {
+        cameraWeeklyViewModel.getImage(week).observe(this) { result ->
+            when (result) {
+                is Result.Success -> {
+                    if (result.data.image.isNotEmpty()) {
+                        displaySavedImage(result.data.image)
+                        disableButtons()
+                    }
+                }
+                is Result.Error -> showToast("Error loading saved image.")
+                else -> Unit
+            }
+        }
+    }
+
+    private fun displaySavedImage(imageUri: String) {
+        Glide.with(this)
+            .load(imageUri)
+            .into(binding.previewImageView)
     }
 
     private fun startCamera() {
@@ -128,8 +147,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
-            currentImageUri = uri
-            showImage()
             startCrop(uri)
         } else {
             showToast("No image selected.")
@@ -138,26 +155,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
     private fun showImage() {
         currentImageUri?.let {
-            binding?.previewImageView?.setImageURI(it)
-        }
-    }
-
-    private fun showSavedImage(imageUriString: String, week: Int) {
-        cameraWeeklyViewModel.getImage(week).observe(this) { result ->
-            when (result) {
-                is Result.Success -> {
-                    val imageUri = result.data // Adjust this if your result is different
-                    Glide.with(this)
-                        .load(imageUri)
-                        .into(binding?.previewImageView!!)
-                }
-                is Result.Error -> {
-                    showToast("Error loading image.")
-                }
-                is Result.Loading -> {
-                    showToast("Loading image...")
-                }
-            }
+            Glide.with(this).load(it).into(binding.previewImageView)
         }
     }
 
@@ -166,30 +164,24 @@ class CameraWeeklyActivity : AppCompatActivity() {
     }
 
     private fun saveImage(imageUriString: String, week: Int) {
-        if (imageUriString.isNotEmpty()) {
-            val imageEntity = ImageEntity(image = imageUriString, week = week)
-            cameraWeeklyViewModel.saveItem(imageEntity)
-            showToast("Image saved successfully!")
-            disableButtons()  // Disable buttons after saving
-        } else {
-            showToast("Failed to save image. Image URI is invalid.")
-        }
+        val imageEntity = ImageEntity(image = imageUriString, week = week)
+        cameraWeeklyViewModel.saveItem(imageEntity)
+        showToast("Image saved successfully!")
+        disableButtons()
     }
 
     private fun disableButtons() {
-        binding?.galleryButton?.isEnabled = false
-        binding?.cameraButton?.isEnabled = false
-        binding?.saveButton?.isEnabled = false
+        binding.galleryButton.isEnabled = false
+        binding.cameraButton.isEnabled = false
+        binding.saveButton.isEnabled = false
     }
 
-    private fun enableButtons() {
-        binding?.galleryButton?.isEnabled = true
-        binding?.cameraButton?.isEnabled = true
-        binding?.saveButton?.isEnabled = true
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
-        const val EXTRA_IMAGE_ID = "extra_image_id"
     }
 }
