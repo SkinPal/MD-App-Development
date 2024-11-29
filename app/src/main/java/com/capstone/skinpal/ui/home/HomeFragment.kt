@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.databinding.FragmentHomeBinding
 import com.capstone.skinpal.ui.ViewModelFactory
-import com.capstone.skinpal.ui.history.HistoryFragment
 
 class HomeFragment : Fragment() {
 
@@ -44,7 +43,7 @@ class HomeFragment : Fragment() {
     private fun setupRecyclerView() {
         articleAdapter = ArticleAdapter()
         binding.rvArticle.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = articleAdapter
         }
     }
