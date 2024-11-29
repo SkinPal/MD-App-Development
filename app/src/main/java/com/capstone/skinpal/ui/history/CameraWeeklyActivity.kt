@@ -119,7 +119,10 @@ class CameraWeeklyActivity : AppCompatActivity() {
         ActivityResultContracts.TakePicture()
     ) { isSuccess ->
         if (isSuccess) {
-            showImage()
+            currentImageUri?.let {
+                showImage()
+                startCrop(it)
+            }
         } else {
             currentImageUri = null
         }

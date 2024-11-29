@@ -83,8 +83,11 @@ class CameraActivity : AppCompatActivity() {
         ActivityResultContracts.TakePicture()
     ) { isSuccess ->
         if (isSuccess) {
-            showImage()
-        } else {
+            currentImageUri?.let {
+                showImage()
+                startCrop(it)
+            }
+        }else {
             currentImageUri = null
         }
     }
