@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "475162384274",
+    "project_id": "skinpal-d2ee9",
+    "storage_bucket": "skinpal-d2ee9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475162384274:android:63dafa7027001a3561934b",
+        "android_client_info": {
+          "package_name": "com.capstone.skinpal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475162384274-l58svds6758shscic8t6rp45444cauje.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.capstone.skinpal",
+            "certificate_hash": "e54fc0b981b19c3f16461e1e6456df81776f56d6"
+          }
+        },
+        {
+          "client_id": "475162384274-ist1a36h9bnb7i9m2u8vaae4on1jmnno.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCZ_cKKVCLNAUEyx3zA-lA-5UsGR_Mr04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475162384274-ist1a36h9bnb7i9m2u8vaae4on1jmnno.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
