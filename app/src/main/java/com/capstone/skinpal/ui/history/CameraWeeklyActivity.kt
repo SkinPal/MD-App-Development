@@ -20,6 +20,8 @@ import java.util.UUID
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
+import com.capstone.skinpal.ui.camera.CameraActivity
+import com.capstone.skinpal.ui.camera.ResultFragment
 import com.capstone.skinpal.ui.camera.getImageUri
 
 class CameraWeeklyActivity : AppCompatActivity() {
@@ -37,6 +39,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
             if (croppedImageUri != null) {
                 currentImageUri = croppedImageUri
                 showImage()
+                showImageInfo()
             } else {
                 showToast("Cropping failed.")
             }
@@ -47,8 +50,9 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            if (permissions.values.any { !it }) {
-                showToast(getString(R.string.permission_request_denied))
+            val granted = permissions.entries.all { it.value }
+            if (!granted) {
+                Toast.makeText(this, getString(R.string.permission_request_denied), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -162,6 +166,15 @@ class CameraWeeklyActivity : AppCompatActivity() {
         }
     }
 
+    private fun showImageInfo() {
+        currentImageUri?.let { uri ->
+            val imageName = uri.lastPathSegment ?: "Unknown Image"
+            val additionalInfo = "This image is displayed from the URI: $uri"
+            val bottomSheet = ResultFragment.newInstance(imageName, additionalInfo)
+            bottomSheet.show(supportFragmentManager, ResultFragment::class.java.simpleName)
+        }
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -185,6 +198,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }

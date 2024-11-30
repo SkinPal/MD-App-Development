@@ -33,6 +33,7 @@ class CameraActivity : AppCompatActivity() {
                 if (croppedImageUri != null) {
                     currentImageUri = croppedImageUri
                     showImage()
+                    showImageInfo()
                 } else {
                     showToast("Cropping failed.")
                 }
@@ -126,12 +127,21 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    private fun showImageInfo() {
+        currentImageUri?.let { uri ->
+            val imageName = uri.lastPathSegment ?: "Unknown Image"
+            val additionalInfo = "This image is displayed from the URI: $uri"
+            val bottomSheet = ResultFragment.newInstance(imageName, additionalInfo)
+            bottomSheet.show(supportFragmentManager, ResultFragment::class.java.simpleName)
+        }
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 
     companion object {
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }
