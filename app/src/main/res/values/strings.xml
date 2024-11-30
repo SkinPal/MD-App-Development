@@ -60,4 +60,6 @@
     <string name="analyze">Analyze</string>
     <string name="welcome_back">Welcome back to SkinPal!</string>
     <string name="message_login_google">Or login with</string>
+    <string name="image_name">Image Name</string>
+    <string name="additional_information">Additional information about the image.</string>
 </resources>
