@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserModel
-import com.capstone.skinpal.data.remote.response.LoginResponse
-import com.capstone.skinpal.data.remote.retrofit.LoginRequest
 import com.capstone.skinpal.ui.Repository
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,6 @@
 package com.capstone.skinpal.data
 
 import android.content.Context
-import kotlin.math.E
 
 class UserPreference(context: Context) {
 

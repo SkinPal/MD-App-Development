@@ -20,11 +20,7 @@ import com.capstone.skinpal.data.remote.retrofit.RegisterRequest
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
-import okhttp3.Request
-import okhttp3.RequestBody
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 import java.lang.Exception
 
