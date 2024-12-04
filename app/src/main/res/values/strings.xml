@@ -66,4 +66,6 @@
     <string name="additional_information">Additional information about the image.</string>
     <string name="photo_profile">Profile Photo</string>
     <string name="Username">Username</string>
+    <string name="invalid_credentials">invalid credentials</string>
+    <string name="generic_error_message">Login failed</string>
 </resources>

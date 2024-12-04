@@ -2,6 +2,7 @@ package com.capstone.skinpal.ui.register
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -18,7 +19,9 @@ import com.capstone.skinpal.R
 import com.capstone.skinpal.databinding.ActivityRegisterBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.data.Result
+import com.capstone.skinpal.ui.MainActivity
 import com.capstone.skinpal.ui.ViewModelFactory
+import com.capstone.skinpal.ui.login.LoginActivity
 import kotlin.getValue
 
 class RegisterActivity : AppCompatActivity() {
@@ -78,10 +81,19 @@ class RegisterActivity : AppCompatActivity() {
                     is Result.Success -> {
                     showLoading(false)
                     showConfirmationDialog(binding.edRegisterEmail.text.toString())
+                        navigateToLoginctivity()
+
                 }
                 }
             }
         }
+    }
+
+    private fun navigateToLoginctivity() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
     }
 
     private fun showLoading(isLoading: Boolean) {

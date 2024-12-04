@@ -12,22 +12,18 @@ import com.capstone.skinpal.ui.Repository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: Repository) : ViewModel() {
-    private val _loginResult = MutableLiveData<Result<LoginResponse>>()
-    val loginResult: LiveData<Result<LoginResponse>> = _loginResult
+    private val _loginResult = MutableLiveData<Result<UserModel>>()
+    val loginResult: LiveData<Result<UserModel>> = _loginResult
 
-    fun login(userId: String, password: String) {
+    fun saveSession(user: UserModel) {
         viewModelScope.launch {
-            try {
-                _loginResult.value = Result.Loading
-                val loginRequest = LoginRequest(
-                    user_id = userId,
-                    password = password
-                )
-                val response = repository.login(loginRequest)
-                _loginResult.value = Result.Success(response)
-            } catch (e: Exception) {
-                _loginResult.value = Result.Error(e.message ?: "Unknown error occurred")
-            }
+            repository.saveSession(user)
+        }
+    }
+
+    fun login(email: String, password: String) {
+        repository.login(email, password).observeForever { result ->
+            _loginResult.value = result!!
         }
     }
 }

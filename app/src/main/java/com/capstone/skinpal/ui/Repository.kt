@@ -9,6 +9,7 @@ import com.capstone.skinpal.data.local.room.ArticleDao
 import com.capstone.skinpal.data.remote.retrofit.ApiService
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserModel
+import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.data.local.room.ImageDao
@@ -31,6 +32,7 @@ class Repository(
     private val apiService: ApiService,
     private val articleDao: ArticleDao,
     private val productDao: ProductDao,
+    private val userPreference: UserPreference,
     private val imageDao: ImageDao
 ) {
 
@@ -110,14 +112,36 @@ class Repository(
         }
     }
 
-    suspend fun login(loginRequest: LoginRequest): LoginResponse {
-        return try {
-            apiService.login(loginRequest)
+    fun login(userId: String, password: String): LiveData<Result<UserModel>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = withContext(Dispatchers.IO) {
+                apiService.login(LoginRequest(userId, password))
+            }
+
+            val userModel = response.let {
+                UserModel(
+                    user = it.user.toString(),
+                    token = it.accessToken.orEmpty(),
+                    isLogin = true
+                )
+            }
+            emit(Result.Success(userModel))
         } catch (e: HttpException) {
-            throw Exception("Login failed: ${e.message()}")
+            val errorMessage = e.response()?.errorBody()?.string()?.let {
+                Gson().fromJson(it, LoginResponse::class.java).message
+            } ?: "Login failed"
+            emit(Result.Error(errorMessage))
+        } catch (e: IOException) {
+            emit(Result.Error("Network error: ${e.message ?: "Unable to connect"}"))
         } catch (e: Exception) {
-            throw Exception("Login failed: ${e.message}")
+            emit(Result.Error("Login failed: ${e.message ?: "Unknown error"}"))
         }
+    }
+
+
+    fun saveSession(user: UserModel) {
+        userPreference.saveSession(user)
     }
 
     /*fun getArticle(): LiveData<Result<List<ArticleEntity>>> = liveData {
@@ -165,10 +189,11 @@ class Repository(
             apiService: ApiService,
             articleDao: ArticleDao,
             productDao: ProductDao,
+            userPreference: UserPreference,
             imageDao: ImageDao
         ): Repository =
             instance ?: synchronized(this) {
-                instance ?: Repository(apiService, articleDao, productDao, imageDao)
+                instance ?: Repository(apiService, articleDao, productDao, userPreference, imageDao)
             }.also { instance = it }
     }
 }

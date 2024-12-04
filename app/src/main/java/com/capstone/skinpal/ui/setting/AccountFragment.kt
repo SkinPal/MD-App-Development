@@ -72,17 +72,16 @@ class AccountFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userInfo = snapshot.getValue(UserModel::class.java)
                 if (userInfo != null) {
-                    binding.nama.text = userInfo.displayName ?: "No Name"
-                    binding.email.text = userInfo.email ?: "No Email"
+                    binding.nama.text = userInfo.user ?: "No Name"
 
                     // Check if the fragment is added before loading the image
-                    if (isAdded) {
+                    /*if (isAdded) {
                         Glide.with(this@AccountFragment)
-                            .load(userInfo.photoUrl)
+                            .load(userInfo.)
                             .into(binding.photoProfile)
                     } else {
                         Log.e("Glide", "Fragment is not attached to activity.")
-                    }
+                    }*/
                 } else {
                     Log.e("Firebase", "User data is null.")
                 }

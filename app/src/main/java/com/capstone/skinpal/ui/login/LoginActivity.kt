@@ -28,6 +28,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
+import com.capstone.skinpal.data.UserModel
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.MainActivity
@@ -44,6 +45,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
+import org.json.JSONException
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel by viewModels<LoginViewModel> {
@@ -57,11 +60,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        userPreference = UserPreference(this)
         auth = Firebase.auth
 
-        binding.signInButton.setOnClickListener {
-            signIn()
-        }
+      //  binding.signInButton.setOnClickListener {
+           // signIn()
+        //}
 
         binding.registerButton.setOnClickListener {
             Intent(this, RegisterActivity::class.java).apply {
@@ -73,10 +77,15 @@ class LoginActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
-        checkGooglePlayServices()
+        //checkGooglePlayServices()
+
+        binding.edLoginEmail.addTextChangedListener(inputWatcher)
+        binding.edLoginPassword.addTextChangedListener(inputWatcher)
+
+
     }
 
-    private fun checkGooglePlayServices() {
+    /*private fun checkGooglePlayServices() {
         val apiAvailability = GoogleApiAvailability.getInstance()
         val resultCode = apiAvailability.isGooglePlayServicesAvailable(this)
 
@@ -88,9 +97,9 @@ class LoginActivity : AppCompatActivity() {
                 finish()
             }
         }
-    }
+    }*/
 
-    private fun signIn() {
+    /*private fun signIn() {
         val credentialManager = CredentialManager.create(this) //import from androidx.CredentialManager
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
@@ -173,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     data class UserInfo(val displayName: String?, val email: String?)
-
+*/
 
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
@@ -202,15 +211,29 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
+        binding.edLoginEmail.addTextChangedListener(inputWatcher)
+        binding.edLoginPassword.addTextChangedListener(inputWatcher)
+
         binding.loginButton.setOnClickListener {
-            val email = binding.edLoginEmail.text.toString()
+            val user_id = binding.edLoginEmail.text.toString()
             val password = binding.edLoginPassword.text.toString()
 
-            if (validateInput(email, password)) {
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+
+            if (isConnectedToInternet()) {
+                loginViewModel.login(user_id, password)
+            } else {
+                Toast.makeText(this, getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show()
+            }
+
+            observeSession()
+
+            /*if (validateInput(userId, password)) {
                 if (isConnectedToInternet()) {
-                    // Extract userId from email (assuming email is used as userId)
-                    val userId = email.substringBefore("@")
+                    showLoading(true)
                     loginViewModel.login(userId, password)
+                    navigateToMainActivity()
                 } else {
                     Toast.makeText(
                         this,
@@ -218,57 +241,11 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }
+            }*/
         }
     }
 
-    private fun setupObservers() {
-        loginViewModel.loginResult.observe(this) { result ->
-            when (result) {
-                is Result.Success -> {
-                   // hideLoading()
-                    // Handle successful login
-                    val response = result.data
-                    // Save user data if needed
-                   // navigateToMain()
-                }
-                is Result.Error -> {
-                   // hideLoading()
-                    Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
-                }
-                is Result.Loading -> {
-                    showLoading(
-                        isLoading = TODO()
-                    )
-                }
-            }
-        }
-    }
-
-    private fun validateInput(email: String, password: String): Boolean {
-        var isValid = true
-
-        if (email.isEmpty()) {
-            binding.emailEditTextLayout.error = "Email cannot be empty"
-            isValid = false
-        } else {
-            binding.emailEditTextLayout.error = null
-        }
-
-        if (password.isEmpty()) {
-            binding.passwordEditTextLayout.error = "Password cannot be empty"
-            isValid = false
-        } else if (password.length < 6) {
-            binding.passwordEditTextLayout.error = "Password must be at least 6 characters"
-            isValid = false
-        } else {
-            binding.passwordEditTextLayout.error = null
-        }
-
-        return isValid
-    }
-
-    /*private fun observeSession() {
+    private fun observeSession() {
         loginViewModel.loginResult.observe(this) { result ->
             handleResult(result)
         }
@@ -279,17 +256,33 @@ class LoginActivity : AppCompatActivity() {
             is Result.Loading -> showLoading(true)
             is Result.Success -> {
                 showLoading(false)
+                val token = result.data.token
+                Log.d(TAG, "Login successful. Token: $token")
                 loginViewModel.saveSession(result.data)
-                navigateToStoryActivity()
+                navigateToMainActivity()
             }
+
             is Result.Error -> {
                 showLoading(false)
-                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                val errorMessage = parseErrorMessage(result.error)
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
             }
         }
-    }*/
+    }
 
-    private fun navigateToStoryActivity() {
+    private fun parseErrorMessage(error: String): String {
+        return try {
+            // Assume the error string is a JSON with a "detail" field
+            val jsonObject = JSONObject(error)
+            jsonObject.getString("detail")
+        } catch (e: JSONException) {
+            // Fallback message if parsing fails
+            getString(R.string.generic_error_message)
+        }
+    }
+
+
+    private fun navigateToMainActivity() {
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         }
@@ -305,9 +298,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateButtonState() {
-        val email = binding.edLoginEmail.text
+        val user_id = binding.edLoginEmail.text
         val password = binding.edLoginPassword.text
-        binding.loginButton.isEnabled = !email.isNullOrEmpty() && !password.isNullOrEmpty()
+        binding.loginButton.isEnabled = !user_id.isNullOrEmpty() && !password.isNullOrEmpty()
     }
 
     private fun playAnimation() {
