@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.local.entity.ArticleEntity
+import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.databinding.FragmentProductBinding
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.capstone.skinpal.ui.home.HomeViewModel
@@ -20,7 +21,7 @@ class ProductFragment : Fragment() {
     private var _binding: FragmentProductBinding? = null
     private val binding get() = _binding!!
     private lateinit var productAdapter: ProductAdapter
-    private val homeViewModel: HomeViewModel by viewModels {
+    private val productViewModel: ProductViewModel by viewModels {
         ViewModelFactory.getInstance(requireActivity())
     }
 
@@ -36,7 +37,7 @@ class ProductFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        observeArticles()
+        observeProduct()
     }
 
     private fun setupRecyclerView() {
@@ -47,8 +48,8 @@ class ProductFragment : Fragment() {
         }
     }
 
-    private fun observeArticles() {
-        homeViewModel.getArticle().observe(viewLifecycleOwner) { result ->
+    private fun observeProduct() {
+        productViewModel.getProduct().observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -56,12 +57,12 @@ class ProductFragment : Fragment() {
                 }
                 is Result.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    val product = result.data.takeLast(10)
+                    val product = result.data
                     if (product.isEmpty()) {
                         binding.tvNoItem.visibility = View.VISIBLE
                     } else {
                         binding.tvNoItem.visibility = View.GONE
-                        productAdapter.submitList(product as List<ArticleEntity?>?)
+                        productAdapter.submitList(product as List<ProductEntity?>?)
                     }
                 }
                 is Result.Error -> {

@@ -14,6 +14,8 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -25,7 +27,14 @@ import com.capstone.skinpal.databinding.ActivityLoginBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.capstone.skinpal.R
+import com.capstone.skinpal.data.Result
+import com.capstone.skinpal.data.UserPreference
+import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.MainActivity
+import com.capstone.skinpal.ui.ViewModelFactory
+import com.capstone.skinpal.ui.register.RegisterActivity
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -33,13 +42,14 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
-    /*private val loginViewModel by viewModels<LoginViewModel> {
+    private val loginViewModel by viewModels<LoginViewModel> {
         ViewModelFactory(Injection.provideRepository(this))
     }
-    private lateinit var userPreference: UserPreference */
+    private lateinit var userPreference: UserPreference
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
 
@@ -52,11 +62,32 @@ class LoginActivity : AppCompatActivity() {
         binding.signInButton.setOnClickListener {
             signIn()
         }
+
+        binding.registerButton.setOnClickListener {
+            Intent(this, RegisterActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            }.also { startActivity(it) }
+        }
         //userPreference = UserPreference(this)
 
         setupView()
         setupAction()
         playAnimation()
+        checkGooglePlayServices()
+    }
+
+    private fun checkGooglePlayServices() {
+        val apiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(this)
+
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, 9000)?.show()
+            } else {
+                Log.e("GooglePlayServices", "This device is not supported.")
+                finish()
+            }
+        }
     }
 
     private fun signIn() {
@@ -107,6 +138,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
+        Log.d(TAG, "Received ID Token: $idToken")
         val credential: AuthCredential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -114,12 +146,34 @@ class LoginActivity : AppCompatActivity() {
                     Log.d(TAG, "signInWithCredential:success")
                     val user: FirebaseUser? = auth.currentUser
                     updateUI(user)
+                    saveUserData(user)
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     updateUI(null)
                 }
             }
     }
+
+    private fun saveUserData(user: FirebaseUser?) {
+        if (user != null) {
+            val database = FirebaseDatabase.getInstance().reference
+            val userId = user.uid
+            val userData = UserInfo(user.displayName, user.email)
+
+            // Save user data under their UID
+            database.child("users").child(userId).setValue(userData)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("Firebase", "User data saved successfully")
+                    } else {
+                        Log.e("Firebase", "Failed to save user data: ${task.exception?.message}")
+                    }
+                }
+        }
+    }
+
+    data class UserInfo(val displayName: String?, val email: String?)
+
 
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
@@ -148,26 +202,70 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.edLoginEmail.addTextChangedListener(inputWatcher)
-        binding.edLoginPassword.addTextChangedListener(inputWatcher)
-
         binding.loginButton.setOnClickListener {
             val email = binding.edLoginEmail.text.toString()
             val password = binding.edLoginPassword.text.toString()
 
-            binding.progressBar.visibility = View.VISIBLE
-
-            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(it.windowToken, 0)
-
-            /*if (isConnectedToInternet()) {
-                loginViewModel.login(email, password)
-            } else {
-                Toast.makeText(this, getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show()
+            if (validateInput(email, password)) {
+                if (isConnectedToInternet()) {
+                    // Extract userId from email (assuming email is used as userId)
+                    val userId = email.substringBefore("@")
+                    loginViewModel.login(userId, password)
+                } else {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.no_internet_connection),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-
-            observeSession()*/
         }
+    }
+
+    private fun setupObservers() {
+        loginViewModel.loginResult.observe(this) { result ->
+            when (result) {
+                is Result.Success -> {
+                   // hideLoading()
+                    // Handle successful login
+                    val response = result.data
+                    // Save user data if needed
+                   // navigateToMain()
+                }
+                is Result.Error -> {
+                   // hideLoading()
+                    Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                }
+                is Result.Loading -> {
+                    showLoading(
+                        isLoading = TODO()
+                    )
+                }
+            }
+        }
+    }
+
+    private fun validateInput(email: String, password: String): Boolean {
+        var isValid = true
+
+        if (email.isEmpty()) {
+            binding.emailEditTextLayout.error = "Email cannot be empty"
+            isValid = false
+        } else {
+            binding.emailEditTextLayout.error = null
+        }
+
+        if (password.isEmpty()) {
+            binding.passwordEditTextLayout.error = "Password cannot be empty"
+            isValid = false
+        } else if (password.length < 6) {
+            binding.passwordEditTextLayout.error = "Password must be at least 6 characters"
+            isValid = false
+        } else {
+            binding.passwordEditTextLayout.error = null
+        }
+
+        return isValid
     }
 
     /*private fun observeSession() {

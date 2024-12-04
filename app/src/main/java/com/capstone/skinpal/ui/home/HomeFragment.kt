@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        observeArticles()
+        //observeArticles()
         binding.buttonProgress.setOnClickListener {
             navigateToHistoryFragment()
         }
@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun observeArticles() {
+    /*private fun observeArticles() {
         homeViewModel.getArticle().observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
     fun navigateToHistoryFragment() {
         findNavController().navigate(

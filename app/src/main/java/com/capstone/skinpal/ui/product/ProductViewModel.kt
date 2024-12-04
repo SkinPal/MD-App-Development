@@ -4,5 +4,5 @@ import androidx.lifecycle.ViewModel
 import com.capstone.skinpal.ui.Repository
 
 class ProductViewModel(private val repository: Repository): ViewModel() {
-    // TODO: Implement the ViewModel
+    fun getProduct() = repository.getProduct()
 }

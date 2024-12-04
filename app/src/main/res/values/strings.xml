@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">SkinPal</string>
 
+    <string name="success">Success</string>
+    <string name="account_created_message">Account with %1$s has been created. Please login to start.</string>
     <string name="title_home">Home</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="title_login_page">Login</string>
@@ -62,4 +64,6 @@
     <string name="message_login_google">Or login with</string>
     <string name="image_name">Image Name</string>
     <string name="additional_information">Additional information about the image.</string>
+    <string name="photo_profile">Profile Photo</string>
+    <string name="Username">Username</string>
 </resources>

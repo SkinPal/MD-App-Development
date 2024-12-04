@@ -11,4 +11,9 @@
         <item name="cornerSize">25%</item>
         <item name="color">@color/white</item>
     </style>
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconSize">32dp</item>
+    </style>
 </resources>
+

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import kotlin.also
 import kotlin.jvm.java
 
-class ViewModelFactory private constructor(
+class ViewModelFactory constructor(
     private val repository: Repository) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -57,7 +57,7 @@ class ViewModelFactory private constructor(
         fun getInstance(context: Context): ViewModelFactory =
             instance ?: synchronized(this) {
                 instance ?: ViewModelFactory(
-                    com.capstone.skinpal.di.Injection.provideEventRepository(context)
+                    com.capstone.skinpal.di.Injection.provideRepository(context)
                 ).also { instance = it }
             }
     }

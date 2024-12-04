@@ -13,6 +13,7 @@
         android:maxSdkVersion="28" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -35,6 +36,10 @@
         </activity>
         <activity
             android:name=".ui.camera.CameraActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".ui.register.RegisterActivity"
             android:exported="false">
         </activity>
         <activity

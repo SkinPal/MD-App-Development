@@ -8,10 +8,9 @@ import com.google.gson.annotations.SerializedName
 data class ProductEntity(
 
     @field:PrimaryKey
-    @field:SerializedName("title")
-    val title: String,
+    @field:SerializedName("name")
+    val name: String,
 
-    @field:SerializedName("urlToImage")
-    val urlToImage: String,
-
+    @field:SerializedName("image_url")
+    val imageUrl: String,
     )

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
     alias(libs.plugins.google.gms.google.services)
 }
 
@@ -11,11 +12,11 @@ android {
 
     defaultConfig {
         applicationId = "com.capstone.skinpal"
-        minSdk = 30
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        buildConfigField ("String", "BASE_URL", "\"https://newsapi.org/v2/\"")
+        buildConfigField ("String", "BASE_URL", "\"https://skinpal-api-989761954410.asia-southeast2.run.app/api/v1/\"")
         buildConfigField ("String", "API_KEY", "\"873ff49adf6b42ebadf01bbeeec22e78\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,6 +50,9 @@ android {
 }
 
 dependencies {
+    implementation (libs.firebase.database) // For Firebase Realtime Database
+    implementation (libs.firebase.storage)  // For Firebase Storage
+    implementation(libs.circleimageview)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.camera.lifecycle)
     implementation(libs.camera.view)
