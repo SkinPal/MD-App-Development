@@ -7,9 +7,9 @@ import com.capstone.skinpal.ui.Repository
 import kotlinx.coroutines.launch
 
 class CameraViewModel(private val repository: Repository) : ViewModel(){
-    fun saveItem(item: ImageEntity) {
+    /*fun saveItem(item: ImageEntity) {
         viewModelScope.launch {
-            repository.saveImage(item)
+            repository.uploadImage(item)
         }
-    }
+    }*/
 }

@@ -14,13 +14,25 @@ import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.data.local.room.ImageDao
 import com.capstone.skinpal.data.local.room.ProductDao
+import com.capstone.skinpal.data.remote.response.ErrorResponse
+import com.capstone.skinpal.data.remote.response.FileUploadResponse
 import com.capstone.skinpal.data.remote.response.LoginResponse
+import com.capstone.skinpal.data.remote.response.ProductResponse
+import com.capstone.skinpal.data.remote.response.ProductResponseItem
+import com.capstone.skinpal.data.remote.response.SkinConditions
+import com.capstone.skinpal.data.remote.response.SkinTypes
+import com.capstone.skinpal.data.remote.retrofit.ApiConfig
 import com.capstone.skinpal.data.remote.retrofit.LoginRequest
 import com.capstone.skinpal.data.remote.retrofit.RegisterRequest
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
+import java.io.File
 import java.io.IOException
 import java.lang.Exception
 
@@ -32,6 +44,10 @@ class Repository(
     private val imageDao: ImageDao
 ) {
 
+    fun clearSession() {
+        userPreference.logout()
+    }
+
     fun getImage(week: Int): LiveData<Result<ImageEntity>> {
         return imageDao.getItem().asLiveData().map { items ->
             val filteredItem = items.find { it.week == week }
@@ -41,7 +57,56 @@ class Repository(
         }
     }
 
-    fun getProduct(): LiveData<Result<List<ProductEntity>>> = liveData {
+    fun getProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
+        emit(Result.Loading)
+        try {
+            // Emit database content first
+            emitSource(productDao.getProduct().map { Result.Success(it) })
+
+            // Fetch from API
+            val response = apiService.getProduct()
+
+            // Map response items to entities
+            val productEntities = response.map { item ->
+                ProductEntity(
+                    name = item.name,
+                    imageUrl = item.imageUrl
+                )
+            }
+
+            // Save to database
+            withContext(Dispatchers.IO) {
+                productDao.insertProduct(productEntities)
+            }
+
+        } catch (e: Exception) {
+            Log.e("Repository", "Error refreshing products: ${e.message}", e)
+            emit(Result.Error("Failed to load products: ${e.message}"))
+        }
+    }
+
+    //val products = productDao.getProduct()
+
+    //fun getAllProducts(): LiveData<List<ProductEntity>> {
+    //    return productDao.getProduct()
+    //}
+
+    /*suspend fun saveProducts(productResponse: List<ProductResponseItem>) {
+        // Map API response to local database entities
+        val productEntities = productResponse.map { item ->
+            ProductEntity(
+                name = item.name,
+                imageUrl = item.imageUrl
+            )
+        }
+        // Insert the mapped entities into the database
+        withContext(Dispatchers.IO) {
+            productDao.insertProduct(productEntities)
+        }
+    }*/
+
+
+    /*fun getProduct(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)
         try {
             // Fetch data from API
@@ -56,9 +121,13 @@ class Repository(
                 )
             }
 
-            // Save mapped data into database
-            productDao.insertProduct(productEntities)
-            Log.d("DB Insert", "Inserted products: $productEntities")
+            withContext(Dispatchers.IO) {
+                productDao.insertProduct(productEntities)
+            }
+            Log.d("Repository", "Successfully inserted ${productEntities.size} products")
+
+            // Emit success
+            emit(Result.Success(productEntities))
 
         } catch (e: Exception) {
             emit(Result.Error("Failed to fetch products: ${e.message}"))
@@ -68,7 +137,7 @@ class Repository(
         // Observe the database and emit as LiveData
         val localData: LiveData<List<ProductEntity>> = productDao.getProduct()
         emitSource(localData.map { Result.Success(it) })
-    }
+    }*/
 
 
     /*fun registerUser(jsonBody: String): Response {
@@ -108,28 +177,34 @@ class Repository(
         }
     }
 
-    fun login(userId: String, password: String): LiveData<Result<UserModel>> = liveData {
+    fun login(user_id: String, password: String): LiveData<Result<UserModel>> = liveData {
         emit(Result.Loading)
         try {
             val response = withContext(Dispatchers.IO) {
-                apiService.login(LoginRequest(userId, password))
+                apiService.login(LoginRequest(user_id, password))
             }
 
             val userModel = response.let {
                 UserModel(
-                    user = it.user.toString(),
-                    token = it.accessToken.orEmpty(),
+                    user = response.user.userId,
+                    token = response.accessToken,
                     isLogin = true
                 )
             }
             emit(Result.Success(userModel))
         } catch (e: HttpException) {
-            val errorMessage = e.response()?.errorBody()?.string()?.let {
-                Gson().fromJson(it, LoginResponse::class.java).message
-            } ?: "Login failed"
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorMessage = try {
+                // Parse the specific error message from server
+                Gson().fromJson(errorBody, ErrorResponse::class.java).detail
+                    ?: "Login failed"
+            } catch (jsonException: Exception) {
+                Log.e("Repository", "Error parsing error response: ${jsonException.message}")
+                "Login failed"
+            }
             emit(Result.Error(errorMessage))
         } catch (e: IOException) {
-            emit(Result.Error("Network error: ${e.message ?: "Unable to connect"}"))
+            emit(Result.Error("Network error: Please check your internet connection"))
         } catch (e: Exception) {
             emit(Result.Error("Login failed: ${e.message ?: "Unknown error"}"))
         }
@@ -166,9 +241,46 @@ class Repository(
         articleDao.deleteAll()
     }
 
-    suspend fun saveImage(image: ImageEntity) {
-        withContext(Dispatchers.IO) {
-            imageDao.insertItem(image)
+    fun uploadImage(
+        user_id: String,
+        imageFile: File,
+        week: String
+    ) = liveData(Dispatchers.IO) {
+        emit(Result.Loading)
+        try {
+            // Get user session data from UserPreference
+            val userSession = userPreference.getSession()
+            val user_id = userSession.user // Make sure this returns just the userId string
+
+            // Create multipart request
+            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+            val imagePart = MultipartBody.Part.createFormData(
+                "file",
+                imageFile.name,
+                requestImageFile
+            )
+
+            // Make API call
+            val response = apiService.uploadImage(
+                user_id = userPreference.getSession().user.toString(),
+                week = week,
+                file = imagePart
+            ).execute()
+
+            if (response.isSuccessful) {
+                emit(Result.Success(FileUploadResponse(false, "Image uploaded successfully")))
+            } else {
+               /* val errorBody = response.errorBody()?.string()
+                Log.e("Repository", """
+                Upload failed:
+                Code: ${response.code()}
+                Error: $errorBody
+             """.trimIndent())
+                emit(Result.Error("Upload failed: ${response.code()} - $errorBody"))*/
+            }
+        } catch (e: Exception) {
+            Log.e("Repository", "Upload exception", e)
+            //emit(Result.Error("Error: ${e.message}"))
         }
     }
 

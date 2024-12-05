@@ -9,12 +9,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.capstone.skinpal.data.UserModel
 import com.capstone.skinpal.databinding.FragmentAccountBinding
+import com.capstone.skinpal.di.Injection
+import com.capstone.skinpal.ui.ViewModelFactory
 import com.capstone.skinpal.ui.login.LoginActivity
+import com.capstone.skinpal.ui.product.ProductViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -25,6 +30,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class AccountFragment : Fragment() {
 
@@ -32,7 +38,9 @@ class AccountFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var databaseReference: DatabaseReference
     private lateinit var storageReference: StorageReference
-
+    private val accountViewModel: AccountViewModel by viewModels {
+        ViewModelFactory.getInstance(requireActivity())
+    }
     private val PICK_IMAGE_REQUEST = 1
 
     override fun onCreateView(
@@ -126,7 +134,13 @@ class AccountFragment : Fragment() {
     }
 
     private fun signOut() {
-        lifecycleScope.launch {
+
+        accountViewModel.logout()
+        val intent = Intent(requireActivity(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+
+        /*lifecycleScope.launch {
             auth.signOut()
             try {
                 val credentialManager = CredentialManager.create(requireContext())
@@ -136,6 +150,6 @@ class AccountFragment : Fragment() {
             }
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             requireActivity().finish()
-        }
+        }*/
     }
 }

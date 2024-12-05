@@ -68,4 +68,6 @@
     <string name="Username">Username</string>
     <string name="invalid_credentials">invalid credentials</string>
     <string name="generic_error_message">Login failed</string>
+    <string name="empty_image_warning">Image is empty</string>
+    <string name="image_uploaded">Image uploaded</string>
 </resources>

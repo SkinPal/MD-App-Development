@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.capstone.skinpal.BuildConfig
 import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.yalantis.ucrop.UCrop
@@ -19,10 +22,13 @@ import java.io.File
 import java.util.UUID
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
+import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
 import com.capstone.skinpal.ui.camera.CameraActivity
 import com.capstone.skinpal.ui.camera.ResultFragment
 import com.capstone.skinpal.ui.camera.getImageUri
+import com.capstone.skinpal.ui.camera.reduceFileImage
+import com.capstone.skinpal.ui.camera.uriToFile
 
 class CameraWeeklyActivity : AppCompatActivity() {
     private var _binding: ActivityWeeklyCameraBinding? = null
@@ -180,16 +186,63 @@ class CameraWeeklyActivity : AppCompatActivity() {
     }
 
     private fun saveImage(imageUriString: String, week: Int) {
-        val imageEntity = ImageEntity(image = imageUriString, week = week)
-        cameraWeeklyViewModel.saveItem(imageEntity)
-        showToast("Image saved successfully!")
-        disableButtons()
+        val userPreference = UserPreference(this)
+        val session = userPreference.getSession()
+
+        val user_id = session.user ?: run {
+            showToast("User ID not found")
+            return
+        }
+
+        currentImageUri?.let { uri ->
+            val imageFile = uriToFile(uri, this).reduceFileImage()
+
+            // Add logging for debugging
+            if (BuildConfig.DEBUG) {
+                Log.d("CameraWeeklyActivity", """
+                Uploading image:
+                userId: $user_id
+                week: $week
+                token: ${session.token!!.take(10)}...
+                file: ${imageFile.name}
+            """.trimIndent())
+            }
+
+            cameraWeeklyViewModel.uploadImage(
+                imageFile = imageFile,
+                user_id = user_id,
+                week = week.toString()
+            ).observe(this) { result ->
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showLoading(false)
+                        showToast("Image uploaded successfully")
+                        finish()
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        if (result.error.contains("authorized", ignoreCase = true)) {
+                            showToast("Session expired. Please login again")
+                            // Optional: Navigate to login screen
+                        } else {
+                            showToast("Debug - Saved Token: ${session.token?.take(10) ?: "null"}")
+                            showToast(result.error)
+                        }
+                    }
+                }
+            }
+        } ?: showToast(getString(R.string.empty_image_warning))
     }
 
     private fun disableButtons() {
         binding.galleryButton.isEnabled = false
         binding.cameraButton.isEnabled = false
         binding.saveButton.isEnabled = false
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroy() {

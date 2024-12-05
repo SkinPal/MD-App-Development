@@ -63,9 +63,9 @@ class LoginActivity : AppCompatActivity() {
         userPreference = UserPreference(this)
         auth = Firebase.auth
 
-      //  binding.signInButton.setOnClickListener {
-           // signIn()
-        //}
+        binding.signInButton.setOnClickListener {
+        signIn()
+        }
 
         binding.registerButton.setOnClickListener {
             Intent(this, RegisterActivity::class.java).apply {
@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
-        //checkGooglePlayServices()
+        checkGooglePlayServices()
 
         binding.edLoginEmail.addTextChangedListener(inputWatcher)
         binding.edLoginPassword.addTextChangedListener(inputWatcher)
@@ -85,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    /*private fun checkGooglePlayServices() {
+    private fun checkGooglePlayServices() {
         val apiAvailability = GoogleApiAvailability.getInstance()
         val resultCode = apiAvailability.isGooglePlayServicesAvailable(this)
 
@@ -97,9 +97,9 @@ class LoginActivity : AppCompatActivity() {
                 finish()
             }
         }
-    }*/
+    }
 
-    /*private fun signIn() {
+    private fun signIn() {
         val credentialManager = CredentialManager.create(this) //import from androidx.CredentialManager
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
@@ -182,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     data class UserInfo(val displayName: String?, val email: String?)
-*/
+
 
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
@@ -264,8 +264,7 @@ class LoginActivity : AppCompatActivity() {
 
             is Result.Error -> {
                 showLoading(false)
-                val errorMessage = parseErrorMessage(result.error)
-                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
             }
         }
     }

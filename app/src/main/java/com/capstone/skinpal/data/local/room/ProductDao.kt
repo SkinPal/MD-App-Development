@@ -13,8 +13,8 @@ interface ProductDao {
     @Query("SELECT * FROM product")
     fun getProduct(): LiveData<List<ProductEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertProduct(products: List<ProductEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertProduct(product: List<ProductEntity>)
 
     @Query("DELETE FROM product")
     suspend fun deleteAll()
