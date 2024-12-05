@@ -34,22 +34,22 @@ class HistoryFragment : Fragment() {
 
     private fun cameraPreview1() {
         val intent = Intent(requireContext(), CameraWeeklyActivity::class.java)
-           intent.putExtra("WEEK", 1)
+           intent.putExtra("WEEK", "pekan1")
         startActivity(intent)
     }
     private fun cameraPreview2() {
         val intent = Intent(requireContext(), CameraWeeklyActivity::class.java)
-        intent.putExtra("WEEK", 2)
+        intent.putExtra("WEEK", "pekan2")
         startActivity(intent)
     }
     private fun cameraPreview3() {
         val intent = Intent(requireContext(), CameraWeeklyActivity::class.java)
-        intent.putExtra("WEEK", 3)
+        intent.putExtra("WEEK", "pekan3")
         startActivity(intent)
     }
     private fun cameraPreview4() {
         val intent = Intent(requireContext(), CameraWeeklyActivity::class.java)
-        intent.putExtra("WEEK", 4)
+        intent.putExtra("WEEK", "pekan4")
         startActivity(intent)
     }
 

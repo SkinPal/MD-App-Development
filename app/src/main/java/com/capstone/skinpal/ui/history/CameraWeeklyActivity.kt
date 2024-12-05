@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.capstone.skinpal.BuildConfig
-import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.yalantis.ucrop.UCrop
 import java.io.File
@@ -24,7 +23,6 @@ import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
-import com.capstone.skinpal.ui.camera.CameraActivity
 import com.capstone.skinpal.ui.camera.ResultFragment
 import com.capstone.skinpal.ui.camera.getImageUri
 import com.capstone.skinpal.ui.camera.reduceFileImage
@@ -73,7 +71,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
         _binding = ActivityWeeklyCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val week = intent.getIntExtra("WEEK", 1)
+        val week = intent.getStringExtra("WEEK") ?: "pekan1" // Use a default string value
         title = "Week $week"
 
         if (!allPermissionsGranted()) {
@@ -99,7 +97,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadPreviewImage(week: Int) {
+    private fun loadPreviewImage(week: String) {
         cameraWeeklyViewModel.getImage(week).observe(this) { result ->
             when (result) {
                 is Result.Success -> {
@@ -185,7 +183,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun saveImage(imageUriString: String, week: Int) {
+    private fun saveImage(imageUriString: String, week: String) {
         val userPreference = UserPreference(this)
         val session = userPreference.getSession()
 

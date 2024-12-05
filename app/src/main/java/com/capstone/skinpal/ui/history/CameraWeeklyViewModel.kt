@@ -16,5 +16,5 @@ class CameraWeeklyViewModel(private val repository: Repository) : ViewModel(){
         week = week
     )
 
-    fun getImage(week: Int) = repository.getImage(week)
+    fun getImage(week: String) = repository.getImage(week)
 }

@@ -16,12 +16,6 @@ import com.capstone.skinpal.data.local.room.ImageDao
 import com.capstone.skinpal.data.local.room.ProductDao
 import com.capstone.skinpal.data.remote.response.ErrorResponse
 import com.capstone.skinpal.data.remote.response.FileUploadResponse
-import com.capstone.skinpal.data.remote.response.LoginResponse
-import com.capstone.skinpal.data.remote.response.ProductResponse
-import com.capstone.skinpal.data.remote.response.ProductResponseItem
-import com.capstone.skinpal.data.remote.response.SkinConditions
-import com.capstone.skinpal.data.remote.response.SkinTypes
-import com.capstone.skinpal.data.remote.retrofit.ApiConfig
 import com.capstone.skinpal.data.remote.retrofit.LoginRequest
 import com.capstone.skinpal.data.remote.retrofit.RegisterRequest
 import com.google.gson.Gson
@@ -30,7 +24,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
@@ -48,14 +41,20 @@ class Repository(
         userPreference.logout()
     }
 
-    fun getImage(week: Int): LiveData<Result<ImageEntity>> {
+    fun getImage(week: String): LiveData<Result<ImageEntity>> {
         return imageDao.getItem().asLiveData().map { items ->
-            val filteredItem = items.find { it.week == week }
-            filteredItem?.let {
-                Result.Success(it)
-            } ?: Result.Error("No saved item for week $week")
+            val weekInt = week.toIntOrNull()
+            if (weekInt == null) {
+                Result.Error("Invalid week format: $week")
+            } else {
+                val filteredItem = items.find { it.week == weekInt }
+                filteredItem?.let {
+                    Result.Success(it)
+                } ?: Result.Error("No saved item for week $week")
+            }
         }
     }
+
 
     fun getProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)
