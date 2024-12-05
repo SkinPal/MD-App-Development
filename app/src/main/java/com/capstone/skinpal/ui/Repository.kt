@@ -290,17 +290,12 @@ class Repository(
     }
 
     companion object {
-        @Volatile
-        private var instance: Repository? = null
         fun getInstance(
             apiService: ApiService,
             articleDao: ArticleDao,
             productDao: ProductDao,
             userPreference: UserPreference,
             imageDao: ImageDao
-        ): Repository =
-            instance ?: synchronized(this) {
-                instance ?: Repository(apiService, articleDao, productDao, userPreference, imageDao)
-            }.also { instance = it }
+        ): Repository = Repository(apiService, articleDao, productDao, userPreference, imageDao)
     }
 }

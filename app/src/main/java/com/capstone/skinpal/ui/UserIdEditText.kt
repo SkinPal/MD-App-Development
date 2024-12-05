@@ -44,7 +44,7 @@ class UserIdEditText @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        hint = context.getString(R.string.fill_email)
+        hint = context.getString(R.string.fill_username)
         textAlignment = TEXT_ALIGNMENT_VIEW_START
     }
 

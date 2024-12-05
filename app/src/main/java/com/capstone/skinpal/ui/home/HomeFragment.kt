@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.databinding.FragmentHomeBinding
+import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.ViewModelFactory
 
 class HomeFragment : Fragment() {
@@ -19,7 +20,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var articleAdapter: ArticleAdapter
     private val homeViewModel: HomeViewModel by viewModels {
-        ViewModelFactory.getInstance(requireActivity())
+        ViewModelFactory(Injection.provideRepository(requireActivity()))
     }
 
     override fun onCreateView(

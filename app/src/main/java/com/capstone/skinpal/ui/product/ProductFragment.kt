@@ -16,6 +16,7 @@ import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.local.entity.ArticleEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.databinding.FragmentProductBinding
+import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.capstone.skinpal.ui.home.HomeViewModel
 
@@ -25,7 +26,7 @@ class ProductFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var productAdapter: ProductAdapter
     private val productViewModel: ProductViewModel by viewModels {
-        ViewModelFactory.getInstance(requireActivity())
+        ViewModelFactory(Injection.provideRepository(requireActivity()))
     }
 
     override fun onCreateView(

@@ -49,16 +49,4 @@ class ViewModelFactory constructor(
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
-
-    companion object {
-        @Volatile
-        private var instance: ViewModelFactory? = null
-
-        fun getInstance(context: Context): ViewModelFactory =
-            instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(
-                    com.capstone.skinpal.di.Injection.provideRepository(context)
-                ).also { instance = it }
-            }
-    }
 }

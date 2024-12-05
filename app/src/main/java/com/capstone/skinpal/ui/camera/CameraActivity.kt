@@ -18,12 +18,13 @@ import java.io.File
 import java.util.UUID
 import kotlin.getValue
 import com.capstone.skinpal.R
+import com.capstone.skinpal.di.Injection
 
 class CameraActivity : AppCompatActivity() {
     private var binding: ActivityCameraBinding? = null
     private var currentImageUri: Uri? = null
     private val cameraViewModel by viewModels<CameraViewModel> {
-        ViewModelFactory.Companion.getInstance(application)
+        ViewModelFactory(Injection.provideRepository(this))
     }
 
     private val cropImageLauncher = registerForActivityResult(StartActivityForResult()) { result ->

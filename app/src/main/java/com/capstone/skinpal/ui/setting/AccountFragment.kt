@@ -39,7 +39,7 @@ class AccountFragment : Fragment() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var storageReference: StorageReference
     private val accountViewModel: AccountViewModel by viewModels {
-        ViewModelFactory.getInstance(requireActivity())
+        ViewModelFactory(Injection.provideRepository(requireActivity()))
     }
     private val PICK_IMAGE_REQUEST = 1
 

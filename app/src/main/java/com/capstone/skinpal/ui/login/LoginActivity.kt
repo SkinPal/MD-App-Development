@@ -79,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
         playAnimation()
         checkGooglePlayServices()
 
-        binding.edLoginEmail.addTextChangedListener(inputWatcher)
+        binding.edLoginUserId.addTextChangedListener(inputWatcher)
         binding.edLoginPassword.addTextChangedListener(inputWatcher)
 
 
@@ -211,11 +211,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.edLoginEmail.addTextChangedListener(inputWatcher)
+        binding.edLoginUserId.addTextChangedListener(inputWatcher)
         binding.edLoginPassword.addTextChangedListener(inputWatcher)
 
         binding.loginButton.setOnClickListener {
-            val user_id = binding.edLoginEmail.text.toString()
+            val user_id = binding.edLoginUserId.text.toString()
             val password = binding.edLoginPassword.text.toString()
 
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -297,7 +297,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateButtonState() {
-        val user_id = binding.edLoginEmail.text
+        val user_id = binding.edLoginUserId.text
         val password = binding.edLoginPassword.text
         binding.loginButton.isEnabled = !user_id.isNullOrEmpty() && !password.isNullOrEmpty()
     }
@@ -310,15 +310,15 @@ class LoginActivity : AppCompatActivity() {
         }.start()
 
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
-         val emailTextView = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
-        val emailEditTextLayout = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+         val userIdTextView = ObjectAnimator.ofFloat(binding.userIdTextView, View.ALPHA, 1f).setDuration(100)
+        val userIdEditTextLayout = ObjectAnimator.ofFloat(binding.userIdEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
         val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
             playSequentially(
-                title, emailTextView, emailEditTextLayout, passwordTextView, passwordEditTextLayout, login
+                title, userIdTextView, userIdEditTextLayout, passwordTextView, passwordEditTextLayout, login
             )
             startDelay = 100
         }.start()

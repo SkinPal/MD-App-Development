@@ -23,6 +23,7 @@ import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
+import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.camera.ResultFragment
 import com.capstone.skinpal.ui.camera.getImageUri
 import com.capstone.skinpal.ui.camera.reduceFileImage
@@ -34,7 +35,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
     private var currentImageUri: Uri? = null
     private val cameraWeeklyViewModel by viewModels<CameraWeeklyViewModel> {
-        ViewModelFactory.Companion.getInstance(application)
+        ViewModelFactory(Injection.provideRepository(this))
     }
 
     private val cropImageLauncher = registerForActivityResult(StartActivityForResult()) { result ->
