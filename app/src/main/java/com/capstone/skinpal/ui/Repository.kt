@@ -87,72 +87,6 @@ class Repository(
         }
     }
 
-    //val products = productDao.getProduct()
-
-    //fun getAllProducts(): LiveData<List<ProductEntity>> {
-    //    return productDao.getProduct()
-    //}
-
-    /*suspend fun saveProducts(productResponse: List<ProductResponseItem>) {
-        // Map API response to local database entities
-        val productEntities = productResponse.map { item ->
-            ProductEntity(
-                name = item.name,
-                imageUrl = item.imageUrl
-            )
-        }
-        // Insert the mapped entities into the database
-        withContext(Dispatchers.IO) {
-            productDao.insertProduct(productEntities)
-        }
-    }*/
-
-
-    /*fun getProduct(): LiveData<Result<List<ProductEntity>>> = liveData {
-        emit(Result.Loading)
-        try {
-            // Fetch data from API
-            val response = apiService.getProduct()
-            Log.d("API Response", response.toString())
-
-            // Map API response to local entity
-            val productEntities = response.productResponse.map { productItem ->
-                ProductEntity(
-                    name = productItem.name,
-                    imageUrl = productItem.imageUrl
-                )
-            }
-
-            withContext(Dispatchers.IO) {
-                productDao.insertProduct(productEntities)
-            }
-            Log.d("Repository", "Successfully inserted ${productEntities.size} products")
-
-            // Emit success
-            emit(Result.Success(productEntities))
-
-        } catch (e: Exception) {
-            emit(Result.Error("Failed to fetch products: ${e.message}"))
-            return@liveData
-        }
-
-        // Observe the database and emit as LiveData
-        val localData: LiveData<List<ProductEntity>> = productDao.getProduct()
-        emitSource(localData.map { Result.Success(it) })
-    }*/
-
-
-    /*fun registerUser(jsonBody: String): Response {
-        val request = Request.Builder()
-            .url("https://your-api-url.com/register")
-            .post(RequestBody.create(MediaType.parse("application/json"), jsonBody))
-            .addHeader("Content-Type", "application/json")
-            .build()
-
-        return client.newCall(request).execute()
-    }*/
-
-
     fun register(name: String, user_id: String, email: String, password: String): LiveData<Result<String>> = liveData {
         emit(Result.Loading)
         try {
@@ -322,59 +256,6 @@ class Repository(
             emit(Result.Error("An error occurred: ${e.message}"))
         }
     }
-
-
-
-    /*fun analyzeImage(
-        imageFile: File,
-        week: String
-    ) = liveData(Dispatchers.IO) {
-        emit(Result.Loading)
-        try {
-            val userSession = userPreference.getSession()
-            val userId = userSession.user
-            val token = userSession.token
-
-            // Create multipart request
-            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            val imagePart = MultipartBody.Part.createFormData(
-                "file",
-                imageFile.name,
-                requestImageFile
-            )
-
-            // Make API call
-           val response = apiService.analyzeImage(
-                token = "Bearer $token",
-                user_id = userId,
-                week = "pekan$week",
-                file = imagePart
-            ).execute()
-
-            if (response.isSuccessful) {
-                val analyzeResponse = response.body()
-                analyzeResponse?.let { result ->
-                    // Save to local database
-                    val imageEntity = ImageEntity(
-                        week = week.toInt(),
-                        imageUrl = result.data.publicUrl,
-                        skinType = result.data.analysis.resultYourSkinhealth.skinType,
-                        skinConditions = result.data.analysis.resultYourSkinhealth.skinConditions,
-                        recommendations = result.data.recommendations
-                    )
-                    imageDao.insertItem(imageEntity)
-
-                    emit(Result.Success(result))
-                } ?: emit(Result.Error("Empty response"))
-            } else {
-                val errorBody = response.errorBody()?.string()
-                emit(Result.Error("Analysis failed: ${response.code()} - $errorBody"))
-            }
-        } catch (e: Exception) {
-            Log.e("Repository", "Analysis exception", e)
-            emit(Result.Error("Error: ${e.message}"))
-        }
-    }*/
 
     suspend fun removePrediction(id: Int) {
         withContext(Dispatchers.IO) {

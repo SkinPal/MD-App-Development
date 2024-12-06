@@ -32,7 +32,7 @@ data class ProductResponseItem(
 	val skinTypes: SkinTypes
 )
 
-data class SkinConditions(
+/*data class SkinConditions(
 
 	@field:SerializedName("wrinkles")
 	val wrinkles: Boolean,
@@ -42,7 +42,7 @@ data class SkinConditions(
 
 	@field:SerializedName("redness")
 	val redness: Boolean
-)
+)*/
 
 data class SkinTypes(
 

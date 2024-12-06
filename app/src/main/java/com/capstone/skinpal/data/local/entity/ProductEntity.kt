@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.capstone.skinpal.data.remote.response.SkinConditions
 import com.capstone.skinpal.data.remote.response.SkinTypes
 import com.capstone.skinpal.ui.product.Converters
 import com.google.gson.annotations.SerializedName
