@@ -44,7 +44,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
             if (croppedImageUri != null) {
                 currentImageUri = croppedImageUri
                 showImage()
-                showImageInfo()
             } else {
                 showToast("Cropping failed.")
             }
@@ -91,9 +90,10 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.cameraButton.setOnClickListener { startCamera() }
-        binding.saveButton.setOnClickListener {
+        binding.analyzeButton.setOnClickListener {
             currentImageUri?.let { uri ->
-                saveImage(uri.toString(), week)
+                //saveImage(uri.toString(), week)
+                showImageInfo()
                 analyzeImage(uri.toString(), week)
             } ?: showToast("Failed to save image. No image captured.")
         }
@@ -108,7 +108,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
                         disableButtons()
                     }
                 }
-                is Result.Error -> showToast("Error loading saved image.")
                 else -> Unit
             }
         }
@@ -173,19 +172,25 @@ class CameraWeeklyActivity : AppCompatActivity() {
     }
 
     private fun showImageInfo() {
-        /*currentImageUri?.let { uri ->
-            val imageName = uri.lastPathSegment ?: "Unknown Image"
-            val additionalInfo = "This image is displayed from the URI: $uri"
-            val bottomSheet = ResultFragment.newInstance(imageName, additionalInfo)
-            bottomSheet.show(supportFragmentManager, ResultFragment::class.java.simpleName)
-        }*/
+        currentImageUri?.let { uri ->
+            // Create an instance of ResultFragment
+            val bottomSheet = ResultFragment()
+
+            val bundle = Bundle()
+            bundle.putString("imageUri", uri.toString()) // Example of passing data
+            bottomSheet.arguments = bundle
+
+            // Show the ResultFragment as a BottomSheet
+            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+        }
     }
+
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun saveImage(imageUriString: String, week: String) {
+    /*private fun saveImage(imageUriString: String, week: String) {
         val userPreference = UserPreference(this)
         val session = userPreference.getSession()
 
@@ -218,7 +223,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
                     is Result.Success -> {
                         showLoading(false)
                         showToast("Image uploaded successfully")
-                        finish()
                     }
                     is Result.Error -> {
                         showLoading(false)
@@ -233,7 +237,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
                 }
             }
         } ?: showToast(getString(R.string.empty_image_warning))
-    }
+    }*/
 
     private fun analyzeImage(imageUriString: String, week: String) {
         val userPreference = UserPreference(this)
@@ -267,17 +271,12 @@ class CameraWeeklyActivity : AppCompatActivity() {
                     is Result.Loading -> showLoading(true)
                     is Result.Success -> {
                         showLoading(false)
-                        showToast("Image uploaded successfully")
-                        finish()
                     }
                     is Result.Error -> {
                         showLoading(false)
                         if (result.error.contains("authorized", ignoreCase = true)) {
                             showToast("Session expired. Please login again")
                             // Optional: Navigate to login screen
-                        } else {
-                            showToast("Debug - Saved Token: ${session.token?.take(10) ?: "null"}")
-                            showToast(result.error)
                         }
                     }
                 }
@@ -288,7 +287,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
     private fun disableButtons() {
         binding.galleryButton.isEnabled = false
         binding.cameraButton.isEnabled = false
-        binding.saveButton.isEnabled = false
+        binding.analyzeButton.isEnabled = false
     }
 
     private fun showLoading(isLoading: Boolean) {

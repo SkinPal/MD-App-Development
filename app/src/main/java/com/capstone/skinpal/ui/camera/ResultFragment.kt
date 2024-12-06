@@ -17,8 +17,6 @@ import com.capstone.skinpal.ui.product.Converters
 
 class ResultFragment : BottomSheetDialogFragment() {
 
-    private var _binding: BottomSheetResultBinding? = null
-    private val binding get() = _binding!!
 
     private var analyzeResponse: AnalyzeResponse? = null
 
@@ -27,11 +25,12 @@ class ResultFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = BottomSheetResultBinding.inflate(inflater, container, false)
-        return binding.root
+        // Inflate your layout for the fragment
+        return inflater.inflate(R.layout.bottom_sheet_result, container, false)
     }
+}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // Retrieve the analysis result from arguments
@@ -39,7 +38,7 @@ class ResultFragment : BottomSheetDialogFragment() {
 
         // Handle case when no response is provided
         if (analyzeResponse == null) {
-            showError("No analysis data available")
+           // showError("No analysis data available")
             return
         }
 
@@ -49,9 +48,6 @@ class ResultFragment : BottomSheetDialogFragment() {
         }
 
         // Set up the close button
-        binding.btnClose.setOnClickListener {
-            dismiss()
-        }
     }
 
     private fun saveToDatabase(response: AnalyzeResponse) {
@@ -69,7 +65,7 @@ class ResultFragment : BottomSheetDialogFragment() {
         //viewModel.saveSkinAnalysis(skinAnalysis)
     }
 
-    private fun displayResults(response: AnalyzeResponse) {
+    /*private fun displayResults(response: AnalyzeResponse) {
         with(binding) {
             // Display skin type
             tvSkinType.text = buildString {
@@ -118,17 +114,17 @@ class ResultFragment : BottomSheetDialogFragment() {
         productsAdapter.submitList(allProducts as List<ProductEntity?>?)
     }
 
-    private fun showError(message: String) {
+    /*private fun showError(message: String) {
         binding.apply {
             tvError.visibility = View.VISIBLE
             tvError.text = message
             groupResults.visibility = View.GONE
         }
-    }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-}
+    }*/
+}*/
 

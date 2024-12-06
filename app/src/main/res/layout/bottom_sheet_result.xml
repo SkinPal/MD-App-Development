@@ -1,79 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageButton
-            android:id="@+id/btn_close"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tvSkinType"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/icon_close"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group_results"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="tv_skin_type,tv_skin_conditions,tv_recommendations,rv_products" />
+            android:textSize="16sp"
+            android:text="@string/skin_type"
+            android:layout_marginBottom="16dp"/>
 
         <TextView
-            android:id="@+id/tv_skin_type"
-            android:layout_width="0dp"
+            android:id="@+id/tvSkinConditions"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:text="@string/skin_condition"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/tvOverallResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_close" />
+            android:layout_marginBottom="16dp"/>
 
         <TextView
-            android:id="@+id/tv_skin_conditions"
-            android:layout_width="0dp"
+            android:id="@+id/tvRecommendations"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_skin_type" />
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:id="@+id/tv_recommendations"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/layoutProducts"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_skin_conditions" />
+            android:orientation="vertical"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_products"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_recommendations" />
-
-        <TextView
-            android:id="@+id/tv_error"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/error"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -73,4 +73,5 @@
     <string name="fill_username">Enter your username</string>
     <string name="skin_type">Skin Type</string>
     <string name="skin_condition_week_0">First Scan</string>
+    <string name="showResult">Show Result</string>
 </resources>

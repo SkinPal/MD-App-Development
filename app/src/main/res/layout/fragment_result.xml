@@ -9,25 +9,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
-
-        <ImageView
-            android:id="@+id/iv_skin_image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"/>
-
         <TextView
             android:id="@+id/tv_skin_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textSize="18sp"
+            android:text="@string/skin_type"
             android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tv_skin_conditions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/skin_condition"
             android:layout_marginTop="8dp"/>
 
         <TextView

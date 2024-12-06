@@ -54,7 +54,7 @@
         android:id="@+id/image_options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/saveButton"
+        app:layout_constraintBottom_toTopOf="@id/analyzeButton"
         app:layout_constraintTop_toBottomOf="@id/previewImageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -90,14 +90,14 @@
             app:layout_constraintStart_toStartOf="parent"/>
     </LinearLayout>
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/analyzeButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
         android:paddingVertical="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/savedImage"
+        android:text="@string/showResult"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/image_options"
         android:layout_marginBottom="20dp"
