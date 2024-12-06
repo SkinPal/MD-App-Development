@@ -4,127 +4,85 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.capstone.skinpal.data.remote.response.AnalyzeResponse
-import com.capstone.skinpal.data.remote.response.BasicRoutine
 import com.capstone.skinpal.databinding.BottomSheetResultBinding
 import com.capstone.skinpal.ui.product.ProductAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.capstone.skinpal.R
-import com.capstone.skinpal.data.local.entity.AnalysisEntity
-import com.capstone.skinpal.data.local.entity.ProductEntity
-import com.capstone.skinpal.ui.product.Converters
+import com.capstone.skinpal.data.Result
+import com.capstone.skinpal.di.Injection
+import com.capstone.skinpal.ui.ViewModelFactory
+import com.capstone.skinpal.ui.history.CameraWeeklyViewModel
+import com.capstone.skinpal.ui.history.ResultAdapter
+import java.io.File
 
 class ResultFragment : BottomSheetDialogFragment() {
 
+    private lateinit var progressTextView: TextView
+    private lateinit var skinTypeTextView: TextView
+    private lateinit var skinConditionsTextView: TextView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var notesTextView: TextView
+    private lateinit var adapter: ResultAdapter
 
-    private var analyzeResponse: AnalyzeResponse? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate your layout for the fragment
-        return inflater.inflate(R.layout.bottom_sheet_result, container, false)
+    // Use activityViewModels instead of viewModels for fragments
+    private val cameraWeeklyViewModel by activityViewModels<CameraWeeklyViewModel> {
+        ViewModelFactory(Injection.provideRepository(requireContext()))
     }
-}
 
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Retrieve the analysis result from arguments
-        analyzeResponse = arguments?.getParcelable("ANALYZE_RESPONSE")
+        // Bind UI elements
+        progressTextView = view.findViewById(R.id.progress_message)
+        skinTypeTextView = view.findViewById(R.id.skin_type)
+        skinConditionsTextView = view.findViewById(R.id.skin_conditions)
+        recyclerView = view.findViewById(R.id.facial_wash_recycler)
+        notesTextView = view.findViewById(R.id.notes)
 
-        // Handle case when no response is provided
-        if (analyzeResponse == null) {
-           // showError("No analysis data available")
-            return
-        }
+        // Initialize the RecyclerView adapter
+        adapter = ResultAdapter()
 
-        // Proceed to display the results if available
-        analyzeResponse?.let { response ->
-            displayResults(response)
-        }
+        // Observe the result of analyzeImage API
+        val imageFile = File("/path/to/your/image.jpg") // Replace with actual file path
+        val userId = "user_id" // Replace with actual user ID
+        val week = "week" // Replace with actual week value
 
-        // Set up the close button
-    }
+        cameraWeeklyViewModel.analyzeImage(imageFile = imageFile, user_id = userId, week = week)
+            .observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is Result.Loading -> {
+                        // Show loading state if needed
+                        // You can display a loading indicator here
+                    }
+                    is Result.Success -> {
+                        val analysisData = result.data
 
-    private fun saveToDatabase(response: AnalyzeResponse) {
-        val converters = Converters()
+                        // Update UI with analysis result
+                        val skinHealth = analysisData.resultYourSkinhealth
+                        skinTypeTextView.text = "Skin Type: ${skinHealth.skinType}"
+                        skinConditionsTextView.text = "Conditions: Acne: ${skinHealth.skinConditions.acne}% Redness: ${skinHealth.skinConditions.redness}% Wrinkles: ${skinHealth.skinConditions.wrinkles}%"
 
-        val skinAnalysis = AnalysisEntity(
-            skinType = response.data.analysis.resultYourSkinhealth.skinType,
-            skinConditions = converters.skinConditionsToJson(
-                response.data.analysis.resultYourSkinhealth.skinConditions
-            ),
-            recommendations = converters.recommendationsToJson(
-                response.data.recommendations.notes
-            ),
-        )
-        //viewModel.saveSkinAnalysis(skinAnalysis)
-    }
+                        progressTextView.text = "${analysisData.progress.percentage}% progress"
 
-    /*private fun displayResults(response: AnalyzeResponse) {
-        with(binding) {
-            // Display skin type
-            tvSkinType.text = buildString {
-                append("Skin Type: ")
-                append(response.data.analysis.resultYourSkinhealth.skinType)
-            }
+                        // Set the facial wash products in RecyclerView
+                        adapter.submitList(analysisData.recommendations.moisturizer)
+                        recyclerView.layoutManager = LinearLayoutManager(context)
+                        recyclerView.adapter = adapter
 
-            // Display skin conditions
-            val conditions = response.data.analysis.resultYourSkinhealth.skinConditions
-            tvSkinConditions.text = buildString {
-                append("Skin Conditions:\n")
-                append("• Acne: ${conditions.acne}\n")
-                append("• Wrinkles: ${conditions.wrinkles}\n")
-                append("• Redness: ${conditions.redness}\n")
-            }
-
-            // Display recommendations
-            tvRecommendations.text = buildString {
-                append("Recommendations:\n")
-                response.data.recommendations.notes.forEach { note ->
-                    append("• $note\n")
+                        // Set notes
+                        notesTextView.text = analysisData.notes.joinToString("\n")
+                    }
+                    is Result.Error -> {
+                        // Handle error
+                        //Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-
-            setupProductsRecyclerView(response.data.recommendations.basicRoutine)
-        }
     }
-
-    private fun setupProductsRecyclerView(basicRoutine: BasicRoutine) {
-        val productsAdapter = ProductAdapter()
-
-        binding.rvProducts.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = productsAdapter
-        }
-
-        // Combine all products into a single list
-        val allProducts = mutableListOf<Any>().apply {
-            addAll(basicRoutine.facialWash)
-            addAll(basicRoutine.toner)
-            addAll(basicRoutine.serum)
-            addAll(basicRoutine.moisturizer)
-            addAll(basicRoutine.sunscreen)
-        }
-
-        productsAdapter.submitList(allProducts as List<ProductEntity?>?)
-    }
-
-    /*private fun showError(message: String) {
-        binding.apply {
-            tvError.visibility = View.VISIBLE
-            tvError.text = message
-            groupResults.visibility = View.GONE
-        }
-    }*/
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }*/
-}*/
-
+}

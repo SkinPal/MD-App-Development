@@ -4,149 +4,32 @@ import com.google.gson.annotations.SerializedName
 
 data class AnalyzeResponse(
 
-    @field:SerializedName("data")
-    val data: Data,
-
-    @field:SerializedName("message")
-    val message: String,
-
-    @field:SerializedName("status")
-    val status: String
-)
-
-data class Analysis(
-
-    @field:SerializedName("skin_conditions_details")
-    val skinConditionsDetails: SkinConditionsDetails,
-
-    @field:SerializedName("skin_type_details")
-    val skinTypeDetails: SkinTypeDetails,
-
-    @field:SerializedName("result_your_skinhealth")
-    val resultYourSkinhealth: ResultYourSkinhealth
-)
-
-data class Recommendations(
-
-    @field:SerializedName("basic_routine")
-    val basicRoutine: BasicRoutine,
+    @field:SerializedName("public_url")
+    val publicUrl: String,
 
     @field:SerializedName("notes")
     val notes: List<String>,
 
-    @field:SerializedName("additional_care")
-    val additionalCare: AdditionalCare
+    @field:SerializedName("progress")
+    val progress: Progress,
+
+    @field:SerializedName("result_your_skinhealth")
+    val resultYourSkinhealth: ResultYourSkinhealth,
+
+    @field:SerializedName("recommendations")
+    val recommendations: Recommendations
 )
 
-data class MoisturizerItem(
+data class Progress(
 
-    @field:SerializedName("skin_conditions")
-    val skinConditions: SkinConditions,
+    @field:SerializedName("percentage")
+    val percentage: Any,
 
-    @field:SerializedName("image_url")
-    val imageUrl: String,
-
-    @field:SerializedName("product_id")
-    val productId: String,
-
-    @field:SerializedName("name")
-    val name: String,
-
-    @field:SerializedName("ingredients")
-    val ingredients: String,
-
-    @field:SerializedName("description")
-    val description: String,
-
-    @field:SerializedName("type")
-    val type: String,
-
-    @field:SerializedName("skin_types")
-    val skinTypes: SkinTypes
+    @field:SerializedName("message")
+    val message: String
 )
 
-data class MaskItem(
-
-    @field:SerializedName("skin_conditions")
-    val skinConditions: SkinConditions,
-
-    @field:SerializedName("image_url")
-    val imageUrl: String,
-
-    @field:SerializedName("product_id")
-    val productId: String,
-
-    @field:SerializedName("name")
-    val name: String,
-
-    @field:SerializedName("ingredients")
-    val ingredients: String,
-
-    @field:SerializedName("description")
-    val description: String,
-
-    @field:SerializedName("type")
-    val type: String,
-
-    @field:SerializedName("skin_types")
-    val skinTypes: SkinTypes
-)
-
-data class SunscreenItem(
-
-    @field:SerializedName("skin_conditions")
-    val skinConditions: SkinConditions,
-
-    @field:SerializedName("image_url")
-    val imageUrl: String,
-
-    @field:SerializedName("product_id")
-    val productId: String,
-
-    @field:SerializedName("name")
-    val name: String,
-
-    @field:SerializedName("ingredients")
-    val ingredients: String,
-
-    @field:SerializedName("description")
-    val description: String,
-
-    @field:SerializedName("type")
-    val type: String,
-
-    @field:SerializedName("skin_types")
-    val skinTypes: SkinTypes
-)
-
-data class FacialWashItem(
-
-    @field:SerializedName("skin_conditions")
-    val skinConditions: SkinConditions,
-
-    @field:SerializedName("image_url")
-    val imageUrl: String,
-
-    @field:SerializedName("product_id")
-    val productId: String,
-
-    @field:SerializedName("name")
-    val name: String,
-
-    @field:SerializedName("ingredients")
-    val ingredients: String,
-
-    @field:SerializedName("description")
-    val description: String,
-
-    @field:SerializedName("type")
-    val type: String,
-
-    @field:SerializedName("skin_types")
-    val skinTypes: SkinTypes
-)
-
-data class SkinConditionsDetails(
+data class SkinConditions(
 
     @field:SerializedName("wrinkles")
     val wrinkles: Any,
@@ -161,22 +44,7 @@ data class SkinConditionsDetails(
     val redness: Any
 )
 
-data class AdditionalCare(
-
-    @field:SerializedName("acne_spot")
-    val acneSpot: List<AcneSpotItem>,
-
-    @field:SerializedName("eye_cream")
-    val eyeCream: List<Any>,
-
-    @field:SerializedName("mask")
-    val mask: List<MaskItem>
-)
-
-data class SerumItem(
-
-    @field:SerializedName("skin_conditions")
-    val skinConditions: SkinConditions,
+data class MoisturizerItem(
 
     @field:SerializedName("image_url")
     val imageUrl: String,
@@ -187,62 +55,38 @@ data class SerumItem(
     @field:SerializedName("name")
     val name: String,
 
-    @field:SerializedName("ingredients")
-    val ingredients: String,
-
     @field:SerializedName("description")
     val description: String,
-
-    @field:SerializedName("type")
-    val type: String,
-
-    @field:SerializedName("skin_types")
-    val skinTypes: SkinTypes
-)
-
-data class Data(
-
-    @field:SerializedName("public_url")
-    val publicUrl: String,
-
-    @field:SerializedName("analysis")
-    val analysis: Analysis,
-
-    @field:SerializedName("recommendations")
-    val recommendations: Recommendations
-)
-
-data class AcneSpotItem(
-
-    @field:SerializedName("skin_conditions")
-    val skinConditions: SkinConditions,
-
-    @field:SerializedName("image_url")
-    val imageUrl: String,
-
-    @field:SerializedName("product_id")
-    val productId: String,
-
-    @field:SerializedName("name")
-    val name: String,
 
     @field:SerializedName("ingredients")
     val ingredients: String,
 
-    @field:SerializedName("description")
-    val description: String,
-
     @field:SerializedName("type")
-    val type: String,
-
-    @field:SerializedName("skin_types")
-    val skinTypes: SkinTypes
+    val type: String
 )
 
 data class TonerItem(
 
-    @field:SerializedName("skin_conditions")
-    val skinConditions: SkinConditions,
+    @field:SerializedName("image_url")
+    val imageUrl: String,
+
+    @field:SerializedName("product_id")
+    val productId: String,
+
+    @field:SerializedName("name")
+    val name: String,
+
+    @field:SerializedName("description")
+    val description: String,
+
+    @field:SerializedName("ingredients")
+    val ingredients: String,
+
+    @field:SerializedName("type")
+    val type: String
+)
+
+data class SerumItem(
 
     @field:SerializedName("image_url")
     val imageUrl: String,
@@ -253,35 +97,44 @@ data class TonerItem(
     @field:SerializedName("name")
     val name: String,
 
+    @field:SerializedName("description")
+    val description: String,
+
     @field:SerializedName("ingredients")
     val ingredients: String,
+
+    @field:SerializedName("type")
+    val type: String
+)
+
+data class TreatmentItem(
+
+    @field:SerializedName("image_url")
+    val imageUrl: String,
+
+    @field:SerializedName("product_id")
+    val productId: String,
+
+    @field:SerializedName("name")
+    val name: String,
 
     @field:SerializedName("description")
     val description: String,
 
+    @field:SerializedName("ingredients")
+    val ingredients: String,
+
     @field:SerializedName("type")
-    val type: String,
-
-    @field:SerializedName("skin_types")
-    val skinTypes: SkinTypes
+    val type: String
 )
 
-data class SkinTypeDetails(
-
-    @field:SerializedName("normal")
-    val normal: Any,
-
-    @field:SerializedName("oily")
-    val oily: Any,
-
-    @field:SerializedName("dry")
-    val dry: Any
-)
-
-data class BasicRoutine(
+data class Recommendations(
 
     @field:SerializedName("moisturizer")
     val moisturizer: List<MoisturizerItem>,
+
+    @field:SerializedName("treatment")
+    val treatment: List<TreatmentItem>,
 
     @field:SerializedName("sunscreen")
     val sunscreen: List<SunscreenItem>,
@@ -296,19 +149,25 @@ data class BasicRoutine(
     val facialWash: List<FacialWashItem>
 )
 
-data class SkinConditions(
+data class FacialWashItem(
 
-	@field:SerializedName("wrinkles")
-	val wrinkles: Any,
+    @field:SerializedName("image_url")
+    val imageUrl: String,
 
-	@field:SerializedName("normal")
-	val normal: Any,
+    @field:SerializedName("product_id")
+    val productId: String,
 
-	@field:SerializedName("acne")
-	val acne: Any,
+    @field:SerializedName("name")
+    val name: String,
 
-	@field:SerializedName("redness")
-	val redness: Any
+    @field:SerializedName("description")
+    val description: String,
+
+    @field:SerializedName("ingredients")
+    val ingredients: String,
+
+    @field:SerializedName("type")
+    val type: String
 )
 
 data class ResultYourSkinhealth(
@@ -320,14 +179,23 @@ data class ResultYourSkinhealth(
     val skinType: String
 )
 
-/*data class SkinTypes(
+data class SunscreenItem(
 
-	@field:SerializedName("normal")
-	val normal: Boolean,
+    @field:SerializedName("image_url")
+    val imageUrl: String,
 
-	@field:SerializedName("oily")
-	val oily: Boolean,
+    @field:SerializedName("product_id")
+    val productId: String,
 
-	@field:SerializedName("dry")
-	val dry: Boolean
-)*/
+    @field:SerializedName("name")
+    val name: String,
+
+    @field:SerializedName("description")
+    val description: String,
+
+    @field:SerializedName("ingredients")
+    val ingredients: String,
+
+    @field:SerializedName("type")
+    val type: String
+)

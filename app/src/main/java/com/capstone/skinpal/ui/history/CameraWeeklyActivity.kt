@@ -93,7 +93,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
         binding.analyzeButton.setOnClickListener {
             currentImageUri?.let { uri ->
                 //saveImage(uri.toString(), week)
-                showImageInfo()
                 analyzeImage(uri.toString(), week)
             } ?: showToast("Failed to save image. No image captured.")
         }
@@ -251,38 +250,42 @@ class CameraWeeklyActivity : AppCompatActivity() {
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
 
-            // Add logging for debugging
             if (BuildConfig.DEBUG) {
                 Log.d("CameraWeeklyActivity", """
-                Uploading image:
-                userId: $user_id
-                week: $week
-                token: ${session.token!!.take(10)}...
-                file: ${imageFile.name}
-            """.trimIndent())
+            Uploading image:
+            userId: $user_id
+            week: $week
+            token: ${session.token!!.take(10)}...
+            file: ${imageFile.name}
+        """.trimIndent())
             }
 
             cameraWeeklyViewModel.analyzeImage(
                 imageFile = imageFile,
                 user_id = user_id,
-                week = week.toString()
+                week = week
             ).observe(this) { result ->
                 when (result) {
                     is Result.Loading -> showLoading(true)
                     is Result.Success -> {
                         showLoading(false)
+                        showImage() // Refresh the image after successful analysis
+                        showImageInfo() // Display analysis info (if needed)
                     }
                     is Result.Error -> {
                         showLoading(false)
                         if (result.error.contains("authorized", ignoreCase = true)) {
                             showToast("Session expired. Please login again")
                             // Optional: Navigate to login screen
+                        } else {
+                            showToast(result.error)
                         }
                     }
                 }
             }
         } ?: showToast(getString(R.string.empty_image_warning))
     }
+
 
     private fun disableButtons() {
         binding.galleryButton.isEnabled = false

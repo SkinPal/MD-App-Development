@@ -226,26 +226,39 @@ class Repository(
 
     fun analyzeImage(user_id: String, imageFile: File, week: String) = liveData(Dispatchers.IO) {
         emit(Result.Loading)
+
         try {
+            // Get user session
             val userSession = userPreference.getSession()
             val userId = userSession.user ?: throw Exception("User session is invalid")
 
+            // Prepare image for upload
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            val imagePart =
-                MultipartBody.Part.createFormData("file", imageFile.name, requestImageFile)
+            val imagePart = MultipartBody.Part.createFormData("file", imageFile.name, requestImageFile)
 
+            // Make API call
             val response = apiService.analyzeImage(userId, week, imagePart).execute()
 
             if (response.isSuccessful) {
                 response.body()?.let { result ->
+
+                    // Map API response to model
+                    val skinHealthData = result.resultYourSkinhealth
+                    val skinConditions = skinHealthData.skinConditions.toString() // Convert map or list to string as needed
+
+                    // Prepare AnalysisEntity to store in the database
                     val analysisEntity = AnalysisEntity(
-                        skinType = result.data.analysis.resultYourSkinhealth.skinType,
-                        skinConditions = result.data.analysis.resultYourSkinhealth.skinConditions.toString(),
-                        recommendations = result.data.recommendations.toString(),
+                        skinType = skinHealthData.skinType,
+                        skinConditions = skinConditions,
+                        recommendations = result.recommendations.toString() // Can adjust based on how you want to display recommendations
                     )
+
                     // Insert entity into Room database
                     skinAnalysisDao.insertAnalysis(analysisEntity)
+
+                    // Emit success with the result
                     emit(Result.Success(result))
+
                 } ?: emit(Result.Error("Empty response"))
             } else {
                 val errorBody = response.errorBody()?.string()
@@ -256,6 +269,7 @@ class Repository(
             emit(Result.Error("An error occurred: ${e.message}"))
         }
     }
+
 
     suspend fun removePrediction(id: Int) {
         withContext(Dispatchers.IO) {
