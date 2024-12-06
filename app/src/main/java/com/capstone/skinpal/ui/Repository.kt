@@ -12,8 +12,10 @@ import com.capstone.skinpal.data.UserModel
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
+import com.capstone.skinpal.data.local.entity.AnalysisEntity
 import com.capstone.skinpal.data.local.room.ImageDao
 import com.capstone.skinpal.data.local.room.ProductDao
+import com.capstone.skinpal.data.local.room.SkinAnalysisDao
 import com.capstone.skinpal.data.remote.response.ErrorResponse
 import com.capstone.skinpal.data.remote.response.FileUploadResponse
 import com.capstone.skinpal.data.remote.retrofit.LoginRequest
@@ -34,7 +36,8 @@ class Repository(
     private val articleDao: ArticleDao,
     private val productDao: ProductDao,
     private val userPreference: UserPreference,
-    private val imageDao: ImageDao
+    private val imageDao: ImageDao,
+    private val skinAnalysisDao: SkinAnalysisDao
 ) {
 
     fun clearSession() {
@@ -283,6 +286,96 @@ class Repository(
         }
     }
 
+    suspend fun insertSkinAnalysis(skinAnalysis: AnalysisEntity) {
+        skinAnalysisDao.insertAnalysis(skinAnalysis)
+    }
+
+    fun analyzeImage(user_id: String, imageFile: File, week: String) = liveData(Dispatchers.IO) {
+        emit(Result.Loading)
+        try {
+            val userSession = userPreference.getSession()
+            val userId = userSession.user ?: throw Exception("User session is invalid")
+
+            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+            val imagePart =
+                MultipartBody.Part.createFormData("file", imageFile.name, requestImageFile)
+
+            val response = apiService.analyzeImage(userId, week, imagePart).execute()
+
+            if (response.isSuccessful) {
+                response.body()?.let { result ->
+                    val analysisEntity = AnalysisEntity(
+                        skinType = result.data.analysis.resultYourSkinhealth.skinType,
+                        skinConditions = result.data.analysis.resultYourSkinhealth.skinConditions.toString(),
+                        recommendations = result.data.recommendations.toString(),
+                    )
+                    // Insert entity into Room database
+                    skinAnalysisDao.insertAnalysis(analysisEntity)
+                    emit(Result.Success(result))
+                } ?: emit(Result.Error("Empty response"))
+            } else {
+                val errorBody = response.errorBody()?.string()
+                emit(Result.Error("Analysis failed: ${response.code()} - $errorBody"))
+            }
+
+        } catch (e: Exception) {
+            emit(Result.Error("An error occurred: ${e.message}"))
+        }
+    }
+
+
+
+    /*fun analyzeImage(
+        imageFile: File,
+        week: String
+    ) = liveData(Dispatchers.IO) {
+        emit(Result.Loading)
+        try {
+            val userSession = userPreference.getSession()
+            val userId = userSession.user
+            val token = userSession.token
+
+            // Create multipart request
+            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+            val imagePart = MultipartBody.Part.createFormData(
+                "file",
+                imageFile.name,
+                requestImageFile
+            )
+
+            // Make API call
+           val response = apiService.analyzeImage(
+                token = "Bearer $token",
+                user_id = userId,
+                week = "pekan$week",
+                file = imagePart
+            ).execute()
+
+            if (response.isSuccessful) {
+                val analyzeResponse = response.body()
+                analyzeResponse?.let { result ->
+                    // Save to local database
+                    val imageEntity = ImageEntity(
+                        week = week.toInt(),
+                        imageUrl = result.data.publicUrl,
+                        skinType = result.data.analysis.resultYourSkinhealth.skinType,
+                        skinConditions = result.data.analysis.resultYourSkinhealth.skinConditions,
+                        recommendations = result.data.recommendations
+                    )
+                    imageDao.insertItem(imageEntity)
+
+                    emit(Result.Success(result))
+                } ?: emit(Result.Error("Empty response"))
+            } else {
+                val errorBody = response.errorBody()?.string()
+                emit(Result.Error("Analysis failed: ${response.code()} - $errorBody"))
+            }
+        } catch (e: Exception) {
+            Log.e("Repository", "Analysis exception", e)
+            emit(Result.Error("Error: ${e.message}"))
+        }
+    }*/
+
     suspend fun removePrediction(id: Int) {
         withContext(Dispatchers.IO) {
             imageDao.deleteItem(id)
@@ -295,7 +388,8 @@ class Repository(
             articleDao: ArticleDao,
             productDao: ProductDao,
             userPreference: UserPreference,
-            imageDao: ImageDao
-        ): Repository = Repository(apiService, articleDao, productDao, userPreference, imageDao)
+            imageDao: ImageDao,
+            skinAnalysisDao: SkinAnalysisDao
+        ): Repository = Repository(apiService, articleDao, productDao, userPreference, imageDao, skinAnalysisDao)
     }
 }

@@ -1,5 +1,6 @@
 package com.capstone.skinpal.data.remote.retrofit
 
+import com.capstone.skinpal.data.remote.response.AnalyzeResponse
 import com.capstone.skinpal.data.remote.response.ArticleResponse
 import com.capstone.skinpal.data.remote.response.LoginResponse
 import com.capstone.skinpal.data.remote.response.ProductResponse
@@ -41,5 +42,13 @@ interface ApiService {
         @Query("week") week: String,
         @Part file: MultipartBody.Part
     ): Call<ResponseBody>
+
+    @Multipart
+    @POST("users/analyze")
+    fun analyzeImage(
+        @Query("user_id") user_id: String,
+        @Query("week") week: String,
+        @Part file: MultipartBody.Part
+    ): Call<AnalyzeResponse>
 
 }

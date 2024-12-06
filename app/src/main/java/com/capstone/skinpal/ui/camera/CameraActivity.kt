@@ -129,12 +129,12 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun showImageInfo() {
-        currentImageUri?.let { uri ->
+        /*currentImageUri?.let { uri ->
             val imageName = uri.lastPathSegment ?: "Unknown Image"
             val additionalInfo = "This image is displayed from the URI: $uri"
             val bottomSheet = ResultFragment.newInstance(imageName, additionalInfo)
             bottomSheet.show(supportFragmentManager, ResultFragment::class.java.simpleName)
-        }
+        }*/
     }
 
     private fun showToast(message: String) {

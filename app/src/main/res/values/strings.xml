@@ -71,4 +71,5 @@
     <string name="empty_image_warning">Image is empty</string>
     <string name="image_uploaded">Image uploaded</string>
     <string name="fill_username">Enter your username</string>
+    <string name="skin_type">Skin Type</string>
 </resources>
