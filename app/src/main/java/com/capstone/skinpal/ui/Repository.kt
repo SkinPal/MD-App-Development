@@ -102,8 +102,8 @@ class Repository(
             }
             emit(Result.Success("Registration successful"))
         } catch (e: HttpException) {
-           // val errorMessage = e.response()?.errorBody()?.string()?.let {
-             //   Gson().fromJson(it, FileUploadResponse::class.java).message
+            // val errorMessage = e.response()?.errorBody()?.string()?.let {
+            //   Gson().fromJson(it, FileUploadResponse::class.java).message
             //} ?: "Registration failed"
             //emit(Result.Error(errorMessage))
         } catch (e: IOException) {
@@ -206,13 +206,13 @@ class Repository(
             if (response.isSuccessful) {
                 emit(Result.Success(FileUploadResponse(false, "Image uploaded successfully")))
             } else {
-               /* val errorBody = response.errorBody()?.string()
-                Log.e("Repository", """
-                Upload failed:
-                Code: ${response.code()}
-                Error: $errorBody
-             """.trimIndent())
-                emit(Result.Error("Upload failed: ${response.code()} - $errorBody"))*/
+                /* val errorBody = response.errorBody()?.string()
+                 Log.e("Repository", """
+                 Upload failed:
+                 Code: ${response.code()}
+                 Error: $errorBody
+              """.trimIndent())
+                 emit(Result.Error("Upload failed: ${response.code()} - $errorBody"))*/
             }
         } catch (e: Exception) {
             Log.e("Repository", "Upload exception", e)
@@ -248,6 +248,8 @@ class Repository(
 
                     // Prepare AnalysisEntity to store in the database
                     val analysisEntity = AnalysisEntity(
+                        userId = userId,
+                        week = week,
                         skinType = skinHealthData.skinType,
                         skinConditions = skinConditions,
                         recommendations = result.recommendations.toString() // Can adjust based on how you want to display recommendations
