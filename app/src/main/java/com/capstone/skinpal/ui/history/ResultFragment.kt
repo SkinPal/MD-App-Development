@@ -18,6 +18,7 @@ import com.capstone.skinpal.data.remote.response.MoisturizerItem
 import com.capstone.skinpal.databinding.FragmentResultBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.ViewModelFactory
+import com.capstone.skinpal.ui.product.ProductAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -26,7 +27,7 @@ class ResultFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentResultBinding? = null
     private val binding get() = _binding!!
-    private lateinit var resultAdapter: ResultAdapter
+    private lateinit var resultAdapter: ProductAdapter
     private lateinit var userPreference: UserPreference
     private val cameraWeeklyViewModel: CameraWeeklyViewModel by viewModels {
         ViewModelFactory(Injection.provideRepository(requireActivity()))
@@ -55,8 +56,33 @@ class ResultFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupRecyclerView() {
-        resultAdapter = ResultAdapter()
+        resultAdapter = ProductAdapter()
         binding.sunscreenRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = resultAdapter
+        }
+
+        binding.moisturizerRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = resultAdapter
+        }
+
+        binding.tonerRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = resultAdapter
+        }
+
+        binding.serumRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = resultAdapter
+        }
+
+        binding.treatmentRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = resultAdapter
+        }
+
+        binding.facialWashRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = resultAdapter
         }
