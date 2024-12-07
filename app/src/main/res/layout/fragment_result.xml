@@ -138,7 +138,7 @@
             android:layout_marginTop="10dp"
             android:id="@+id/sunscreen_recycler"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -152,7 +152,7 @@
             android:layout_marginTop="10dp"
             android:id="@+id/moisturizer_recycler"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -166,7 +166,7 @@
             android:layout_marginTop="20dp"
             android:id="@+id/facial_wash_recycler"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -180,7 +180,7 @@
             android:layout_marginTop="20dp"
             android:id="@+id/treatment_recycler"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -194,7 +194,7 @@
             android:layout_marginTop="20dp"
             android:id="@+id/toner_recycler"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -208,7 +208,7 @@
             android:layout_marginTop="20dp"
             android:id="@+id/serum_recycler"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp" />
 
     </LinearLayout>
 </ScrollView>

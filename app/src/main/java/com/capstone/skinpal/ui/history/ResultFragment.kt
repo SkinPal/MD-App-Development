@@ -14,6 +14,7 @@ import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.local.entity.AnalysisEntity
+import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.data.remote.response.MoisturizerItem
 import com.capstone.skinpal.databinding.FragmentResultBinding
 import com.capstone.skinpal.di.Injection
@@ -27,7 +28,12 @@ class ResultFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentResultBinding? = null
     private val binding get() = _binding!!
-    private lateinit var resultAdapter: ProductAdapter
+    private lateinit var sunscreenAdapter: SunscreenAdapter
+    private lateinit var moisturizerAdapter: MoisturizerAdapter
+    private lateinit var tonerAdapter: TonerAdapter
+    private lateinit var serumAdapter: SerumAdapter
+    private lateinit var facialWashAdapter: FacialWashAdapter
+    private lateinit var treatmentAdapter: TreatmentAdapter
     private lateinit var userPreference: UserPreference
     private val cameraWeeklyViewModel: CameraWeeklyViewModel by viewModels {
         ViewModelFactory(Injection.provideRepository(requireActivity()))
@@ -56,35 +62,40 @@ class ResultFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupRecyclerView() {
-        resultAdapter = ProductAdapter()
+        sunscreenAdapter = SunscreenAdapter()
         binding.sunscreenRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = resultAdapter
+            adapter = sunscreenAdapter
         }
 
+        moisturizerAdapter = MoisturizerAdapter()
         binding.moisturizerRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = resultAdapter
+            adapter = moisturizerAdapter
         }
 
+        tonerAdapter = TonerAdapter()
         binding.tonerRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = resultAdapter
+            adapter = tonerAdapter
         }
 
+        serumAdapter = SerumAdapter()
         binding.serumRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = resultAdapter
+            adapter = serumAdapter
         }
 
+        treatmentAdapter = TreatmentAdapter()
         binding.treatmentRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = resultAdapter
+            adapter = treatmentAdapter
         }
 
+        facialWashAdapter = FacialWashAdapter()
         binding.facialWashRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = resultAdapter
+            adapter = facialWashAdapter
         }
     }
 
@@ -120,7 +131,65 @@ class ResultFragment : BottomSheetDialogFragment() {
         binding.wrinklesValue.text = analysis.wrinkles
 
        // val recommendations = analysis.sunscreenItem ?: emptyList()
-        //resultAdapter.submitList(recommendations as List<MoisturizerItem?>?)
+        val moisturizerEntities = analysis.moisturizer?.map { moisturizerItem ->
+            ProductEntity( // Map fields appropriately
+                name = moisturizerItem.name,
+                imageUrl = moisturizerItem.imageUrl
+                // Add any other required fields
+            )
+        } ?: emptyList()
+
+        moisturizerAdapter.submitList(moisturizerEntities)
+
+        val sunscreenEntities = analysis.sunscreen?.map { sunscreenItem ->
+            ProductEntity( // Map fields appropriately
+                name = sunscreenItem.name,
+                imageUrl = sunscreenItem.imageUrl
+                // Add any other required fields
+            )
+        } ?: emptyList()
+
+        sunscreenAdapter.submitList(sunscreenEntities)
+
+        val tonerEntities = analysis.toner?.map { tonerItem ->
+            ProductEntity( // Map fields appropriately
+                name = tonerItem.name,
+                imageUrl = tonerItem.imageUrl
+                // Add any other required fields
+            )
+        } ?: emptyList()
+
+        tonerAdapter.submitList(tonerEntities)
+
+        val serumEntities = analysis.serum?.map { serumItem ->
+            ProductEntity( // Map fields appropriately
+                name = serumItem.name,
+                imageUrl = serumItem.imageUrl
+                // Add any other required fields
+            )
+        } ?: emptyList()
+
+        serumAdapter.submitList(serumEntities)
+
+        val facialWashEntities = analysis.facialWash?.map { facialWashItem ->
+            ProductEntity( // Map fields appropriately
+                name = facialWashItem.name,
+                imageUrl = facialWashItem.imageUrl
+                // Add any other required fields
+            )
+        } ?: emptyList()
+
+        facialWashAdapter.submitList(facialWashEntities)
+
+        val treatmentEntities = analysis.treatment?.map { treatmentItem ->
+            ProductEntity( // Map fields appropriately
+                name = treatmentItem.name,
+                imageUrl = treatmentItem.imageUrl
+                // Add any other required fields
+            )
+        } ?: emptyList()
+
+        treatmentAdapter.submitList(treatmentEntities)
 
         // Update the RecyclerView data
        // val recommendations = analysis.recommendations ?: emptyList()
