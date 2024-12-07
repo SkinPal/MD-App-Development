@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.capstone.skinpal.data.local.entity.AnalysisEntity
 
-@Database(entities = [AnalysisEntity::class], version = 4, exportSchema = false)
+@Database(entities = [AnalysisEntity::class], version = 5, exportSchema = false)
 abstract class AnalysisDatabase : RoomDatabase() {
 
     abstract fun skinAnalysisDao() : SkinAnalysisDao

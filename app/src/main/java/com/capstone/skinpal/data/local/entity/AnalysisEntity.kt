@@ -9,7 +9,6 @@ data class AnalysisEntity(
     val week: String,
     val skinType: String,
     val acne : String,
-    val normal : String,
     val redness : String,
     val wrinkles: String,
     val recommendations: String,  // Store as JSON string

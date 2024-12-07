@@ -294,10 +294,9 @@ class Repository(
                         userId = userId,
                         week = week,
                         skinType = skinHealthData.skinType,
-                        acne = skinHealthData.skinConditions.acne.toString(),
-                        normal = skinHealthData.skinConditions.normal.toString(),
-                        redness = skinHealthData.skinConditions.redness.toString(),
-                        wrinkles = skinHealthData.skinConditions.wrinkles.toString(),
+                        acne = skinHealthData.skinConditions.acne.toPercent(),
+                        redness = skinHealthData.skinConditions.redness.toPercent(),
+                        wrinkles = skinHealthData.skinConditions.wrinkles.toPercent(),
                         recommendations = result.recommendations.toString(),
                         timestamp = System.currentTimeMillis()// Can adjust based on how you want to display recommendations
                     )

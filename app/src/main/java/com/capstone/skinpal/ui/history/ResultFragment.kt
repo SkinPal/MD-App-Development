@@ -14,6 +14,7 @@ import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.local.entity.AnalysisEntity
+import com.capstone.skinpal.data.remote.response.MoisturizerItem
 import com.capstone.skinpal.databinding.FragmentResultBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.ViewModelFactory
@@ -55,7 +56,7 @@ class ResultFragment : BottomSheetDialogFragment() {
 
     private fun setupRecyclerView() {
         resultAdapter = ResultAdapter()
-        binding.facialWashRecycler.apply {
+        binding.sunscreenRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = resultAdapter
         }
@@ -90,8 +91,10 @@ class ResultFragment : BottomSheetDialogFragment() {
         binding.skinTypeValue.text = analysis.skinType
         binding.acneValue.text = analysis.acne
         binding.rednessValue.text = analysis.redness
-        binding.normalValue.text = analysis.normal
         binding.wrinklesValue.text = analysis.wrinkles
+
+       // val recommendations = analysis.sunscreenItem ?: emptyList()
+        //resultAdapter.submitList(recommendations as List<MoisturizerItem?>?)
 
         // Update the RecyclerView data
        // val recommendations = analysis.recommendations ?: emptyList()
@@ -99,6 +102,10 @@ class ResultFragment : BottomSheetDialogFragment() {
         Log.d("ResultFragment", "Analysis: $analysis")
     }
 
+
+    fun Float.toPercent(): String {
+        return String.format("%.2f%%", this * 100) // Mengalikan nilai dengan 100 dan menambahkan simbol %
+    }
     /*private fun showDefaultResult() {
         showLoading(false)
         binding.skinConditions.text = getString(R.string.no_skin_conditions)

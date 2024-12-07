@@ -32,16 +32,16 @@ data class Progress(
 data class SkinConditions(
 
     @field:SerializedName("wrinkles")
-    val wrinkles: Any,
+    val wrinkles: Float,
 
     @field:SerializedName("normal")
-    val normal: Any,
+    val normal: Float,
 
     @field:SerializedName("acne")
-    val acne: Any,
+    val acne: Float,
 
     @field:SerializedName("redness")
-    val redness: Any
+    val redness: Float
 )
 
 data class MoisturizerItem(

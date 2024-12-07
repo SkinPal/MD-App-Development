@@ -21,70 +21,100 @@
 
     <TextView
         android:id="@+id/skin_type"
-        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/secondary"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Skin Type: "
+        android:gravity="center"
         android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/skin_type_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-    <TextView
-        android:id="@+id/acne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Acne: "
-        android:textSize="16sp"/>
+        android:layout_gravity="center"
+        android:textColor="@color/secondary"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"/>
+<LinearLayout
+    android:layout_marginTop="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/acne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Acne: "
+            android:textColor="@color/secondary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
-        android:id="@+id/acne_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/acne_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary"
+            app:layout_constraintStart_toStartOf="@id/acne"
+            app:layout_constraintEnd_toEndOf="@id/acne"
+            app:layout_constraintTop_toBottomOf="@id/acne"
+           android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/normal"
-        android:text="Normal: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/redness"
+            android:text="Redness: "
+            android:textColor="@color/secondary"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/normal_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/redness_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/redness"
+            app:layout_constraintEnd_toEndOf="@id/redness"
+            app:layout_constraintTop_toBottomOf="@id/redness" />
 
-    <TextView
-        android:id="@+id/redness"
-        android:text="Redness: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/wrinkles"
+            android:text="Wrinkles: "
+            android:textStyle="bold"
+            android:textColor="@color/secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/redness_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:id="@+id/wrinkles"
-        android:text="Wrinkles: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:id="@+id/wrinkles_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
-    <!-- Product Recommendations -->
+        <TextView
+            android:id="@+id/wrinkles_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary"
+            app:layout_constraintStart_toStartOf="@id/wrinkles"
+            app:layout_constraintEnd_toEndOf="@id/wrinkles"
+            app:layout_constraintTop_toBottomOf="@id/wrinkles"
+            android:textSize="16sp"/>
+        <!-- Product Recommendations -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/facial_wash_recycler"
+        android:layout_marginTop="20dp"
+        android:id="@+id/sunscreen_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
