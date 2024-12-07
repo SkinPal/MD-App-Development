@@ -13,6 +13,7 @@ import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.data.local.entity.AnalysisEntity
+import com.capstone.skinpal.data.local.room.AnalysisDatabase
 import com.capstone.skinpal.data.local.room.ImageDao
 import com.capstone.skinpal.data.local.room.ProductDao
 import com.capstone.skinpal.data.local.room.SkinAnalysisDao
@@ -37,7 +38,8 @@ class Repository(
     private val productDao: ProductDao,
     private val userPreference: UserPreference,
     private val imageDao: ImageDao,
-    private val skinAnalysisDao: SkinAnalysisDao
+    private val skinAnalysisDao: SkinAnalysisDao,
+    private val analysisDatabase: AnalysisDatabase
 ) {
 
     fun clearSession() {
@@ -102,14 +104,20 @@ class Repository(
             }
             emit(Result.Success("Registration successful"))
         } catch (e: HttpException) {
-            // val errorMessage = e.response()?.errorBody()?.string()?.let {
-            //   Gson().fromJson(it, FileUploadResponse::class.java).message
-            //} ?: "Registration failed"
-            //emit(Result.Error(errorMessage))
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorMessage = try {
+                // Parse the specific error message from server
+                Gson().fromJson(errorBody, ErrorResponse::class.java).detail
+                    ?: "Register failed"
+            } catch (jsonException: Exception) {
+                Log.e("Repository", "Error parsing error response: ${jsonException.message}")
+                "REgister failed"
+            }
+            emit(Result.Error(errorMessage))
         } catch (e: IOException) {
-            emit(Result.Error("Network error: ${e.message ?: "Unable to connect"}"))
-        } catch (e: kotlin.Exception) {
-            emit(Result.Error("Registration failed: ${e.message ?: "Unknown error"}"))
+            emit(Result.Error("Network error: Please check your internet connection"))
+        } catch (e: Exception) {
+            emit(Result.Error("Register failed: ${e.message ?: "Unknown error"}"))
         }
     }
 
@@ -143,6 +151,24 @@ class Repository(
             emit(Result.Error("Network error: Please check your internet connection"))
         } catch (e: Exception) {
             emit(Result.Error("Login failed: ${e.message ?: "Unknown error"}"))
+        }
+    }
+
+    fun getAnalysisByUserId(userId: String): LiveData<Result<AnalysisEntity>> = liveData {
+        emit(Result.Loading) // Emit a loading state
+
+        try {
+            val analysis = withContext(Dispatchers.IO) {
+                skinAnalysisDao.getAnalysisByUserId(userId) // Fetch from database
+            }
+
+            if (analysis != null) {
+                emit(Result.Success(analysis)) // Emit the successful result
+            } else {
+                emit(Result.Error("No analysis found for userId: $userId")) // Emit an error if no analysis is found
+            }
+        } catch (e: Exception) {
+            emit(Result.Error("Error fetching analysis: ${e.message}")) // Emit an error if an exception occurs
         }
     }
 
@@ -252,7 +278,8 @@ class Repository(
                         week = week,
                         skinType = skinHealthData.skinType,
                         skinConditions = skinConditions,
-                        recommendations = result.recommendations.toString() // Can adjust based on how you want to display recommendations
+                        recommendations = result.recommendations.toString(),
+                        timestamp = System.currentTimeMillis()// Can adjust based on how you want to display recommendations
                     )
 
                     // Insert entity into Room database
@@ -286,7 +313,8 @@ class Repository(
             productDao: ProductDao,
             userPreference: UserPreference,
             imageDao: ImageDao,
-            skinAnalysisDao: SkinAnalysisDao
-        ): Repository = Repository(apiService, articleDao, productDao, userPreference, imageDao, skinAnalysisDao)
+            skinAnalysisDao: SkinAnalysisDao,
+            analysisDatabase: AnalysisDatabase
+        ): Repository = Repository(apiService, articleDao, productDao, userPreference, imageDao, skinAnalysisDao, analysisDatabase)
     }
 }

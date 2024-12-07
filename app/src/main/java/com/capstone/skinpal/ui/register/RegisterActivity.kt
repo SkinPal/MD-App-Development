@@ -69,7 +69,7 @@ class RegisterActivity : AppCompatActivity() {
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(it.windowToken, 0)
 
-            registerViewModel.register(user_id, name, email, password)
+            registerViewModel.register(name, user_id, email, password)
             registerViewModel.registrationResult.observe(this) { result ->
                 when (result) {
                     is Result.Loading -> showLoading(true)

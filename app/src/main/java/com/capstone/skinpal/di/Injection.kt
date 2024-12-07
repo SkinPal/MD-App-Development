@@ -22,6 +22,6 @@ object Injection {
         val pref = UserPreference(context)
         val user = pref.getSession()
         val apiService = ApiConfig.getApiService(user.token!!)
-        return Repository.getInstance(apiService, articleDao, productDao, pref, imageDao, skinAnalysisDao)
+        return Repository.getInstance(apiService, articleDao, productDao, pref, imageDao, skinAnalysisDao, analysisDatabase)
     }
 }

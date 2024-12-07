@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SkinAnalysisDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAnalysis(analysis: AnalysisEntity)
 
     @Query("SELECT * FROM skin_analysis WHERE userId = :userId")
-    fun getAnalysisByUserId(userId: String): Flow<List<AnalysisEntity>>
+    fun getAnalysisByUserId(userId: String): AnalysisEntity
 
     @Query("SELECT * FROM skin_analysis WHERE userId = :userId AND week = :week")
     fun getAnalysisByUserIdAndWeek(userId: String, week: String): Flow<AnalysisEntity?>

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 // RegisterRequest.kt
 data class RegisterRequest(
-    @SerializedName("nama") // Ubah ini
+    @SerializedName("nama")
     val name: String,
     @SerializedName("user_id")
     val user_id: String,

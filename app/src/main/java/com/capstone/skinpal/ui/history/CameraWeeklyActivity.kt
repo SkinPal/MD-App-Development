@@ -171,7 +171,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
     }
 
     private fun showImageInfo() {
-        currentImageUri?.let { uri ->
+        /*currentImageUri?.let { uri ->
             // Create an instance of ResultFragment
             val bottomSheet = ResultFragment()
 
@@ -181,7 +181,14 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
             // Show the ResultFragment as a BottomSheet
             bottomSheet.show(supportFragmentManager, bottomSheet.tag)
-        }
+        }*/
+
+            // Create an instance of ResultFragment
+        val bottomSheet = ResultFragment()
+
+        // Show the ResultFragment as a BottomSheet
+        bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+
     }
 
 
@@ -268,7 +275,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
                 when (result) {
                     is Result.Loading -> showLoading(true)
                     is Result.Success -> {
-                        showLoading(false)
                         showImage() // Refresh the image after successful analysis
                         showImageInfo() // Display analysis info (if needed)
                     }

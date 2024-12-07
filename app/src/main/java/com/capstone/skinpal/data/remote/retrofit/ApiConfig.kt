@@ -7,6 +7,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class ApiConfig {
     companion object{
@@ -24,6 +25,9 @@ class ApiConfig {
                 chain.proceed(requestHeaders)
             }
             val client = OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS) // Waktu koneksi
+                .readTimeout(60, TimeUnit.SECONDS)    // Waktu membaca
+                .writeTimeout(60, TimeUnit.SECONDS)   // Waktu menulis
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(authInterceptor)
                 .build()

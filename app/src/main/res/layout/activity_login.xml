@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal2"
-        app:srcCompat="@drawable/image_face"
+        app:srcCompat="@drawable/skinpal"
+        android:background="@color/primary"
         tools:ignore="ContentDescription" />
 
     <ProgressBar
@@ -135,33 +136,25 @@
         android:alpha="0"
         android:text="@string/login"
         android:enabled="false"
-        app:layout_constraintBottom_toTopOf="@id/login_google"
+        app:layout_constraintBottom_toTopOf="@id/register_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
         tools:alpha="100" />
 
     <TextView
-        android:id="@+id/login_google"
+        android:id="@+id/register_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/message_login_google"
+        android:text="@string/message_register"
+        android:textSize="16sp"
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_button"
-        app:layout_constraintBottom_toBottomOf="@id/signInButton"
+        app:layout_constraintBottom_toBottomOf="@id/login_button"
         tools:layout_editor_absoluteX="63dp"
         tools:layout_editor_absoluteY="628dp" />
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/signInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_google" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHorizontal"
@@ -183,12 +176,14 @@
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/signInButton"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/register_message"
+        app:layout_constraintStart_toStartOf="@id/login_button"
+        app:layout_constraintEnd_toEndOf="@id/login_button"
         android:text="Register"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textSize="14dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

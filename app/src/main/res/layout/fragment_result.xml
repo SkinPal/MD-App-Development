@@ -1,57 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Skin Health Summary -->
+    <TextView
+        android:id="@+id/skin_type"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-        <TextView
-            android:id="@+id/tv_skin_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="18sp"
-            android:text="@string/skin_type"
-            android:textStyle="bold"/>
+        android:text="Skin Type: Normal"
+        android:textSize="18sp"/>
 
-        <TextView
-            android:id="@+id/tv_skin_conditions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/skin_condition"
-            android:layout_marginTop="8dp"/>
+    <TextView
+        android:id="@+id/skin_conditions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Conditions: Acne, Redness, Wrinkles"
+        android:textSize="16sp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Recommendations"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+    <!-- Progress -->
+    <TextView
+        android:id="@+id/progress_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="32.41% progress"
+        android:textSize="16sp"/>
 
-        <TextView
-            android:id="@+id/tv_recommendations"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+    <!-- Product Recommendations -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/facial_wash_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Recommended Products"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_products"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
-
-    </LinearLayout>
-</ScrollView>
+    <!-- Notes -->
+    <TextView
+        android:id="@+id/notes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notes"
+        android:textSize="16sp"/>
+</LinearLayout>

@@ -14,7 +14,7 @@
     <string name="fill_password">Enter your password</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="title_register_page">Register</string>
+    <string name="title_register_page">Welcome to SkinPal!</string>
     <string name="register">Register</string>
     <string name="fill_name">Enter your name</string>
     <string name="name">Name</string>
@@ -36,7 +36,7 @@
     <string name="article">Read Articles about Beauty</string>
     <string name="daily_streak">Daily Streak</string>
     <string name="daily_point">11</string>
-    <string name="skin_condition">Healthy</string>
+    <string name="skin_condition">-</string>
     <string name="skin_condition_title">Your Skin Condition</string>
     <string name="skin_type_title">Your Skin Type</string>
     <string name="your_web_client_id">475162384274-ist1a36h9bnb7i9m2u8vaae4on1jmnno.apps.googleusercontent.com</string>
@@ -74,4 +74,7 @@
     <string name="skin_type">Skin Type</string>
     <string name="skin_condition_week_0">First Scan</string>
     <string name="showResult">Show Result</string>
+    <string name="message_register">Don\'t have an account? Register here</string>
+    <string name="default_user">User</string>
+    <string name="greeting_format">"Hello, %s"</string>
 </resources>
