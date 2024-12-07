@@ -24,7 +24,6 @@ import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
 import com.capstone.skinpal.di.Injection
-import com.capstone.skinpal.ui.camera.ResultFragment
 import com.capstone.skinpal.ui.camera.getImageUri
 import com.capstone.skinpal.ui.camera.reduceFileImage
 import com.capstone.skinpal.ui.camera.uriToFile
@@ -73,6 +72,20 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
         val week = intent.getStringExtra("WEEK") ?: "pekan1" // Use a default string value
         title = "Week $week"
+
+        // Buat instance ResultFragment
+        val resultFragment = ResultFragment()
+
+// Membuat Bundle dan menambahkan nilai week ke dalamnya
+        val bundle = Bundle()
+        bundle.putString("week", week) // Memasukkan nilai week ke dalam Bundle
+
+// Menyertakan Bundle ke dalam Fragment
+        resultFragment.arguments = bundle
+
+// Menampilkan Fragment sebagai BottomSheet (atau cara lainnya)
+        //resultFragment.show(supportFragmentManager, resultFragment.tag)
+
 
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
@@ -171,6 +184,21 @@ class CameraWeeklyActivity : AppCompatActivity() {
     }
 
     private fun showImageInfo() {
+        val week = intent.getStringExtra("WEEK") ?: "pekan1" // Use a default string value
+        title = "Week $week"
+        val  userPreference = UserPreference(this)
+        val userId = userPreference.getSession().user ?: getString(R.string.default_user)
+
+
+        val resultFragment = ResultFragment().apply {
+            arguments = Bundle().apply {
+                putString("userId", userId)
+                putString("week", week)
+            }
+        }
+
+
+
         /*currentImageUri?.let { uri ->
             // Create an instance of ResultFragment
             val bottomSheet = ResultFragment()

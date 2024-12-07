@@ -77,4 +77,7 @@
     <string name="message_register">Don\'t have an account? Register here</string>
     <string name="default_user">User</string>
     <string name="greeting_format">"Hello, %s"</string>
+    <string name="no_skin_conditions">Skin conditions</string>
+    <string name="no_skin_type">Skin Type</string>
+    <string name="default_week">Week -</string>
 </resources>

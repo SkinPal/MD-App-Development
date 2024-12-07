@@ -165,7 +165,25 @@ class Repository(
             if (analysis != null) {
                 emit(Result.Success(analysis)) // Emit the successful result
             } else {
-                emit(Result.Error("No analysis found for userId: $userId")) // Emit an error if no analysis is found
+                //emit(Result.Error("No analysis found for userId: $userId")) // Emit an error if no analysis is found
+            }
+        } catch (e: Exception) {
+            emit(Result.Error("Error fetching analysis: ${e.message}")) // Emit an error if an exception occurs
+        }
+    }
+
+    fun getResult(): LiveData<Result<AnalysisEntity>> = liveData {
+        emit(Result.Loading) // Emit a loading state
+
+        try {
+            val analysis = withContext(Dispatchers.IO) {
+                skinAnalysisDao.getResult() // Fetch from database
+            }
+
+            if (analysis != null) {
+                emit(Result.Success(analysis)) // Emit the successful result
+            } else {
+                //emit(Result.Error("No analysis found for userId: $userId")) // Emit an error if no analysis is found
             }
         } catch (e: Exception) {
             emit(Result.Error("Error fetching analysis: ${e.message}")) // Emit an error if an exception occurs
@@ -270,18 +288,19 @@ class Repository(
 
                     // Map API response to model
                     val skinHealthData = result.resultYourSkinhealth
-                    val skinConditions = skinHealthData.skinConditions.toString() // Convert map or list to string as needed
 
                     // Prepare AnalysisEntity to store in the database
                     val analysisEntity = AnalysisEntity(
                         userId = userId,
                         week = week,
                         skinType = skinHealthData.skinType,
-                        skinConditions = skinConditions,
+                        acne = skinHealthData.skinConditions.acne.toString(),
+                        normal = skinHealthData.skinConditions.normal.toString(),
+                        redness = skinHealthData.skinConditions.redness.toString(),
+                        wrinkles = skinHealthData.skinConditions.wrinkles.toString(),
                         recommendations = result.recommendations.toString(),
                         timestamp = System.currentTimeMillis()// Can adjust based on how you want to display recommendations
                     )
-
                     // Insert entity into Room database
                     skinAnalysisDao.insertAnalysis(analysisEntity)
 
@@ -297,6 +316,10 @@ class Repository(
         } catch (e: Exception) {
             emit(Result.Error("An error occurred: ${e.message}"))
         }
+    }
+
+    fun Float.toPercent(): String {
+        return String.format("%.2f%%", this * 100) // Mengalikan nilai dengan 100 dan menambahkan simbol %
     }
 
 

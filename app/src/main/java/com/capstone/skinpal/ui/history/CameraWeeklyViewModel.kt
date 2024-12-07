@@ -1,6 +1,9 @@
 package com.capstone.skinpal.ui.history
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.capstone.skinpal.data.Result
+import com.capstone.skinpal.data.local.entity.AnalysisEntity
 import com.capstone.skinpal.ui.Repository
 import java.io.File
 
@@ -27,4 +30,8 @@ class CameraWeeklyViewModel(private val repository: Repository) : ViewModel(){
     )
 
     fun getImage(week: String) = repository.getImage(week)
+
+    fun getResult(): LiveData<Result<AnalysisEntity>> {
+        return repository.getResult()
+    }
 }

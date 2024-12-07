@@ -15,6 +15,9 @@ interface SkinAnalysisDao {
     @Query("SELECT * FROM skin_analysis WHERE userId = :userId ORDER BY timestamp DESC LIMIT 1")
     fun getLatestAnalysisByUserId(userId: String): AnalysisEntity?
 
+    @Query("SELECT * FROM skin_analysis ORDER BY timestamp DESC LIMIT 1")
+    fun getResult(): AnalysisEntity?
+
     @Query("SELECT * FROM skin_analysis WHERE userId = :userId AND week = :week")
     fun getAnalysisByUserIdAndWeek(userId: String, week: String): Flow<AnalysisEntity?>
 

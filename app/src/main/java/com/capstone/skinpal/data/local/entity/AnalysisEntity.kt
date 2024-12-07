@@ -8,7 +8,10 @@ data class AnalysisEntity(
     val userId: String,
     val week: String,
     val skinType: String,
-    val skinConditions: String, // Store as JSON string
+    val acne : String,
+    val normal : String,
+    val redness : String,
+    val wrinkles: String,
     val recommendations: String,  // Store as JSON string
     @PrimaryKey()
     val timestamp: Long = System.currentTimeMillis()

@@ -17,12 +17,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetCredentialResponse
-import androidx.credentials.exceptions.GetCredentialException
-import androidx.lifecycle.lifecycleScope
 import com.capstone.skinpal.databinding.ActivityLoginBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -36,17 +30,8 @@ import com.capstone.skinpal.ui.ViewModelFactory
 import com.capstone.skinpal.ui.register.RegisterActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel by viewModels<LoginViewModel> {
@@ -209,7 +194,7 @@ class LoginActivity : AppCompatActivity() {
         }.start()
 
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
-         val userIdTextView = ObjectAnimator.ofFloat(binding.userIdTextView, View.ALPHA, 1f).setDuration(100)
+        val userIdTextView = ObjectAnimator.ofFloat(binding.userIdTextView, View.ALPHA, 1f).setDuration(100)
         val userIdEditTextLayout = ObjectAnimator.ofFloat(binding.userIdEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
         val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
