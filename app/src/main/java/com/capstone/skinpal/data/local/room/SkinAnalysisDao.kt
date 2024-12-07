@@ -12,8 +12,8 @@ interface SkinAnalysisDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAnalysis(analysis: AnalysisEntity)
 
-    @Query("SELECT * FROM skin_analysis WHERE userId = :userId")
-    fun getAnalysisByUserId(userId: String): AnalysisEntity
+    @Query("SELECT * FROM skin_analysis WHERE userId = :userId ORDER BY timestamp DESC LIMIT 1")
+    fun getLatestAnalysisByUserId(userId: String): AnalysisEntity?
 
     @Query("SELECT * FROM skin_analysis WHERE userId = :userId AND week = :week")
     fun getAnalysisByUserIdAndWeek(userId: String, week: String): Flow<AnalysisEntity?>

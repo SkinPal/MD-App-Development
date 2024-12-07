@@ -159,7 +159,7 @@ class Repository(
 
         try {
             val analysis = withContext(Dispatchers.IO) {
-                skinAnalysisDao.getAnalysisByUserId(userId) // Fetch from database
+                skinAnalysisDao.getLatestAnalysisByUserId(userId) // Fetch from database
             }
 
             if (analysis != null) {
