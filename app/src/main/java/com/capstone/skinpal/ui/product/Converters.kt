@@ -1,38 +1,85 @@
 package com.capstone.skinpal.ui.product
 
 import androidx.room.TypeConverter
+import com.capstone.skinpal.data.remote.response.FacialWashItem
+import com.capstone.skinpal.data.remote.response.MoisturizerItem
+import com.capstone.skinpal.data.remote.response.SerumItem
 import com.capstone.skinpal.data.remote.response.SkinConditions
+import com.capstone.skinpal.data.remote.response.SunscreenItem
+import com.capstone.skinpal.data.remote.response.TonerItem
+import com.capstone.skinpal.data.remote.response.TreatmentItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.Date
 
 class Converters {
+
     private val gson = Gson()
 
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun fromMoisturizerList(value: List<MoisturizerItem>): String {
+        return gson.toJson(value)
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
+    fun toMoisturizerList(value: String): List<MoisturizerItem> {
+        val type = object : TypeToken<List<MoisturizerItem>>() {}.type
+        return gson.fromJson(value, type)
     }
 
-    fun skinConditionsToJson(skinConditions: SkinConditions): String {
-        return gson.toJson(skinConditions)
+    // Tambahkan converter serupa untuk setiap tipe daftar (TreatmentItem, SunscreenItem, dll.)
+    @TypeConverter
+    fun fromTreatmentList(value: List<TreatmentItem>): String {
+        return gson.toJson(value)
     }
 
-    fun jsonToSkinConditions(json: String): SkinConditions {
-        return gson.fromJson(json, SkinConditions::class.java)
+    @TypeConverter
+    fun toTreatmentList(value: String): List<TreatmentItem> {
+        val type = object : TypeToken<List<TreatmentItem>>() {}.type
+        return gson.fromJson(value, type)
     }
 
-    fun recommendationsToJson(recommendations: List<String>): String {
-        return gson.toJson(recommendations)
+    @TypeConverter
+    fun fromSerumList(value: List<SerumItem>): String {
+        return gson.toJson(value)
     }
 
-    fun jsonToRecommendations(json: String): List<String> {
-        val type = object : TypeToken<List<String>>() {}.type
-        return gson.fromJson(json, type)
+    @TypeConverter
+    fun toSerumList(value: String): List<SerumItem> {
+        val type = object : TypeToken<List<SerumItem>>() {}.type
+        return gson.fromJson(value, type)
+    }
+
+    @TypeConverter
+    fun fromTonerList(value: List<TonerItem>): String {
+        return gson.toJson(value)
+    }
+
+    @TypeConverter
+    fun toTonerList(value: String): List<TonerItem> {
+        val type = object : TypeToken<List<TonerItem>>() {}.type
+        return gson.fromJson(value, type)
+    }
+
+    @TypeConverter
+    fun fromSunscreenList(value: List<SunscreenItem>): String {
+        return gson.toJson(value)
+    }
+
+    @TypeConverter
+    fun toSunscreenList(value: String): List<SunscreenItem> {
+        val type = object : TypeToken<List<SunscreenItem>>() {}.type
+        return gson.fromJson(value, type)
+    }
+
+    @TypeConverter
+    fun fromFacialWashList(value: List<FacialWashItem>): String {
+        return gson.toJson(value)
+    }
+
+    @TypeConverter
+    fun toFacialWashList(value: String): List<FacialWashItem> {
+        val type = object : TypeToken<List<FacialWashItem>>() {}.type
+        return gson.fromJson(value, type)
     }
 }

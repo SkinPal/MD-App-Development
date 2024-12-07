@@ -298,6 +298,12 @@ class Repository(
                         redness = skinHealthData.skinConditions.redness.toPercent(),
                         wrinkles = skinHealthData.skinConditions.wrinkles.toPercent(),
                         recommendations = result.recommendations.toString(),
+                        moisturizer = result.recommendations.moisturizer,
+                        treatment = result.recommendations.treatment,
+                        sunscreen = result.recommendations.sunscreen,
+                        toner = result.recommendations.toner,
+                        serum = result.recommendations.serum,
+                        facialWash = result.recommendations.facialWash,
                         timestamp = System.currentTimeMillis()// Can adjust based on how you want to display recommendations
                     )
                     // Insert entity into Room database
