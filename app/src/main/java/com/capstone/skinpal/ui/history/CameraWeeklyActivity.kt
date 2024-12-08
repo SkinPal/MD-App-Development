@@ -190,8 +190,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
             }
         }
 
-
-
         /*currentImageUri?.let { uri ->
             // Create an instance of ResultFragment
             val bottomSheet = ResultFragment()

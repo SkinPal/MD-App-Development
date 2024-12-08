@@ -5,11 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
@@ -57,8 +59,27 @@ class ResultFragment : BottomSheetDialogFragment() {
         val userId = session.user ?: getString(R.string.default_user)
         val week = arguments?.getString("week") ?: getString(R.string.default_week)
 
+        setToggleVisibility(binding.moisturizer, binding.moisturizerRecycler, R.drawable.icon_more, R.drawable.icon_close)
+        setToggleVisibility(binding.serum, binding.serumRecycler, R.drawable.icon_more, R.drawable.icon_close)
+        setToggleVisibility(binding.toner, binding.tonerRecycler, R.drawable.icon_more, R.drawable.icon_close)
+        setToggleVisibility(binding.treatment, binding.treatmentRecycler, R.drawable.icon_more, R.drawable.icon_close)
+        setToggleVisibility(binding.facialWash, binding.facialWashRecycler, R.drawable.icon_more, R.drawable.icon_close)
+        setToggleVisibility(binding.sunscreen, binding.sunscreenRecycler, R.drawable.icon_more, R.drawable.icon_close)
+
         setupRecyclerView()
         observeAnalysis()
+    }
+
+    private fun setToggleVisibility(header: TextView, recyclerView: RecyclerView, expandIcon: Int, collapseIcon: Int) {
+        header.setOnClickListener {
+            if (recyclerView.visibility == View.VISIBLE) {
+                recyclerView.visibility = View.GONE
+                header.setCompoundDrawablesWithIntrinsicBounds(0, 0, expandIcon, 0)
+            } else {
+                recyclerView.visibility = View.VISIBLE
+                header.setCompoundDrawablesWithIntrinsicBounds(0, 0, collapseIcon, 0)
+            }
+        }
     }
 
     private fun setupRecyclerView() {

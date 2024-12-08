@@ -127,88 +127,113 @@
             android:textStyle="bold"/>
         <!-- Product Recommendation Lists -->
         <TextView
-            android:layout_marginTop="20dp"
             android:id="@+id/sunscreen"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Sunscreen"
             android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
             android:textSize="16sp"
-            android:text="Sunscreen"/>
+            android:background="?android:attr/selectableItemBackground" />
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="10dp"
             android:id="@+id/sunscreen_recycler"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="250dp"
+            android:visibility="gone" />
 
         <TextView
-            android:layout_marginTop="20dp"
             android:id="@+id/moisturizer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Moisturizer"
             android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
             android:textSize="16sp"
-            android:text="Moisturizer"/>
+            android:background="?android:attr/selectableItemBackground" />
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="10dp"
             android:id="@+id/moisturizer_recycler"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="250dp"
+            android:visibility="gone" />
+
 
         <TextView
-            android:layout_marginTop="20dp"
             android:id="@+id/facial_wash"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Facial Wash"
             android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
             android:textSize="16sp"
-            android:text="Facial Wash"/>
+            android:background="?android:attr/selectableItemBackground" />
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="20dp"
             android:id="@+id/facial_wash_recycler"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="250dp"
+            android:visibility="gone" />
 
         <TextView
-            android:layout_marginTop="20dp"
             android:id="@+id/treatment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Treatment"
             android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
             android:textSize="16sp"
-            android:text="Treatment"/>
+            android:background="?android:attr/selectableItemBackground" />
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="20dp"
             android:id="@+id/treatment_recycler"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="250dp"
+            android:visibility="gone" />
 
         <TextView
-            android:layout_marginTop="20dp"
             android:id="@+id/toner"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Toner"
             android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
             android:textSize="16sp"
-            android:text="Toner"/>
+            android:background="?android:attr/selectableItemBackground" />
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="20dp"
             android:id="@+id/toner_recycler"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="250dp"
+            android:visibility="gone" />
 
         <TextView
-            android:layout_marginTop="20dp"
             android:id="@+id/serum"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Serum"
             android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
             android:textSize="16sp"
-            android:text="Serum"/>
+            android:background="?android:attr/selectableItemBackground" />
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="20dp"
             android:id="@+id/serum_recycler"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="250dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>
