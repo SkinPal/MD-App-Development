@@ -73,19 +73,12 @@ class CameraWeeklyActivity : AppCompatActivity() {
         val week = intent.getStringExtra("WEEK") ?: "pekan1" // Use a default string value
         title = "Week $week"
 
-        // Buat instance ResultFragment
+
         val resultFragment = ResultFragment()
 
-// Membuat Bundle dan menambahkan nilai week ke dalamnya
         val bundle = Bundle()
-        bundle.putString("week", week) // Memasukkan nilai week ke dalam Bundle
-
-// Menyertakan Bundle ke dalam Fragment
+        bundle.putString("week", week)
         resultFragment.arguments = bundle
-
-// Menampilkan Fragment sebagai BottomSheet (atau cara lainnya)
-        //resultFragment.show(supportFragmentManager, resultFragment.tag)
-
 
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)

@@ -22,6 +22,7 @@ import com.capstone.skinpal.data.remote.response.FileUploadResponse
 import com.capstone.skinpal.data.remote.retrofit.LoginRequest
 import com.capstone.skinpal.data.remote.retrofit.RegisterRequest
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
@@ -31,6 +32,7 @@ import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
+import java.util.Locale
 
 class Repository(
     private val apiService: ApiService,
@@ -323,10 +325,13 @@ class Repository(
         }
     }
 
-    fun Float.toPercent(): String {
-        return String.format("%.2f%%", this * 100) // Mengalikan nilai dengan 100 dan menambahkan simbol %
+    fun JsonElement.toPercent(): String {
+        return if (this.isJsonPrimitive && this.asJsonPrimitive.isNumber) {
+            String.format(Locale.US, "%.2f%%", this.asDouble * 100) // Specify the locale explicitly
+        } else {
+            "N/A" // Handle cases where the JsonElement is not a number
+        }
     }
-
 
     suspend fun removePrediction(id: Int) {
         withContext(Dispatchers.IO) {

@@ -3,25 +3,37 @@ package com.capstone.skinpal.ui.camera
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.capstone.skinpal.databinding.ActivityCameraBinding
+import com.bumptech.glide.Glide
+import com.capstone.skinpal.BuildConfig
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.util.UUID
-import kotlin.getValue
 import com.capstone.skinpal.R
+import com.capstone.skinpal.data.Result
+import com.capstone.skinpal.data.UserPreference
+import com.capstone.skinpal.databinding.ActivityCameraBinding
+import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
 import com.capstone.skinpal.di.Injection
+import com.capstone.skinpal.ui.camera.getImageUri
+import com.capstone.skinpal.ui.camera.reduceFileImage
+import com.capstone.skinpal.ui.camera.uriToFile
+import com.capstone.skinpal.ui.history.ResultFragment
 
 class CameraActivity : AppCompatActivity() {
-    private var binding: ActivityCameraBinding? = null
+    private var _binding: ActivityCameraBinding? = null
+    private val binding get() = _binding!!
+
     private var currentImageUri: Uri? = null
     private val cameraViewModel by viewModels<CameraViewModel> {
         ViewModelFactory(Injection.provideRepository(this))
@@ -29,15 +41,12 @@ class CameraActivity : AppCompatActivity() {
 
     private val cropImageLauncher = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            result.data?.let { intent ->
-                val croppedImageUri = UCrop.getOutput(intent)
-                if (croppedImageUri != null) {
-                    currentImageUri = croppedImageUri
-                    showImage()
-                    showImageInfo()
-                } else {
-                    showToast("Cropping failed.")
-                }
+            val croppedImageUri = UCrop.getOutput(result.data!!)
+            if (croppedImageUri != null) {
+                currentImageUri = croppedImageUri
+                showImage()
+            } else {
+                showToast("Cropping failed.")
             }
         } else {
             showToast("Cropping was cancelled.")
@@ -60,20 +69,60 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCameraBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        _binding = ActivityCameraBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val week = intent.getStringExtra("WEEK") ?: "test"
+        title = "Week $week"
+
+        val resultFragment = ResultFragment()
+
+        val bundle = Bundle()
+        bundle.putString("week", week)
+
+        resultFragment.arguments = bundle
 
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
         currentImageUri = savedInstanceState?.getParcelable("CURRENT_IMAGE_URI")
-        showImage()
         val imageUriString = intent.getStringExtra("IMAGE_URI")
 
-        binding?.galleryButton?.setOnClickListener { startGallery() }
-        binding?.cameraButton?.setOnClickListener { startCamera() }
+        if (imageUriString.isNullOrEmpty()) {
+            loadPreviewImage(week)
+        } else {
+            displaySavedImage(imageUriString)
+            disableButtons()
+        }
 
+        binding.galleryButton.setOnClickListener { startGallery() }
+        binding.cameraButton.setOnClickListener { startCamera() }
+        binding.analyzeButton.setOnClickListener {
+            currentImageUri?.let { uri ->
+                analyzeImage(uri.toString(), week)
+            } ?: showToast("Failed to save image. No image captured.")
+        }
+    }
+
+    private fun loadPreviewImage(week: String) {
+        cameraViewModel.getImage(week).observe(this) { result ->
+            when (result) {
+                is Result.Success -> {
+                    if (result.data.image.isNotEmpty()) {
+                        displaySavedImage(result.data.image)
+                        disableButtons()
+                    }
+                }
+                else -> Unit
+            }
+        }
+    }
+
+    private fun displaySavedImage(imageUri: String) {
+        Glide.with(this)
+            .load(imageUri)
+            .into(binding.previewImageView)
     }
 
     private fun startCamera() {
@@ -89,7 +138,7 @@ class CameraActivity : AppCompatActivity() {
                 showImage()
                 startCrop(it)
             }
-        }else {
+        } else {
             currentImageUri = null
         }
     }
@@ -116,31 +165,170 @@ class CameraActivity : AppCompatActivity() {
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
-            currentImageUri = uri
-            showImage()
             startCrop(uri)
+        } else {
+            showToast("No image selected.")
         }
     }
 
     private fun showImage() {
         currentImageUri?.let {
-            binding?.previewImageView?.setImageURI(it)
+            Glide.with(this).load(it).into(binding.previewImageView)
         }
     }
 
     private fun showImageInfo() {
+        val week = intent.getStringExtra("WEEK") ?: "test" // Use a default string value
+        title = "Week $week"
+        val  userPreference = UserPreference(this)
+        val userId = userPreference.getSession().user ?: getString(R.string.default_user)
+
+
+        val resultFragment = ResultFragment().apply {
+            arguments = Bundle().apply {
+                putString("userId", userId)
+                putString("week", week)
+            }
+        }
+
+
+
         /*currentImageUri?.let { uri ->
-            val imageName = uri.lastPathSegment ?: "Unknown Image"
-            val additionalInfo = "This image is displayed from the URI: $uri"
-            val bottomSheet = ResultFragment.newInstance(imageName, additionalInfo)
-            bottomSheet.show(supportFragmentManager, ResultFragment::class.java.simpleName)
+            // Create an instance of ResultFragment
+            val bottomSheet = ResultFragment()
+
+            val bundle = Bundle()
+            bundle.putString("imageUri", uri.toString()) // Example of passing data
+            bottomSheet.arguments = bundle
+
+            // Show the ResultFragment as a BottomSheet
+            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
         }*/
+
+        // Create an instance of ResultFragment
+        val bottomSheet = ResultFragment()
+
+        // Show the ResultFragment as a BottomSheet
+        bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+
     }
+
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
+    /*private fun saveImage(imageUriString: String, week: String) {
+        val userPreference = UserPreference(this)
+        val session = userPreference.getSession()
+
+        val user_id = session.user ?: run {
+            showToast("User ID not found")
+            return
+        }
+
+        currentImageUri?.let { uri ->
+            val imageFile = uriToFile(uri, this).reduceFileImage()
+
+            // Add logging for debugging
+            if (BuildConfig.DEBUG) {
+                Log.d("CameraWeeklyActivity", """
+                Uploading image:
+                userId: $user_id
+                week: $week
+                token: ${session.token!!.take(10)}...
+                file: ${imageFile.name}
+            """.trimIndent())
+            }
+
+            cameraWeeklyViewModel.uploadImage(
+                imageFile = imageFile,
+                user_id = user_id,
+                week = week.toString()
+            ).observe(this) { result ->
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showLoading(false)
+                        showToast("Image uploaded successfully")
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        if (result.error.contains("authorized", ignoreCase = true)) {
+                            showToast("Session expired. Please login again")
+                            // Optional: Navigate to login screen
+                        } else {
+                            showToast("Debug - Saved Token: ${session.token?.take(10) ?: "null"}")
+                            showToast(result.error)
+                        }
+                    }
+                }
+            }
+        } ?: showToast(getString(R.string.empty_image_warning))
+    }*/
+
+    private fun analyzeImage(imageUriString: String, week: String) {
+        val userPreference = UserPreference(this)
+        val session = userPreference.getSession()
+
+        val user_id = session.user ?: run {
+            showToast("User ID not found")
+            return
+        }
+
+        currentImageUri?.let { uri ->
+            val imageFile = uriToFile(uri, this).reduceFileImage()
+
+            if (BuildConfig.DEBUG) {
+                Log.d("CameraWeeklyActivity", """
+            Uploading image:
+            userId: $user_id
+            week: $week
+            token: ${session.token!!.take(10)}...
+            file: ${imageFile.name}
+        """.trimIndent())
+            }
+
+            cameraViewModel.analyzeImage(
+                imageFile = imageFile,
+                user_id = user_id,
+                week = week
+            ).observe(this) { result ->
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showImage() // Refresh the image after successful analysis
+                        showImageInfo() // Display analysis info (if needed)
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        if (result.error.contains("authorized", ignoreCase = true)) {
+                            showToast("Session expired. Please login again")
+                            // Optional: Navigate to login screen
+                        } else {
+                            showToast(result.error)
+                        }
+                    }
+                }
+            }
+        } ?: showToast(getString(R.string.empty_image_warning))
+    }
+
+
+    private fun disableButtons() {
+        binding.galleryButton.isEnabled = false
+        binding.cameraButton.isEnabled = false
+        binding.analyzeButton.isEnabled = false
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)

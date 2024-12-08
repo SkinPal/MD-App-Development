@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.capstone.skinpal.databinding.ActivityLoginBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +33,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel by viewModels<LoginViewModel> {
@@ -46,14 +48,15 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         userPreference = UserPreference(this)
-        auth = Firebase.auth
 
+        lifecycleScope.launch {
+            observeUserSession()
+        }
         binding.registerButton.setOnClickListener {
             Intent(this, RegisterActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             }.also { startActivity(it) }
         }
-        //userPreference = UserPreference(this)
 
         setupView()
         setupAction()
@@ -64,6 +67,17 @@ class LoginActivity : AppCompatActivity() {
         binding.edLoginPassword.addTextChangedListener(inputWatcher)
 
 
+    }
+
+    private fun observeUserSession() {
+        val session = userPreference.getSession()
+        val token = session.token
+        if (token != "") {
+            navigateToMainActivity()
+            finish()
+        } else {
+            setupAction()
+        }
     }
 
     private fun checkGooglePlayServices() {

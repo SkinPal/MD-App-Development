@@ -1,5 +1,6 @@
 package com.capstone.skinpal.data.remote.response
 
+import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 
 data class AnalyzeResponse(
@@ -32,16 +33,16 @@ data class Progress(
 data class SkinConditions(
 
     @field:SerializedName("wrinkles")
-    val wrinkles: Float,
+    val wrinkles: JsonElement,
 
     @field:SerializedName("normal")
-    val normal: Float,
+    val normal: JsonElement,
 
     @field:SerializedName("acne")
-    val acne: Float,
+    val acne: JsonElement,
 
     @field:SerializedName("redness")
-    val redness: Float
+    val redness: JsonElement
 )
 
 data class MoisturizerItem(
