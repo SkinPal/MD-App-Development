@@ -80,4 +80,6 @@
     <string name="no_skin_conditions">Skin conditions</string>
     <string name="no_skin_type">Skin Type</string>
     <string name="default_week">Week -</string>
+    <string name="change_profile_picture">Change Profile Picture</string>
+    <string name="logout">logout</string>
 </resources>

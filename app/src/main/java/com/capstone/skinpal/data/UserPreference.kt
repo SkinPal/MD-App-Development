@@ -28,6 +28,14 @@ class UserPreference(context: Context) {
         editor.apply()
     }
 
+    fun saveProfileImage(url: String) {
+        preferences.edit().putString("profile_image", url).apply()
+    }
+
+    fun getProfileImage(): String? {
+        return preferences.getString("profile_image", null)
+    }
+
     companion object {
         private const val PREFS_NAME = "user_pref"
         private const val USER = "user"

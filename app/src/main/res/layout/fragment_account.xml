@@ -9,6 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleTextAppearance="@style/ToolbarTitleText"
+            android:title="About Me"
+            android:titleTextColor="@android:color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingConstraints" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/photo_profile"
             android:layout_width="165dp"
@@ -18,15 +31,27 @@
             android:background="@drawable/circle"
             android:contentDescription="@string/photo_profile"
             android:src="@drawable/icon_person"
-            app:layout_constraintBottom_toTopOf="@+id/nama"
+            app:layout_constraintBottom_toTopOf="@+id/tv_name"
             app:layout_constraintTop_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
 
+        <ImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="120dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/change_profile_picture"
+            android:src="@drawable/icon_camera"
+            android:background="@drawable/circle"
+            app:layout_constraintEnd_toEndOf="@id/photo_profile"
+            app:layout_constraintTop_toTopOf="@id/photo_profile" />
+
         <TextView
-            android:id="@+id/nama"
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -36,13 +61,27 @@
             android:textColor="@color/secondary"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/email"
+            app:layout_constraintBottom_toTopOf="@+id/tv_email"
             app:layout_constraintEnd_toEndOf="@+id/photo_profile"
             app:layout_constraintStart_toStartOf="@+id/photo_profile"
             app:layout_constraintTop_toBottomOf="@+id/photo_profile" />
 
         <TextView
-            android:id="@+id/email"
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/Username"
+            android:textColor="@color/secondary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/tv_name"
+            app:layout_constraintStart_toStartOf="@+id/tv_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+        <TextView
+            android:id="@+id/tv_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -51,9 +90,9 @@
             android:textColor="@color/secondary"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/nama"
-            app:layout_constraintStart_toStartOf="@+id/nama"
-            app:layout_constraintTop_toBottomOf="@+id/nama" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_username"
+            app:layout_constraintStart_toStartOf="@+id/tv_username"
+            app:layout_constraintTop_toBottomOf="@+id/tv_username" />
 
         <Button
             android:id="@+id/logoutButton"
@@ -61,12 +100,22 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/email"
+            app:layout_constraintTop_toBottomOf="@id/tv_email"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="20dp"
-            android:text="logout"
+            android:text="@string/logout"
             tools:layout_editor_absoluteX="108dp"
             tools:layout_editor_absoluteY="52dp" />
+
+        <ProgressBar
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

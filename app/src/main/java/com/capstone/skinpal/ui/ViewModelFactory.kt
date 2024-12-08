@@ -31,7 +31,7 @@ class ViewModelFactory constructor(
             }
 
             modelClass.isAssignableFrom(com.capstone.skinpal.ui.setting.AccountViewModel::class.java) -> {
-                com.capstone.skinpal.ui.setting.AccountViewModel(repository) as T
+                com.capstone.skinpal.ui.setting.AccountViewModel(repository, ) as T
             }
 
             modelClass.isAssignableFrom(com.capstone.skinpal.ui.history.HistoryViewModel::class.java) -> {

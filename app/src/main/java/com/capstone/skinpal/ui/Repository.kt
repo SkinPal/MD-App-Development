@@ -19,6 +19,8 @@ import com.capstone.skinpal.data.local.room.ProductDao
 import com.capstone.skinpal.data.local.room.SkinAnalysisDao
 import com.capstone.skinpal.data.remote.response.ErrorResponse
 import com.capstone.skinpal.data.remote.response.FileUploadResponse
+import com.capstone.skinpal.data.remote.response.ProfileResponse
+import com.capstone.skinpal.data.remote.response.UploadProfileResponse
 import com.capstone.skinpal.data.remote.retrofit.LoginRequest
 import com.capstone.skinpal.data.remote.retrofit.RegisterRequest
 import com.google.gson.Gson
@@ -338,6 +340,20 @@ class Repository(
             imageDao.deleteItem(id)
         }
     }
+
+    suspend fun getUserProfile(userId: String): ProfileResponse {
+        return apiService.getUserProfile(userId)
+    }
+
+    fun getUserSession(): UserModel {
+        return userPreference.getSession()
+    }
+
+    suspend fun uploadProfileImage(image: MultipartBody.Part, userId: String): UploadProfileResponse {
+        return apiService.uploadProfileImage(userId, image)
+    }
+
+
 
     companion object {
         fun getInstance(

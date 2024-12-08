@@ -3,16 +3,15 @@ package com.capstone.skinpal.data.remote.retrofit
 import com.capstone.skinpal.data.remote.response.AnalyzeResponse
 import com.capstone.skinpal.data.remote.response.ArticleResponse
 import com.capstone.skinpal.data.remote.response.LoginResponse
-import com.capstone.skinpal.data.remote.response.ProductResponse
 import com.capstone.skinpal.data.remote.response.ProductResponseItem
+import com.capstone.skinpal.data.remote.response.ProfileResponse
 import com.capstone.skinpal.data.remote.response.RegisterResponse
-import com.capstone.skinpal.data.remote.response.User
+import com.capstone.skinpal.data.remote.response.UploadProfileResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -59,6 +58,16 @@ interface ApiService {
         @Part file: MultipartBody.Part
     ): Call<AnalyzeResponse>
 
+    @GET("users/profile")
+    suspend fun getUserProfile(
+        @Query("user_id") userId: String
+    ): ProfileResponse
 
+    @Multipart
+    @POST("users/upload-profile")
+    suspend fun uploadProfileImage(
+        @Query("user_id") userId: String, // Kirim user_id dalam query string
+        @Part file: MultipartBody.Part
+    ): UploadProfileResponse
 
 }
