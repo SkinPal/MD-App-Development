@@ -19,4 +19,7 @@ interface ProductDao {
     @Query("DELETE FROM product")
     suspend fun deleteAll()
 
+    @Query("SELECT * FROM product WHERE name LIKE :query")
+    fun searchProducts(query: String): LiveData<List<ProductEntity>>
+
 }

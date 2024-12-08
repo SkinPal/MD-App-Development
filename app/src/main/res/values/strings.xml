@@ -80,4 +80,5 @@
     <string name="no_skin_conditions">Skin conditions</string>
     <string name="no_skin_type">Skin Type</string>
     <string name="default_week">Week -</string>
+    <string name="search_hint">Search product</string>
 </resources>

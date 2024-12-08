@@ -2,6 +2,7 @@ package com.capstone.skinpal.ui
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
@@ -72,7 +73,18 @@ class Repository(
         }
     }
 
+    fun searchProducts(query: String): LiveData<Result<List<ProductEntity>>> {
+        val result = MediatorLiveData<Result<List<ProductEntity>>>()
+        result.value = Result.Loading
 
+        val searchResults = productDao.searchProducts("%$query%")
+
+        result.addSource(searchResults) { products ->
+            result.value = if (products.isNotEmpty()) Result.Success(products) else Result.Error("No products found")
+        }
+
+        return result
+    }
 
     fun getProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)

@@ -13,4 +13,5 @@ import kotlinx.coroutines.launch
 
 class ProductViewModel(private val repository: Repository): ViewModel() {
     val products: LiveData<Result<List<ProductEntity>>> = repository.getProducts()
+    fun searchProducts(query: String) = repository.searchProducts(query)
 }

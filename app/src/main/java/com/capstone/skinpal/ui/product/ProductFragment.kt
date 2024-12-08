@@ -42,6 +42,7 @@ class ProductFragment : Fragment() {
 
         setupRecyclerView()
         observeProducts()
+        setupSearchView()
         //productViewModel.products.observe(viewLifecycleOwner) { products ->
          //   productAdapter.submitList(products)
         //}
@@ -53,6 +54,62 @@ class ProductFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = productAdapter
         }
+    }
+
+    private fun setupSearchView() {
+        binding.searchView.apply {
+            visibility = View.VISIBLE
+            setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    observeProducts(query.orEmpty())
+                    return true
+                }
+
+                override fun onQueryTextChange(query: String?): Boolean {
+                    observeProducts(query.orEmpty())
+                    return true
+                }
+            })
+        }
+    }
+
+    private fun observeProducts(query: String) {
+        productViewModel.searchProducts(query).observe(viewLifecycleOwner) { result ->
+            handleResult(result)
+        }
+    }
+
+    private fun handleResult(result: Result<List<ProductEntity>>) {
+        when (result) {
+            is Result.Loading -> showLoading(true)
+            is Result.Success -> {
+                showLoading(false)
+                updateProductList(result.data)
+            }
+            is Result.Error -> showError()
+        }
+    }
+
+    private fun updateProductList(productData: List<ProductEntity>) {
+        if (productData.isEmpty()) {
+            binding.tvNoItem.visibility = View.VISIBLE
+            binding.rvProduct.visibility = View.GONE
+        } else {
+            binding.tvNoItem.visibility = View.GONE
+            binding.rvProduct.visibility = View.VISIBLE
+            productAdapter.submitList(productData)
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.tvNoItem.visibility = if (isLoading) View.GONE else binding.tvNoItem.visibility
+    }
+
+    private fun showError() {
+        binding.progressBar.visibility = View.GONE
+        binding.rvProduct.visibility = View.GONE
+        binding.tvNoItem.visibility = View.VISIBLE
     }
 
     private fun observeProducts() {
