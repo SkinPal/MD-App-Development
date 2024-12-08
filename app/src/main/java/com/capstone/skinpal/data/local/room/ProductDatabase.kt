@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.capstone.skinpal.data.local.entity.ProductEntity
 
-@Database(entities = [ProductEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ProductEntity::class], version = 2, exportSchema = false)
 @TypeConverters(com.capstone.skinpal.ui.product.Converters::class)
 abstract class ProductDatabase : RoomDatabase() {
 

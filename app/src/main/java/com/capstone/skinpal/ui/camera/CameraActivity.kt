@@ -106,11 +106,13 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun loadPreviewImage(week: String) {
-        cameraViewModel.getImage(week).observe(this) { result ->
+        val  userPreference = UserPreference(this)
+        val userId = userPreference.getSession().user ?: getString(R.string.default_user)
+        cameraViewModel.getImage(userId, week).observe(this) { result ->
             when (result) {
                 is Result.Success -> {
-                    if (result.data.image.isNotEmpty()) {
-                        displaySavedImage(result.data.image)
+                    if (result.data.imageUri?.isNotEmpty() == true) {
+                        displaySavedImage(result.data.imageUri.toString())
                         disableButtons()
                     }
                 }

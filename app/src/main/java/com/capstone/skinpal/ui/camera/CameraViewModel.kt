@@ -31,7 +31,7 @@ class CameraViewModel(private val repository: Repository) : ViewModel(){
         week = week
     )
 
-    fun getImage(week: String) = repository.getImage(week)
+    fun getImage(user_id: String, week: String) = repository.getImage(week, user_id)
 
     fun getResult(): LiveData<Result<AnalysisEntity>> {
         return repository.getResult()

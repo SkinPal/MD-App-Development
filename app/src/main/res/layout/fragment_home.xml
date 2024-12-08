@@ -12,10 +12,12 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="175dp"
-        android:layout_height="79dp"
-        android:padding="12dp"
-        android:src="@drawable/logo"
+        android:layout_width="185dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginVertical="10dp"
+        android:padding="16dp"
+        android:src="@drawable/skinpal_crop"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/sv_content"
         app:layout_constraintStart_toStartOf="parent"

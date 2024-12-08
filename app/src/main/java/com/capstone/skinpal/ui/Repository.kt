@@ -2,6 +2,7 @@ package com.capstone.skinpal.ui
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
@@ -50,7 +51,7 @@ class Repository(
         userPreference.logout()
     }
 
-    fun getImage(week: String): LiveData<Result<ImageEntity>> {
+    /*fun getImage(week: String): LiveData<Result<ImageEntity>> {
         return imageDao.getItem().asLiveData().map { items ->
             val weekInt = week.toIntOrNull()
             if (weekInt == null) {
@@ -62,8 +63,30 @@ class Repository(
                 } ?: Result.Error("No saved item for week $week")
             }
         }
+    }*/
+
+    fun getImage(userId: String, week: String): LiveData<Result<AnalysisEntity>> {
+        return skinAnalysisDao.getImageByUserIdAndWeek(userId, week).map { analysisImageUri ->
+            if (analysisImageUri != null) {
+                Result.Success(analysisImageUri)
+            } else {
+                Result.Error("No image found for userId: $userId and week: $week")
+            }
+        }
     }
 
+    fun searchProducts(query: String): LiveData<Result<List<ProductEntity>>> {
+        val result = MediatorLiveData<Result<List<ProductEntity>>>()
+        result.value = Result.Loading
+
+        val searchResults = productDao.searchProducts("%$query%")
+
+        result.addSource(searchResults) { products ->
+            result.value = if (products.isNotEmpty()) Result.Success(products) else Result.Error("No products found")
+        }
+
+        return result
+    }
 
     fun getProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)
@@ -297,6 +320,7 @@ class Repository(
                     val analysisEntity = AnalysisEntity(
                         userId = userId,
                         week = week,
+                        imageUri = imageFile.absolutePath,
                         skinType = skinHealthData.skinType,
                         acne = skinHealthData.skinConditions.acne.toPercent(),
                         redness = skinHealthData.skinConditions.redness.toPercent(),
@@ -310,7 +334,7 @@ class Repository(
                         facialWash = result.recommendations.facialWash,
                         timestamp = System.currentTimeMillis()// Can adjust based on how you want to display recommendations
                     )
-                    // Insert entity into Room database
+
                     skinAnalysisDao.insertAnalysis(analysisEntity)
 
                     // Emit success with the result

@@ -80,6 +80,8 @@ class CameraWeeklyActivity : AppCompatActivity() {
         bundle.putString("week", week)
         resultFragment.arguments = bundle
 
+
+
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
@@ -105,12 +107,13 @@ class CameraWeeklyActivity : AppCompatActivity() {
     }
 
     private fun loadPreviewImage(week: String) {
-        cameraWeeklyViewModel.getImage(week).observe(this) { result ->
+        val  userPreference = UserPreference(this)
+        val userId = userPreference.getSession().user ?: getString(R.string.default_user)
+        cameraWeeklyViewModel.getImage(userId, week).observe(this) { result ->
             when (result) {
                 is Result.Success -> {
-                    if (result.data.image.isNotEmpty()) {
-                        displaySavedImage(result.data.image)
-                        disableButtons()
+                    if (result.data.imageUri?.isNotEmpty() == true) {
+                        displaySavedImage(result.data.imageUri.toString())
                     }
                 }
                 else -> Unit
@@ -189,6 +192,8 @@ class CameraWeeklyActivity : AppCompatActivity() {
                 putString("week", week)
             }
         }
+
+
 
         /*currentImageUri?.let { uri ->
             // Create an instance of ResultFragment

@@ -82,4 +82,5 @@
     <string name="default_week">Week -</string>
     <string name="change_profile_picture">Change Profile Picture</string>
     <string name="logout">logout</string>
+    <string name="search_hint">Search product</string>
 </resources>

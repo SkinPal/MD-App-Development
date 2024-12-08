@@ -10,7 +10,10 @@ import com.capstone.skinpal.data.remote.response.TonerItem
 import com.capstone.skinpal.data.remote.response.TreatmentItem
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "skin_analysis")
+@Entity(
+    tableName = "skin_analysis",
+    primaryKeys = ["userId", "week"]
+)
 data class AnalysisEntity(
     val userId: String,
     val week: String,
@@ -18,8 +21,9 @@ data class AnalysisEntity(
     val acne : String,
     val redness : String,
     val wrinkles: String,
-    val recommendations: String,  // Store as JSON string
-    @PrimaryKey()
+    val recommendations: String,
+    val imageUri: String?,
+    // Store as JSON string
     val timestamp: Long = System.currentTimeMillis(),
     @field:SerializedName("moisturizer")
     val moisturizer: List<MoisturizerItem>,
