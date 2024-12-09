@@ -5,6 +5,7 @@ package com.capstone.skinpal.ui
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.capstone.skinpal.ui.setting.SettingPreferences
 import kotlin.also
 import kotlin.jvm.java
 
@@ -30,10 +31,6 @@ class ViewModelFactory(
                 com.capstone.skinpal.ui.register.RegisterViewModel(repository) as T
             }
 
-            modelClass.isAssignableFrom(com.capstone.skinpal.ui.setting.AccountViewModel::class.java) -> {
-                com.capstone.skinpal.ui.setting.AccountViewModel(repository, ) as T
-            }
-
             modelClass.isAssignableFrom(com.capstone.skinpal.ui.history.HistoryViewModel::class.java) -> {
                 com.capstone.skinpal.ui.history.HistoryViewModel(repository) as T
             }
@@ -45,9 +42,11 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(com.capstone.skinpal.ui.history.CameraWeeklyViewModel::class.java) -> {
                 com.capstone.skinpal.ui.history.CameraWeeklyViewModel(repository) as T
             }
-
             modelClass.isAssignableFrom(com.capstone.skinpal.ui.splash.SplashViewModel::class.java) -> {
                 com.capstone.skinpal.ui.splash.SplashViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(com.capstone.skinpal.ui.setting.AccountViewModel::class.java) -> {
+                com.capstone.skinpal.ui.setting.AccountViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

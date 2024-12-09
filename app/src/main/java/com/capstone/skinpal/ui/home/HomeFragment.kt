@@ -18,8 +18,9 @@ import com.capstone.skinpal.data.local.entity.AnalysisEntity
 import com.capstone.skinpal.databinding.FragmentHomeBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.ViewModelFactory
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class HomeFragment : Fragment() {
+class HomeFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!

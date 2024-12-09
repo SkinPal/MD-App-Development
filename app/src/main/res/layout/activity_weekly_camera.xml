@@ -97,9 +97,36 @@
         android:paddingVertical="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/showResult"
+        android:text="@string/analyze"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/image_options"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/showResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:paddingVertical="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/showResult"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/analyzeButton"
+        app:layout_constraintBottom_toTopOf="@id/uploadButton"/>
+
+    <Button
+        android:id="@+id/uploadButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:paddingVertical="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/upload_photo"
+        android:visibility="gone"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/showResult"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -81,6 +81,12 @@
     <string name="no_skin_type">Skin Type</string>
     <string name="default_week">Week -</string>
     <string name="change_profile_picture">Change Profile Picture</string>
-    <string name="logout">logout</string>
+    <string name="logout">LOGOUT</string>
     <string name="search_hint">Search product</string>
+    <string name="products">Product Recommendations</string>
+    <string name="product_detail">Product Detail\n</string>
+    <string name="notification">Daily Notification</string>
+    <string name="notifications_permission_granted">Notification permission granted</string>
+    <string name="notifications_permission_rejected">Notification permission rejected</string>
+    <string name="mode">Dark Mode</string>
 </resources>
