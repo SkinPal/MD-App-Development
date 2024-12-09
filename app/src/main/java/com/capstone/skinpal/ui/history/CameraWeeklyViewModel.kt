@@ -30,9 +30,17 @@ class CameraWeeklyViewModel(private val repository: Repository) : ViewModel(){
         week = week
     )
 
+    fun getAnalysis(
+        user_id: String,
+        week: String
+    ) = repository.getAnalysis(
+        user_id = user_id,
+        week = week
+    )
+
     fun getImage(userId: String, week: String) = repository.getImage(userId, week)
 
-    fun getResult(): LiveData<Result<AnalysisEntity>> {
-        return repository.getResult()
+    fun getResult(user_id: String, week: String): LiveData<Result<AnalysisResult>> {
+        return repository.getAnalysis(user_id, week)
     }
 }

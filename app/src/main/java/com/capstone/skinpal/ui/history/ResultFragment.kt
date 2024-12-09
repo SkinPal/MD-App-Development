@@ -124,7 +124,7 @@ class ResultFragment : BottomSheetDialogFragment() {
 
         val week = arguments?.getString("week") ?: getString(R.string.default_week)
         val user_id = userPreference.getSession().user.toString()
-        cameraWeeklyViewModel.getResult().observe(viewLifecycleOwner) { result ->
+        cameraWeeklyViewModel.getAnalysis(user_id, week).observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Success -> {
                     val analysis = result.data
@@ -144,7 +144,7 @@ class ResultFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun displayResult(analysis: AnalysisEntity) {
+    private fun displayResult(analysis: AnalysisResult) {
         showLoading(false)
         binding.skinTypeValue.text = analysis.skinType
         binding.acneValue.text = analysis.acne

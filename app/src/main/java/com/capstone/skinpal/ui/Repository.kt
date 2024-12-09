@@ -24,6 +24,7 @@ import com.capstone.skinpal.data.remote.response.ProfileResponse
 import com.capstone.skinpal.data.remote.response.UploadProfileResponse
 import com.capstone.skinpal.data.remote.retrofit.LoginRequest
 import com.capstone.skinpal.data.remote.retrofit.RegisterRequest
+import com.capstone.skinpal.ui.history.AnalysisResult
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import kotlinx.coroutines.Dispatchers
@@ -199,6 +200,53 @@ class Repository(
         }
     }
 
+    fun getAnalysis(user_id: String, week: String) = liveData(Dispatchers.IO) {
+        emit(Result.Loading)
+
+        try {
+            // Get user session
+            val userSession = userPreference.getSession()
+            val userId = userSession.user ?: throw Exception("User session is invalid")
+            // Make API call
+            val response = apiService.getAnalysis(userId, week).execute()
+
+            if (response.isSuccessful) {
+                response.body()?.let { result ->
+
+                    // Map API response to model
+                    val skinHealthData = result.resultYourSkinhealth
+
+                    // Prepare AnalysisEntity to store in the database
+                    val analysisResult = AnalysisResult(
+                        userId = userId,
+                        week = week,
+                        imageUri = result.publicUrl,
+                        skinType = skinHealthData.skinType,
+                        acne = skinHealthData.skinConditions.acne.toPercent(),
+                        redness = skinHealthData.skinConditions.redness.toPercent(),
+                        wrinkles = skinHealthData.skinConditions.wrinkles.toPercent(),
+                        recommendations = result.recommendations.toString(),
+                        moisturizer = result.recommendations.moisturizer,
+                        treatment = result.recommendations.treatment,
+                        sunscreen = result.recommendations.sunscreen,
+                        toner = result.recommendations.toner,
+                        serum = result.recommendations.serum,
+                        facialWash = result.recommendations.facialWash,
+                        timestamp = System.currentTimeMillis(),
+                        publicUrl = result.publicUrl// Can adjust based on how you want to display recommendations
+                    )
+                    emit(Result.Success(analysisResult))
+
+                } ?: emit(Result.Error("Empty response"))
+            } else {
+                val errorBody = response.errorBody()?.string()
+                emit(Result.Error("Analysis failed: ${response.code()} - $errorBody"))
+            }
+        } catch (e: Exception) {
+            emit(Result.Error("An error occurred: ${e.message}"))
+        }
+    }
+
     fun getResult(): LiveData<Result<AnalysisEntity>> = liveData {
         emit(Result.Loading) // Emit a loading state
 
@@ -217,6 +265,9 @@ class Repository(
         }
     }
 
+    fun getAnalysis() {
+
+    }
 
     fun saveSession(user: UserModel) {
         userPreference.saveSession(user)
@@ -332,7 +383,8 @@ class Repository(
                         toner = result.recommendations.toner,
                         serum = result.recommendations.serum,
                         facialWash = result.recommendations.facialWash,
-                        timestamp = System.currentTimeMillis()// Can adjust based on how you want to display recommendations
+                        timestamp = System.currentTimeMillis(),
+                        publicUrl = result.publicUrl// Can adjust based on how you want to display recommendations
                     )
 
                     skinAnalysisDao.insertAnalysis(analysisEntity)

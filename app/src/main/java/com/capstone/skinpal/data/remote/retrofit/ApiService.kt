@@ -50,12 +50,10 @@ interface ApiService {
         @Part file: MultipartBody.Part
     ): Call<AnalyzeResponse>
 
-    @Multipart
     @GET("users/analysis")
     fun getAnalysis(
         @Query("user_id") user_id: String,
-        @Query("week") week: String,
-        @Part file: MultipartBody.Part
+        @Query("week") week: String
     ): Call<AnalyzeResponse>
 
     @GET("users/profile")

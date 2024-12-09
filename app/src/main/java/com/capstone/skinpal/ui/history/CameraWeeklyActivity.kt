@@ -73,14 +73,11 @@ class CameraWeeklyActivity : AppCompatActivity() {
         val week = intent.getStringExtra("WEEK") ?: "pekan1" // Use a default string value
         title = "Week $week"
 
-
         val resultFragment = ResultFragment()
 
         val bundle = Bundle()
         bundle.putString("week", week)
         resultFragment.arguments = bundle
-
-
 
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
@@ -89,34 +86,74 @@ class CameraWeeklyActivity : AppCompatActivity() {
         currentImageUri = savedInstanceState?.getParcelable("CURRENT_IMAGE_URI")
         val imageUriString = intent.getStringExtra("IMAGE_URI")
 
-        if (imageUriString.isNullOrEmpty()) {
+        loadPreviewImage(week)
+        /*if (imageUriString.isNullOrEmpty()) {
             loadPreviewImage(week)
         } else {
             displaySavedImage(imageUriString)
             disableButtons()
-        }
+        }*/
 
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.cameraButton.setOnClickListener { startCamera() }
         binding.analyzeButton.setOnClickListener {
-            currentImageUri?.let { uri ->
-                //saveImage(uri.toString(), week)
-                analyzeImage(uri.toString(), week)
-            } ?: showToast("Failed to save image. No image captured.")
+            if (currentImageUri == null) {
+                showToast("No image to analyze. Please capture or select an image.")
+                return@setOnClickListener
+            }
+
+            val userPreference = UserPreference(this)
+            val userId = userPreference.getSession().user ?: getString(R.string.default_user)
+            val week = intent.getStringExtra("WEEK") ?: "pekan1"
+
+            // Observe the result for the current image
+            cameraWeeklyViewModel.getAnalysis(userId, week).observe(this) { result ->
+                when (result) {
+                    is Result.Success -> {
+                        if (result.data.publicUrl.isNotEmpty()) {
+                            disableButtons()
+                            showToast("Analysis already exists. Showing results...")
+                            showImageInfo() // Display existing analysis info
+                        } else {
+                            analyzeImage(userId, week) // Perform a new analysis
+                        }
+                    }
+                    is Result.Error -> {
+                        Log.e("CameraWeeklyActivity", "Error checking analysis: ${result.error}")
+                        analyzeImage(userId, week) // Assume no analysis exists; perform a new analysis
+                    }
+                    is Result.Loading -> {
+                        showToast("Checking analysis status...")
+                    }
+                }
+            }
         }
+
     }
 
     private fun loadPreviewImage(week: String) {
         val  userPreference = UserPreference(this)
         val userId = userPreference.getSession().user ?: getString(R.string.default_user)
-        cameraWeeklyViewModel.getImage(userId, week).observe(this) { result ->
+        cameraWeeklyViewModel.getAnalysis(userId, week).observe(this) { result ->
             when (result) {
                 is Result.Success -> {
-                    if (result.data.imageUri?.isNotEmpty() == true) {
-                        displaySavedImage(result.data.imageUri.toString())
+                    Log.d("CameraWeeklyActivity", "Result data: ${result.data.publicUrl}")
+                    if (result.data.publicUrl.isNotEmpty()) {
+                        currentImageUri = Uri.parse(result.data.publicUrl) // Ensure proper parsing
+                        Glide.with(this)
+                            .load(currentImageUri)
+                            .into(binding.previewImageView)
+                        showImageInfo()
+                        disableButtons()
                     }
                 }
-                else -> Unit
+                is Result.Error -> {
+                    Log.e("CameraWeeklyActivity", "Error loading preview: ${result.error}")
+                }
+                is Result.Loading -> {
+                    showLoading(isLoading = true)
+                    Log.d("CameraWeeklyActivity", "Loading preview image...")
+                }
             }
         }
     }
@@ -186,10 +223,11 @@ class CameraWeeklyActivity : AppCompatActivity() {
         val userId = userPreference.getSession().user ?: getString(R.string.default_user)
 
 
-        val resultFragment = ResultFragment().apply {
+        val bottomSheet = ResultFragment().apply {
             arguments = Bundle().apply {
                 putString("userId", userId)
                 putString("week", week)
+
             }
         }
 
@@ -208,7 +246,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
         }*/
 
             // Create an instance of ResultFragment
-        val bottomSheet = ResultFragment()
+        //val bottomSheet = ResultFragment()
 
         // Show the ResultFragment as a BottomSheet
         bottomSheet.show(supportFragmentManager, bottomSheet.tag)
@@ -320,7 +358,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
     private fun disableButtons() {
         binding.galleryButton.isEnabled = false
         binding.cameraButton.isEnabled = false
-        binding.analyzeButton.isEnabled = false
     }
 
     private fun showLoading(isLoading: Boolean) {

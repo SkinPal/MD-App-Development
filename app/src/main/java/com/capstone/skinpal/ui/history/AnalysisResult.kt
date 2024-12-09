@@ -1,7 +1,5 @@
-package com.capstone.skinpal.data.local.entity
+package com.capstone.skinpal.ui.history
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.capstone.skinpal.data.remote.response.FacialWashItem
 import com.capstone.skinpal.data.remote.response.MoisturizerItem
 import com.capstone.skinpal.data.remote.response.SerumItem
@@ -10,11 +8,7 @@ import com.capstone.skinpal.data.remote.response.TonerItem
 import com.capstone.skinpal.data.remote.response.TreatmentItem
 import com.google.gson.annotations.SerializedName
 
-@Entity(
-    tableName = "skin_analysis",
-    primaryKeys = ["userId", "week"]
-)
-data class AnalysisEntity(
+data class AnalysisResult(
     val userId: String,
     val week: String,
     val skinType: String,

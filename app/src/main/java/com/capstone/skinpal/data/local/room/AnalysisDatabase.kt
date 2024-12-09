@@ -9,7 +9,7 @@ import com.capstone.skinpal.data.local.entity.AnalysisEntity
 import com.capstone.skinpal.ui.product.Converters
 
 @TypeConverters(Converters::class)
-@Database(entities = [AnalysisEntity::class], version = 10, exportSchema = false)
+@Database(entities = [AnalysisEntity::class], version = 11, exportSchema = false)
 abstract class AnalysisDatabase : RoomDatabase() {
 
 
