@@ -368,10 +368,10 @@ class Repository(
                     val skinHealthData = result.resultYourSkinhealth
 
                     // Prepare AnalysisEntity to store in the database
-                    val analysisEntity = AnalysisEntity(
+                    val analysisResult = AnalysisResult(
                         userId = userId,
                         week = week,
-                        imageUri = imageFile.absolutePath,
+                        imageUri = result.publicUrl,
                         skinType = skinHealthData.skinType,
                         acne = skinHealthData.skinConditions.acne.toPercent(),
                         redness = skinHealthData.skinConditions.redness.toPercent(),
@@ -386,11 +386,7 @@ class Repository(
                         timestamp = System.currentTimeMillis(),
                         publicUrl = result.publicUrl// Can adjust based on how you want to display recommendations
                     )
-
-                    skinAnalysisDao.insertAnalysis(analysisEntity)
-
-                    // Emit success with the result
-                    emit(Result.Success(result))
+                    emit(Result.Success(analysisResult))
 
                 } ?: emit(Result.Error("Empty response"))
             } else {

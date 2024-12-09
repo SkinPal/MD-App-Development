@@ -73,12 +73,12 @@ class CameraActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val week = intent.getStringExtra("WEEK") ?: "test"
-        title = "Week $week"
+        //title = "Week $week"
 
         val resultFragment = ResultFragment()
 
         val bundle = Bundle()
-        bundle.putString("week", week)
+        bundle.putString("week", "test")
 
         resultFragment.arguments = bundle
 
@@ -181,15 +181,15 @@ class CameraActivity : AppCompatActivity() {
 
     private fun showImageInfo() {
         val week = intent.getStringExtra("WEEK") ?: "test" // Use a default string value
-        title = "Week $week"
+        //title = "Week $week"
         val  userPreference = UserPreference(this)
         val userId = userPreference.getSession().user ?: getString(R.string.default_user)
 
 
-        val resultFragment = ResultFragment().apply {
+        val bottomSheet = ResultFragment().apply {
             arguments = Bundle().apply {
                 putString("userId", userId)
-                putString("week", week)
+                putString("week", "test")
             }
         }
 
@@ -208,7 +208,7 @@ class CameraActivity : AppCompatActivity() {
         }*/
 
         // Create an instance of ResultFragment
-        val bottomSheet = ResultFragment()
+        //val bottomSheet = ResultFragment()
 
         // Show the ResultFragment as a BottomSheet
         bottomSheet.show(supportFragmentManager, bottomSheet.tag)

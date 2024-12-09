@@ -83,4 +83,6 @@
     <string name="change_profile_picture">Change Profile Picture</string>
     <string name="logout">logout</string>
     <string name="search_hint">Search product</string>
+    <string name="products">Product Recommendations</string>
+    <string name="product_detail">Product Detail\n</string>
 </resources>
