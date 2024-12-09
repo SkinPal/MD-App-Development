@@ -97,11 +97,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun setupSettings() {
-        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            settingViewModel.saveThemeSetting(isChecked)
-        }
-
-        binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+             binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             settingViewModel.saveNotificationSetting(isChecked)
             if (isChecked) {
                 scheduleNotificationsAt(listOf(
@@ -112,22 +108,13 @@ class AccountFragment : Fragment() {
                 cancelNotificationTasks()
             }
         }
-
-        // Observe settings
-        settingViewModel.getThemeSetting().observe(viewLifecycleOwner) { isDarkModeActive ->
-            AppCompatDelegate.setDefaultNightMode(
-                if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-            )
-            binding.switchTheme.isChecked = isDarkModeActive
-        }
-
         settingViewModel.getNotificationSetting().observe(viewLifecycleOwner) { isNotificationActive ->
             binding.switchNotifications.isChecked = isNotificationActive
         }
     }
 
     private fun setupUI() {
-        val userId = userPreference.getSession()?.user
+        val userId = userPreference.getSession().user
         if (!userId.isNullOrEmpty()) {
             accountViewModel.fetchUserProfile()
         } else {
@@ -154,17 +141,6 @@ class AccountFragment : Fragment() {
 
         accountViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
-
-        settingViewModel.getThemeSetting().observe(viewLifecycleOwner) { isDarkModeActive ->
-            AppCompatDelegate.setDefaultNightMode(
-                if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-            )
-            binding.switchTheme.isChecked = isDarkModeActive
-        }
-
-        settingViewModel.getNotificationSetting().observe(viewLifecycleOwner) { isNotificationActive ->
-            binding.switchNotifications.isChecked = isNotificationActive
         }
     }
 
