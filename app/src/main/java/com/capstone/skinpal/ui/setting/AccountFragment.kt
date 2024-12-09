@@ -161,6 +161,7 @@ class AccountFragment : Fragment() {
                     val imageUri = data.data
                     imageUri?.let { handleImageUpload(it) }
                 }
+
                 cameraRequestCode -> {
                     val bitmap = data.extras?.get("data") as? Bitmap
                     bitmap?.let { handleBitmapUpload(it) }
@@ -174,7 +175,11 @@ class AccountFragment : Fragment() {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
             inputStream?.let {
                 val requestBody = RequestBody.create("image/*".toMediaTypeOrNull(), it.readBytes())
-                val part = MultipartBody.Part.createFormData("file", "profile_image.jpg", requestBody) // Periksa nama field
+                val part = MultipartBody.Part.createFormData(
+                    "file",
+                    "profile_image.jpg",
+                    requestBody
+                ) // Periksa nama field
                 accountViewModel.uploadProfile(part)
                 Glide.with(requireContext()).load(uri).into(binding.photoProfile)
             }
@@ -190,7 +195,11 @@ class AccountFragment : Fragment() {
                 "image/*".toMediaTypeOrNull(),
                 byteArrayOutputStream.toByteArray()
             )
-            val part = MultipartBody.Part.createFormData("image", "profile_image.jpg", requestBody)
+            val part = MultipartBody.Part.createFormData(
+                "file",
+                "profile_image.jpg",
+                requestBody
+            ) // Periksa nama field
             accountViewModel.uploadProfile(part)
             Glide.with(requireContext()).load(bitmap).into(binding.photoProfile)
         }

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import kotlin.also
 import kotlin.jvm.java
 
-class ViewModelFactory constructor(
+class ViewModelFactory(
     private val repository: Repository) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -44,6 +44,10 @@ class ViewModelFactory constructor(
 
             modelClass.isAssignableFrom(com.capstone.skinpal.ui.history.CameraWeeklyViewModel::class.java) -> {
                 com.capstone.skinpal.ui.history.CameraWeeklyViewModel(repository) as T
+            }
+
+            modelClass.isAssignableFrom(com.capstone.skinpal.ui.splash.SplashViewModel::class.java) -> {
+                com.capstone.skinpal.ui.splash.SplashViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

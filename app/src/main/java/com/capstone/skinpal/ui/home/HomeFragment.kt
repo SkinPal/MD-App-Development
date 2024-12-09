@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.local.entity.AnalysisEntity
@@ -59,12 +60,24 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupUI() {
+        userPreference = UserPreference(requireContext())
         // Get username from SharedPreferences
         val session = userPreference.getSession()
         val username = session.user ?: getString(R.string.default_user)
+        val photoUrl = userPreference.getProfileImage() ?: ""
 
         // Update greeting text
         binding.tvName.text = getString(R.string.greeting_format, username)
+        if (photoUrl.isNotEmpty()) {
+            Glide.with(this)
+                .load(photoUrl)
+                .placeholder(R.drawable.icon_person) // Icon default jika foto belum tersedia
+                .error(R.drawable.icon_person) // Icon error jika gagal memuat
+                .into(binding.profile) // Ganti dengan ID ImageView foto profil Anda
+        } else {
+            binding.profile.setImageResource(R.drawable.icon_person)
+        }
+
         homeViewModel.getAnalysisByUserId(username).observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
