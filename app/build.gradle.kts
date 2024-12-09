@@ -50,6 +50,9 @@ android {
 }
 
 dependencies {
+    implementation (libs.androidx.datastore.preferences.v100)
+    implementation (libs.androidx.datastore.preferences.core)
+    implementation(libs.androidx.core.ktx.v1120)
     implementation (libs.firebase.database) // For Firebase Realtime Database
     implementation (libs.firebase.storage)  // For Firebase Storage
     implementation(libs.circleimageview)

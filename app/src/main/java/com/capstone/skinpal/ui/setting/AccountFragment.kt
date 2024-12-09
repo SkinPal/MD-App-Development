@@ -7,18 +7,28 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.capstone.skinpal.R
 import com.capstone.skinpal.databinding.FragmentAccountBinding
@@ -31,33 +41,89 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class AccountFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountBinding
+    private lateinit var settingViewModel: SettingViewModel
     private val userPreference: UserPreference by lazy { UserPreference(requireContext()) }
     private val accountViewModel: AccountViewModel by viewModels {
         ViewModelFactory(repository = Injection.provideRepository(requireContext()))
     }
+    private lateinit var workManager: WorkManager
 
     private val galleryRequestCode = 100
     private val cameraRequestCode = 101
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(requireContext(),
+                    getString(R.string.notifications_permission_granted), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(),
+                    getString(R.string.notifications_permission_rejected), Toast.LENGTH_SHORT).show()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
-        // Atur Toolbar sebagai action bar
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
 
-        // Ubah properti langsung
         binding.toolbar.title = "About Me"
         binding.toolbar.setTitleTextColor(Color.WHITE)
+        if (Build.VERSION.SDK_INT >= 33) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
+        val pref = SettingPreferences.getInstance(requireContext().dataStore)
+        settingViewModel = ViewModelProvider(
+            this,
+            SettingViewModelFactory(pref)
+        )[SettingViewModel::class.java]
+        workManager = WorkManager.getInstance(requireContext())
 
         setupUI()
         observeViewModel()
+        setupSettings()
 
         return binding.root
+    }
+
+    private fun setupSettings() {
+        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
+            settingViewModel.saveThemeSetting(isChecked)
+        }
+
+        binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            settingViewModel.saveNotificationSetting(isChecked)
+            if (isChecked) {
+                scheduleNotificationsAt(listOf(
+                    Pair(6, 0),  // 6:00 AM
+                    Pair(22, 15) // 10:15 PM
+                ))
+            } else {
+                cancelNotificationTasks()
+            }
+        }
+
+        // Observe settings
+        settingViewModel.getThemeSetting().observe(viewLifecycleOwner) { isDarkModeActive ->
+            AppCompatDelegate.setDefaultNightMode(
+                if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            )
+            binding.switchTheme.isChecked = isDarkModeActive
+        }
+
+        settingViewModel.getNotificationSetting().observe(viewLifecycleOwner) { isNotificationActive ->
+            binding.switchNotifications.isChecked = isNotificationActive
+        }
     }
 
     private fun setupUI() {
@@ -70,6 +136,7 @@ class AccountFragment : Fragment() {
 
         binding.logoutButton.setOnClickListener { signOut() }
         binding.ivCamera.setOnClickListener { showImagePickerDialog() }
+
     }
 
     private fun observeViewModel() {
@@ -80,13 +147,24 @@ class AccountFragment : Fragment() {
                 binding.tvUsername.text = data.username
                 Glide.with(requireContext())
                     .load(data.profileImage)
-                    .placeholder(R.drawable.icon_person) // Gambar default
+                    .placeholder(R.drawable.icon_person)
                     .into(binding.photoProfile)
             }
         }
 
         accountViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        settingViewModel.getThemeSetting().observe(viewLifecycleOwner) { isDarkModeActive ->
+            AppCompatDelegate.setDefaultNightMode(
+                if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            )
+            binding.switchTheme.isChecked = isDarkModeActive
+        }
+
+        settingViewModel.getNotificationSetting().observe(viewLifecycleOwner) { isNotificationActive ->
+            binding.switchNotifications.isChecked = isNotificationActive
         }
     }
 
@@ -174,13 +252,12 @@ class AccountFragment : Fragment() {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
             inputStream?.let {
                 val requestBody = RequestBody.create("image/*".toMediaTypeOrNull(), it.readBytes())
-                val part = MultipartBody.Part.createFormData("file", "profile_image.jpg", requestBody) // Periksa nama field
+                val part = MultipartBody.Part.createFormData("file", "profile_image.jpg", requestBody)
                 accountViewModel.uploadProfile(part)
                 Glide.with(requireContext()).load(uri).into(binding.photoProfile)
             }
         }
     }
-
 
     private fun handleBitmapUpload(bitmap: Bitmap) {
         lifecycleScope.launch {
@@ -194,5 +271,38 @@ class AccountFragment : Fragment() {
             accountViewModel.uploadProfile(part)
             Glide.with(requireContext()).load(bitmap).into(binding.photoProfile)
         }
+    }
+
+    fun scheduleNotificationsAt(times: List<Pair<Int, Int>>) {
+        for ((hour, minute) in times) {
+            val currentTime = Calendar.getInstance()
+            val notificationTime = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hour)
+                set(Calendar.MINUTE, minute)
+                set(Calendar.SECOND, 0)
+            }
+
+            // If the notification time is before the current time, schedule for the next day
+            if (notificationTime.before(currentTime)) {
+                notificationTime.add(Calendar.DAY_OF_MONTH, 1)
+            }
+
+            val delay = notificationTime.timeInMillis - currentTime.timeInMillis
+
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+
+            val notificationWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                .setConstraints(constraints)
+                .build()
+
+            WorkManager.getInstance(requireContext()).enqueue(notificationWorkRequest)
+        }
+    }
+
+    private fun cancelNotificationTasks() {
+        workManager.cancelUniqueWork("EventNotificationWork")
     }
 }

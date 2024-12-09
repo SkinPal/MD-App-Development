@@ -5,13 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.remote.response.ProfileResponse
 import com.capstone.skinpal.ui.Repository
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
-class AccountViewModel(private val repository: Repository): ViewModel() {
+class AccountViewModel(
+    private val repository: Repository
+): ViewModel() {
 
     private val _userProfile = MutableLiveData<ProfileResponse?>()
     val userProfile: MutableLiveData<ProfileResponse?> = _userProfile
@@ -66,8 +67,6 @@ class AccountViewModel(private val repository: Repository): ViewModel() {
             }
         }
     }
-
-
 
     fun logout() {
         viewModelScope.launch {

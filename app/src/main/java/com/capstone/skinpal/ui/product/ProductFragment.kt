@@ -1,5 +1,6 @@
 package com.capstone.skinpal.ui.product
 
+import android.graphics.Color
 import com.capstone.skinpal.R
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -34,6 +35,9 @@ class ProductFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductBinding.inflate(inflater, container, false)
+
+        binding.toolbar.title = "Product Recommendations"
+        binding.toolbar.setTitleTextColor(Color.WHITE)
         return binding.root
     }
 
