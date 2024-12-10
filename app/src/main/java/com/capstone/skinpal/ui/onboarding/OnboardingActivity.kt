@@ -11,6 +11,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.capstone.skinpal.R
 import android.os.Bundle
 import com.capstone.skinpal.ui.login.LoginActivity
+import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
+import android.view.animation.DecelerateInterpolator
 
 class OnboardingActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
@@ -41,6 +44,7 @@ class OnboardingActivity : AppCompatActivity() {
                 super.onPageSelected(position)
                 updateIndicators(position)
                 btnNext.text = if (position == onboardingItems.size - 1) "Get Started" else "Next"
+                animatePage(position)
             }
         })
 
@@ -49,6 +53,28 @@ class OnboardingActivity : AppCompatActivity() {
                 viewPager.currentItem += 1
             } else {
                 navigateToMainScreen()
+            }
+        }
+    }
+
+    private fun animatePage(position: Int) {
+        val currentItemView = (viewPager.getChildAt(0) as ViewGroup?)?.getChildAt(position) as? ImageView
+
+        currentItemView?.let {
+
+            it.translationX = 0f
+
+            val animatorX = ObjectAnimator.ofFloat(it, "translationX", -50f, 0f)
+            animatorX.duration = 400
+            animatorX.interpolator = DecelerateInterpolator()
+
+            val animatorY = ObjectAnimator.ofFloat(it, "translationY", -50f, 0f)
+            animatorY.duration = 400
+            animatorY.interpolator = DecelerateInterpolator()
+
+            AnimatorSet().apply {
+                playTogether(animatorX, animatorY)
+                start()
             }
         }
     }
