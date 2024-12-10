@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation (libs.dotsindicator)
     implementation (libs.androidx.datastore.preferences.v100)
     implementation (libs.androidx.datastore.preferences.core)
     implementation(libs.androidx.core.ktx.v1120)

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
@@ -104,25 +105,6 @@ class HomeFragment : BottomSheetDialogFragment() {
                     .into(binding.profile)
             }
         }
-
-        homeViewModel.getAnalysisByUserId(username).observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Result.Loading -> showLoading(true)
-                is Result.Success -> {
-                    showLoading(false)
-                    displaySkinType(result.data)
-                }
-                is Result.Error -> {
-                    showLoading(false)
-                    showError(result.error)
-                }
-            }
-        }
-    }
-
-    private fun displaySkinType(analysis: AnalysisEntity) {
-        binding.skinCondition.text = analysis.skinType
-        Log.d("AnalysisFragment", "Analysis: $analysis")
     }
 
     private fun showError(error: String) {

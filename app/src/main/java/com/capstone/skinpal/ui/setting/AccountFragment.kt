@@ -81,7 +81,7 @@ class AccountFragment : Fragment() {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
 
-        binding.toolbar.title = "About Me"
+        binding.toolbar.title = "Setting"
         binding.toolbar.setTitleTextColor(Color.WHITE)
 
         if (!allPermissionsGranted()) {

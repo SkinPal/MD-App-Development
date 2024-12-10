@@ -42,7 +42,7 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) : Wor
         val channelId = "scheduled_notification_channel"
         val message = "Don't forget to do your daily routine skincare!"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "Scheduled Notifications", NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(channelId, "Daily Reminder", NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
 
