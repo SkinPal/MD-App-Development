@@ -58,17 +58,19 @@ class AccountFragment : Fragment() {
     private val cameraRequestCode = 101
 
     private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                Toast.makeText(requireContext(),
-                    getString(R.string.notifications_permission_granted), Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(),
-                    getString(R.string.notifications_permission_rejected), Toast.LENGTH_SHORT).show()
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all { it.value }
+            if (!granted) {
+                Toast.makeText(requireContext(), getString(R.string.permission_request_denied), Toast.LENGTH_LONG).show()
             }
         }
+
+    private fun allPermissionsGranted(): Boolean {
+        return REQUIRED_PERMISSIONS.all {
+            ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -78,8 +80,9 @@ class AccountFragment : Fragment() {
 
         binding.toolbar.title = "About Me"
         binding.toolbar.setTitleTextColor(Color.WHITE)
-        if (Build.VERSION.SDK_INT >= 33) {
-            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+
+        if (!allPermissionsGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
         val pref = SettingPreferences.getInstance(requireContext().dataStore)
@@ -288,5 +291,9 @@ class AccountFragment : Fragment() {
 
     private fun cancelNotificationTasks() {
         workManager.cancelUniqueWork("EventNotificationWork")
+    }
+
+    companion object {
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }

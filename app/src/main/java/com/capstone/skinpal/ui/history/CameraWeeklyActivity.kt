@@ -101,34 +101,13 @@ class CameraWeeklyActivity : AppCompatActivity() {
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.cameraButton.setOnClickListener { startCamera() }
         binding.showResult.setOnClickListener {
-            if (currentImageUri == null) {
-                showToast("No image to analyze. Please capture or select an image.")
-                return@setOnClickListener
-            }
-
+            // Hapus pengecekan currentImageUri
             val userPreference = UserPreference(this)
             val userId = userPreference.getSession().user ?: getString(R.string.default_user)
             val week = intent.getStringExtra("WEEK") ?: "pekan1"
-            cameraWeeklyViewModel.getAnalysis(userId, week).observe(this) { result ->
-                when (result) {
-                    is Result.Success -> {
-                        if (result.data.publicUrl.isNotEmpty()) {
-                            disableButtons()
-                            showToast("Analysis already exists. Showing results...")
-                            showImageInfo() // Display existing analysis info
-                        } else {
-                            //analyzeImage(userId, week) // Perform a new analysis
-                        }
-                    }
-                    is Result.Error -> {
-                        Log.e("CameraWeeklyActivity", "Error checking analysis: ${result.error}")
-                        analyzeImage(userId, week) // Assume no analysis exists; perform a new analysis
-                    }
-                    is Result.Loading -> {
-                        showToast("Checking analysis status...")
-                    }
-                }
-            }
+
+            // Langsung tampilkan result
+            showImageInfo()
         }
 
         binding.analyzeButton.setOnClickListener {
@@ -160,33 +139,74 @@ class CameraWeeklyActivity : AppCompatActivity() {
                     showLoading(false)
                     if (result.data != null && result.data.publicUrl.isNotEmpty()) {
                         Log.d("CameraWeeklyActivity", "Found image URL: ${result.data.publicUrl}")
-                        currentImageUri = Uri.parse(result.data.publicUrl)
+
                         Glide.with(this)
-                            .load(currentImageUri)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable caching
-                            .skipMemoryCache(true) // Skip memory cach
+                            .load(result.data.publicUrl)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
                             .error(R.drawable.ic_place_holder)
                             .into(binding.previewImageView)
-                        showImageInfo()
-                        disableButtons()
+
+                        // Update UI untuk menampilkan showResult
+                        binding.apply {
+                            galleryButton.visibility = GONE
+                            cameraButton.visibility = GONE
+                            showResult.apply {
+                                visibility = VISIBLE
+                                isEnabled = true
+                            }
+                            analyzeButton.visibility = GONE
+                            binding.uploadButton.apply {
+                                visibility = View.VISIBLE
+                                setOnClickListener {
+                                    resetToInitialState() // Panggil fungsi baru ini
+                                }
+                            }
+                        }
                     } else {
-                        Log.d("CameraWeeklyActivity", "No image found for week: $week")
                         binding.previewImageView.setImageResource(R.drawable.ic_place_holder)
-                        resetButtons() // Gunakan resetButtons() di sini
+                        resetButtons()
                     }
                 }
                 is Result.Error -> {
                     showLoading(false)
                     Log.e("CameraWeeklyActivity", "Error loading preview: ${result.error}")
                     binding.previewImageView.setImageResource(R.drawable.ic_place_holder)
-                    resetButtons() // Gunakan resetButtons() di sini
+                    resetButtons()
                 }
-                is Result.Loading -> {
-                    showLoading(true)
-                }
+                is Result.Loading -> showLoading(true)
             }
         }
     }
+
+    private fun resetToInitialState() {
+        // Reset image view
+        binding.previewImageView.setImageResource(R.drawable.ic_place_holder)
+
+        // Reset URI
+        currentImageUri = null
+
+        // Reset button states
+        binding.apply {
+            galleryButton.apply {
+                isEnabled = true
+                visibility = View.VISIBLE
+            }
+            cameraButton.apply {
+                isEnabled = true
+                visibility = View.VISIBLE
+            }
+            analyzeButton.apply {
+                visibility = View.VISIBLE
+                isEnabled = true
+            }
+            showResult.visibility = View.GONE
+            uploadButton.visibility = View.GONE
+        }
+
+        showToast("Ready to upload a new image")
+    }
+
 
     // Add this new function to handle button visibility
     private fun toggleAnalysisButtons(hasAnalysis: Boolean) {
@@ -310,143 +330,32 @@ class CameraWeeklyActivity : AppCompatActivity() {
     }
 
     private fun showImageInfo() {
-        val week = intent.getStringExtra("WEEK") ?: "pekan1" // Use a default string value
-        title = "Week $week"
-        val  userPreference = UserPreference(this)
+        val week = intent.getStringExtra("WEEK") ?: "pekan1"
+        val userPreference = UserPreference(this)
         val userId = userPreference.getSession().user ?: getString(R.string.default_user)
 
+        // Tambahkan log untuk debugging
+        Log.d("CameraWeeklyActivity", "Showing image info for userId: $userId, week: $week")
 
         val bottomSheet = ResultFragment().apply {
             arguments = Bundle().apply {
                 putString("userId", userId)
                 putString("week", week)
-
             }
         }
 
-
-
-        /*currentImageUri?.let { uri ->
-            // Create an instance of ResultFragment
-            val bottomSheet = ResultFragment()
-
-            val bundle = Bundle()
-            bundle.putString("imageUri", uri.toString()) // Example of passing data
-            bottomSheet.arguments = bundle
-
-            // Show the ResultFragment as a BottomSheet
-            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
-        }*/
-
-        // Create an instance of ResultFragment
-        //val bottomSheet = ResultFragment()
-
-        // Show the ResultFragment as a BottomSheet
-        bottomSheet.show(supportFragmentManager, bottomSheet.tag)
-
+        try {
+            bottomSheet.show(supportFragmentManager, "ResultFragment")
+        } catch (e: Exception) {
+            Log.e("CameraWeeklyActivity", "Error showing bottom sheet: ${e.message}")
+            showToast("Error showing results")
+        }
     }
 
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
-    /*private fun saveImage(imageUriString: String, week: String) {
-        val userPreference = UserPreference(this)
-        val session = userPreference.getSession()
-
-        val user_id = session.user ?: run {
-            showToast("User ID not found")
-            return
-        }
-
-        currentImageUri?.let { uri ->
-            val imageFile = uriToFile(uri, this).reduceFileImage()
-
-            // Add logging for debugging
-            if (BuildConfig.DEBUG) {
-                Log.d("CameraWeeklyActivity", """
-                Uploading image:
-                userId: $user_id
-                week: $week
-                token: ${session.token!!.take(10)}...
-                file: ${imageFile.name}
-            """.trimIndent())
-            }
-
-            cameraWeeklyViewModel.uploadImage(
-                imageFile = imageFile,
-                user_id = user_id,
-                week = week.toString()
-            ).observe(this) { result ->
-                when (result) {
-                    is Result.Loading -> showLoading(true)
-                    is Result.Success -> {
-                        showLoading(false)
-                        showToast("Image uploaded successfully")
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        if (result.error.contains("authorized", ignoreCase = true)) {
-                            showToast("Session expired. Please login again")
-                            // Optional: Navigate to login screen
-                        } else {
-                            showToast("Debug - Saved Token: ${session.token?.take(10) ?: "null"}")
-                            showToast(result.error)
-                        }
-                    }
-                }
-            }
-        } ?: showToast(getString(R.string.empty_image_warning))
-    }*/
-
-    /*private fun analyzeImage(imageUriString: String, week: String) {
-        val userPreference = UserPreference(this)
-        val session = userPreference.getSession()
-
-        val user_id = session.user ?: run {
-            showToast("User ID not found")
-            return
-        }
-
-        currentImageUri?.let { uri ->
-            val imageFile = uriToFile(uri, this).reduceFileImage()
-
-            if (BuildConfig.DEBUG) {
-                Log.d("CameraWeeklyActivity", """
-            Uploading image:
-            userId: $user_id
-            week: $week
-            token: ${session.token!!.take(10)}...
-            file: ${imageFile.name}
-        """.trimIndent())
-            }
-
-            cameraWeeklyViewModel.analyzeImage(
-                imageFile = imageFile,
-                user_id = user_id,
-                week = week
-            ).observe(this) { result ->
-                when (result) {
-                    is Result.Loading -> showLoading(true)
-                    is Result.Success -> {
-                        showImage() // Refresh the image after successful analysis
-                        showImageInfo() // Display analysis info (if needed)
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        if (result.error.contains("authorized", ignoreCase = true)) {
-                            showToast("Session expired. Please login again")
-                            // Optional: Navigate to login screen
-                        } else {
-                            showToast(result.error)
-                        }
-                    }
-                }
-            }
-        } ?: showToast(getString(R.string.empty_image_warning))
-    }*/
-
 
     private fun disableButtons() {
         binding.apply {
@@ -459,7 +368,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
                 setOnClickListener {
                     currentImageUri = null
                     previewImageView.setImageResource(R.drawable.ic_place_holder)
-                    resetButtons() // Ganti enableButtons() dengan resetButtons()
+                    resetButtons()
                     showToast("Ready to upload a new image.")
                     showLoading(isLoading = false)
                 }

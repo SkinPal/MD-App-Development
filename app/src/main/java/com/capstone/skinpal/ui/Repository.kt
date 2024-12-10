@@ -457,7 +457,7 @@ class Repository(
             if (events.isNotEmpty()) {
                 result.value = Result.Success(events)
             } else {
-                result.value = Result.Error("No favorite events found")
+                result.value = Result.Error("No favorite products found")
             }
         }
 

@@ -13,10 +13,10 @@ import com.google.gson.annotations.SerializedName
 data class ProductEntity(
     @PrimaryKey
     val name: String,
-    val imageUrl: String,
-    val description: String,
-    val ingredients: String,
-    val type: String,
+    val imageUrl: String?,
+    val description: String?,
+    val ingredients: String?,
+    val type: String?,
     @field:ColumnInfo(name = "bookmarked")
-    var isBookmarked: Boolean
+    var isBookmarked: Boolean?
 )

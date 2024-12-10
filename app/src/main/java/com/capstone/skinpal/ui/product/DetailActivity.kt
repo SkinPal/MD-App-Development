@@ -76,7 +76,7 @@ class DetailActivity : AppCompatActivity() {
                     binding.progressBar.visibility = View.GONE
                     val products = result.data
                     product = products
-                    isBookmarked = products.isBookmarked
+                    isBookmarked = products.isBookmarked == true
                     updateFabIcon(isBookmarked)
                     populateEventDetails(products)
                 }

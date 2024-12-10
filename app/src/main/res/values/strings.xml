@@ -22,7 +22,7 @@
     <string name="title_account">Account</string>
     <string name="title_reminder">Reminder</string>
     <string name="empty">" "</string>
-    <string name="no_item_found">No item found.</string>
+    <string name="no_item_found">No product found.</string>
     <string name="title_product2">Product</string>
     <string name="product_name">Product</string>
     <string name="greetings">Get ready to start your beauty journey with us!</string>
@@ -99,4 +99,6 @@
     <string name="removed_from_favorite">Removed from favorite</string>
     <string name="title_favorite">Favorite</string>
     <string name="default_username">User</string>
+    <string name="no_product_found">No favorite products found.</string>
+    <string name="reupload_photo">Reupload Photo</string>
 </resources>

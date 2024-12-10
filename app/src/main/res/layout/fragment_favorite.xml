@@ -13,7 +13,7 @@
         android:id="@+id/tv_no_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_events_found"
+        android:text="@string/no_product_found"
         android:visibility="gone"
         tools:visibility="visible"
         android:textColorHint="@color/primary"

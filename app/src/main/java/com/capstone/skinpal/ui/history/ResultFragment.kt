@@ -176,16 +176,16 @@ class ResultFragment : BottomSheetDialogFragment() {
             binding.wrinklesValue.text = analysis.wrinkles
         }
 
-       // val recommendations = analysis.sunscreenItem ?: emptyList()
+        // val recommendations = analysis.sunscreenItem ?: emptyList()
         val moisturizerEntities = analysis.moisturizer?.map { moisturizerItem ->
             ProductEntity(
                 // Map fields appropriately
                 name = moisturizerItem.name,
                 imageUrl = moisturizerItem.imageUrl,
-                description = TODO(),
-                ingredients = TODO(),
-                isBookmarked = TODO(),
-                type = TODO(),
+                description = null,
+                ingredients = null,
+                isBookmarked = null,
+                type = null
 
                 // Add any other required fields
             )
@@ -197,10 +197,10 @@ class ResultFragment : BottomSheetDialogFragment() {
             ProductEntity( // Map fields appropriately
                 name = sunscreenItem.name,
                 imageUrl = sunscreenItem.imageUrl,
-                description = TODO(),
-                ingredients = TODO(),
-                isBookmarked = TODO(),
-                type = TODO()
+                description = null,
+                ingredients = null,
+                isBookmarked = null,
+                type = null
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -211,24 +211,24 @@ class ResultFragment : BottomSheetDialogFragment() {
             ProductEntity( // Map fields appropriately
                 name = tonerItem.name,
                 imageUrl = tonerItem.imageUrl,
-                description = TODO(),
-                ingredients = TODO(),
-                isBookmarked = TODO(),
-                type = TODO()
+                description = null,
+                ingredients = null,
+                isBookmarked = null,
+                type = null
                 // Add any other required fields
             )
         } ?: emptyList()
 
         tonerAdapter.submitList(tonerEntities)
 
-        val serumEntities = analysis.serum?.map { serumItem ->
+        val serumEntities = analysis.serum.map { serumItem ->
             ProductEntity( // Map fields appropriately
                 name = serumItem.name,
                 imageUrl = serumItem.imageUrl,
-                description = TODO(),
-                ingredients = TODO(),
-                isBookmarked = TODO(),
-                type = TODO()
+                description = null,
+                ingredients = null,
+                isBookmarked = null,
+                type = null
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -239,10 +239,10 @@ class ResultFragment : BottomSheetDialogFragment() {
             ProductEntity( // Map fields appropriately
                 name = facialWashItem.name,
                 imageUrl = facialWashItem.imageUrl,
-                description = TODO(),
-                ingredients = TODO(),
-                isBookmarked = TODO(),
-                type = TODO()
+                description = null,
+                ingredients = null,
+                isBookmarked = null,
+                type = null
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -253,10 +253,10 @@ class ResultFragment : BottomSheetDialogFragment() {
             ProductEntity( // Map fields appropriately
                 name = treatmentItem.name,
                 imageUrl = treatmentItem.imageUrl,
-                description = TODO(),
-                ingredients = TODO(),
-                isBookmarked = TODO(),
-                type = TODO()
+                description = null,
+                ingredients = null,
+                isBookmarked = null,
+                type = null
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -264,7 +264,7 @@ class ResultFragment : BottomSheetDialogFragment() {
         treatmentAdapter.submitList(treatmentEntities)
 
         // Update the RecyclerView data
-       // val recommendations = analysis.recommendations ?: emptyList()
+        // val recommendations = analysis.recommendations ?: emptyList()
         //resultAdapter.submitList(recommendations)
         Log.d("ResultFragment", "Analysis: $analysis")
     }
