@@ -118,6 +118,38 @@
 
         <TextView
             android:layout_marginTop="20dp"
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:text="Monthly Progress"
+            android:visibility="gone"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/progress_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:text="progress value"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/progress_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:text="message"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
             android:id="@+id/recommendations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

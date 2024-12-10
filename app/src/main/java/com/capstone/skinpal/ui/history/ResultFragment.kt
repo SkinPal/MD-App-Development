@@ -146,10 +146,35 @@ class ResultFragment : BottomSheetDialogFragment() {
 
     private fun displayResult(analysis: AnalysisResult) {
         showLoading(false)
-        binding.skinTypeValue.text = analysis.skinType
-        binding.acneValue.text = analysis.acne
-        binding.rednessValue.text = analysis.redness
-        binding.wrinklesValue.text = analysis.wrinkles
+        val week = arguments?.getString("week") ?: getString(R.string.default_week)
+        if (week == "pekan4") {
+            // Tampilkan hanya percentage dan message
+            binding.skinTypeValue.text = analysis.skinType
+            binding.acneValue.text = analysis.acne
+            binding.rednessValue.text = analysis.redness
+            binding.wrinklesValue.text = analysis.wrinkles
+
+            binding.progressPercentage.visibility = View.VISIBLE
+            binding.progressMessage.visibility = View.VISIBLE
+
+            binding.progress.visibility = View.VISIBLE
+            binding.progressPercentage.text = analysis.percentage
+            binding.progressMessage.text = analysis.message
+        } else {
+            // Tampilkan data analisis lainnya
+            binding.skinTypeValue.visibility = View.VISIBLE
+            binding.acneValue.visibility = View.VISIBLE
+            binding.rednessValue.visibility = View.VISIBLE
+            binding.wrinklesValue.visibility = View.VISIBLE
+
+            binding.progressPercentage.visibility = View.GONE
+            binding.progressMessage.visibility = View.GONE
+
+            binding.skinTypeValue.text = analysis.skinType
+            binding.acneValue.text = analysis.acne
+            binding.rednessValue.text = analysis.redness
+            binding.wrinklesValue.text = analysis.wrinkles
+        }
 
        // val recommendations = analysis.sunscreenItem ?: emptyList()
         val moisturizerEntities = analysis.moisturizer?.map { moisturizerItem ->

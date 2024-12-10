@@ -233,7 +233,9 @@ class Repository(
                         serum = result.recommendations.serum,
                         facialWash = result.recommendations.facialWash,
                         timestamp = System.currentTimeMillis(),
-                        publicUrl = result.publicUrl// Can adjust based on how you want to display recommendations
+                        publicUrl = result.publicUrl,
+                        percentage = result.progress.percentage?.toPercent(),
+                        message = result.progress.message
                     )
                     emit(Result.Success(analysisResult))
 
@@ -384,7 +386,9 @@ class Repository(
                         serum = result.recommendations.serum,
                         facialWash = result.recommendations.facialWash,
                         timestamp = System.currentTimeMillis(),
-                        publicUrl = result.publicUrl// Can adjust based on how you want to display recommendations
+                        publicUrl = result.publicUrl,
+                        percentage = result.progress.percentage?.toPercent(),
+                        message = result.progress.message
                     )
                     emit(Result.Success(analysisResult))
 
