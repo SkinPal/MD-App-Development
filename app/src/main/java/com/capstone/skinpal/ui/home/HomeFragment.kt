@@ -44,9 +44,7 @@ class HomeFragment : BottomSheetDialogFragment() {
         userPreference = UserPreference(requireContext())
 
         setupUI()
-       // observeUserData()
         setupRecyclerView()
-        //observeArticles()
         binding.buttonProgress.setOnClickListener {
             navigateToHistoryFragment()
         }
@@ -64,20 +62,28 @@ class HomeFragment : BottomSheetDialogFragment() {
         userPreference = UserPreference(requireContext())
         // Get username from SharedPreferences
         val session = userPreference.getSession()
-        val username = session.user ?: getString(R.string.default_user)
-        val photoUrl = userPreference.getProfileImage() ?: ""
 
-        // Update greeting text
-        binding.tvName.text = getString(R.string.greeting_format, username)
-        if (photoUrl.isNotEmpty()) {
-            Glide.with(this)
-                .load(photoUrl)
-                .placeholder(R.drawable.icon_person) // Icon default jika foto belum tersedia
-                .error(R.drawable.icon_person) // Icon error jika gagal memuat
-                .into(binding.profile) // Ganti dengan ID ImageView foto profil Anda
+        val userId = userPreference.getSession()?.user
+        if (!userId.isNullOrEmpty()) {
+            homeViewModel.fetchUserProfile()
         } else {
-            binding.profile.setImageResource(R.drawable.icon_person)
+            Log.e("AccountFragment", "User ID kosong atau belum login")
         }
+
+        val photoUrl = homeViewModel.fetchUserProfile()
+        val username = userPreference.getSession().user ?:
+        getString(R.string.default_username)
+        binding.tvName.text = getString(R.string.greeting_format, username)
+        homeViewModel.userProfile.observe(viewLifecycleOwner) { profileResponse ->
+            profileResponse?.data?.let { data ->
+                Glide.with(this)
+                    .load(data.profileImage)
+                    .placeholder(R.drawable.icon_person)
+                    .error(R.drawable.icon_person)
+                    .into(binding.profile)
+            }
+        }
+
 
         homeViewModel.getAnalysisByUserId(username).observe(viewLifecycleOwner) { result ->
             when (result) {

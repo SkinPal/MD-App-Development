@@ -97,7 +97,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun setupSettings() {
-             binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             settingViewModel.saveNotificationSetting(isChecked)
             if (isChecked) {
                 scheduleNotificationsAt(listOf(

@@ -36,15 +36,15 @@
             android:layout_height="wrap_content"
             android:paddingBottom="30dp"
             android:background="@drawable/home_layout">
-        <ImageView
-            android:id="@+id/profile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/icon_person"
-            android:background="@drawable/round_bg"
-            app:layout_constraintTop_toTopOf="parent"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/icon_person"
+        android:background="@drawable/round_bg"
+        app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tv_name"
