@@ -200,9 +200,11 @@ class AccountFragment : Fragment() {
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            Log.d("AccountFragment", "Aplikasi kamera ditemukan, membuka kamera...")
             startActivityForResult(intent, cameraRequestCode)
         } else {
             Log.e("AccountFragment", "Tidak ada aplikasi kamera yang tersedia")
+            Toast.makeText(requireContext(), "Aplikasi kamera tidak ditemukan.", Toast.LENGTH_SHORT).show()
         }
     }
 
