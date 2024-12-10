@@ -2,12 +2,12 @@ package com.capstone.skinpal.ui.setting
 
 import android.Manifest
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -16,18 +16,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.capstone.skinpal.R
@@ -36,18 +34,23 @@ import com.capstone.skinpal.ui.login.LoginActivity
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.ViewModelFactory
+import com.capstone.skinpal.ui.camera.getImageUri
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
 import java.util.Calendar
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class AccountFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountBinding
     private lateinit var settingViewModel: SettingViewModel
+    private var currentImageUri: Uri? = null
     private val userPreference: UserPreference by lazy { UserPreference(requireContext()) }
     private val accountViewModel: AccountViewModel by viewModels {
         ViewModelFactory(repository = Injection.provideRepository(requireContext()))
@@ -85,6 +88,7 @@ class AccountFragment : Fragment() {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
+        currentImageUri = savedInstanceState?.getParcelable("CURRENT_IMAGE_URI")
         val pref = SettingPreferences.getInstance(requireContext().dataStore)
         settingViewModel = ViewModelProvider(
             this,
@@ -201,14 +205,49 @@ class AccountFragment : Fragment() {
     }
 
     private fun openCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(requireActivity().packageManager) != null) {
-            Log.d("AccountFragment", "Aplikasi kamera ditemukan, membuka kamera...")
-            startActivityForResult(intent, cameraRequestCode)
-        } else {
-            Log.e("AccountFragment", "Tidak ada aplikasi kamera yang tersedia")
-            Toast.makeText(requireContext(), "Aplikasi kamera tidak ditemukan.", Toast.LENGTH_SHORT).show()
+        try {
+            if (!allPermissionsGranted()) {
+                requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
+                return
+            }
+
+            currentImageUri = getImageUri(requireContext())
+            Log.d("AccountFragment", "Camera URI created: $currentImageUri")
+
+            if (currentImageUri != null) {
+                launcherIntentCamera.launch(currentImageUri)
+            } else {
+                Log.e("AccountFragment", "Failed to create camera URI")
+                Toast.makeText(requireContext(), "Failed to initialize camera", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Log.e("AccountFragment", "Error starting camera: ${e.message}")
+            Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { isSuccess ->
+        if (isSuccess) {
+            currentImageUri?.let {
+                Log.d("AccountFragment", "Camera capture success: $it")
+                startCrop(it)
+            }
+        } else {
+            Log.e("AccountFragment", "Camera capture failed")
+            currentImageUri = null
+            showToast("Failed to capture image")
+        }
+    }
+
+    private fun startCrop(uri: Uri) {
+        val destinationUri = Uri.fromFile(File(requireContext().cacheDir, "cropped_image_${UUID.randomUUID()}.jpg"))
+        val uCropIntent = UCrop.of(uri, destinationUri)
+            .withAspectRatio(1f, 1f)
+            .withMaxResultSize(224, 224)
+            .getIntent(requireContext())
+        cropImageLauncher.launch(uCropIntent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -218,14 +257,27 @@ class AccountFragment : Fragment() {
             when (requestCode) {
                 galleryRequestCode -> {
                     val imageUri = data.data
-                    imageUri?.let { handleImageUpload(it) }
-                }
-
-                cameraRequestCode -> {
-                    val bitmap = data.extras?.get("data") as? Bitmap
-                    bitmap?.let { handleBitmapUpload(it) }
+                    imageUri?.let { startCrop(it) }
                 }
             }
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private val cropImageLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val croppedImageUri = UCrop.getOutput(result.data!!)
+            if (croppedImageUri != null) {
+                currentImageUri = croppedImageUri
+                handleImageUpload(uri = currentImageUri!!)
+            } else {
+                showToast("Cropping failed.")
+            }
+        } else {
+            showToast("Cropping was cancelled.")
         }
     }
 
