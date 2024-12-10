@@ -1,5 +1,6 @@
 package com.capstone.skinpal.ui.product
 
+import android.content.Intent
 import android.graphics.Color
 import com.capstone.skinpal.R
 import androidx.fragment.app.viewModels
@@ -38,6 +39,12 @@ class ProductFragment : Fragment() {
 
         binding.toolbar.title = "Product Recommendations"
         binding.toolbar.setTitleTextColor(Color.WHITE)
+        val bookmarkButton = binding.bookmarkButton
+        bookmarkButton.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_product_to_navigation_favorite)
+        }
+
+
         return binding.root
     }
 
@@ -53,11 +60,18 @@ class ProductFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        productAdapter = ProductAdapter()
+        productAdapter = ProductAdapter { navigateToDetailProduct(it) }
         binding.rvProduct.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = productAdapter
         }
+    }
+
+    private fun navigateToDetailProduct(product: ProductEntity) {
+        val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+            putExtra(DetailActivity.EXTRA_PRODUCT_ID, product.name.toString())
+        }
+        startActivity(intent)
     }
 
     private fun setupSearchView() {
@@ -185,5 +199,9 @@ class ProductFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val EXTRA_PRODUCT_ID = "extra_product_id"
     }
 }

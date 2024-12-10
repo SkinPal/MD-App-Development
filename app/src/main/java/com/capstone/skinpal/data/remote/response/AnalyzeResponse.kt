@@ -24,10 +24,10 @@ data class AnalyzeResponse(
 data class Progress(
 
     @field:SerializedName("percentage")
-    val percentage: Any,
+    val percentage: JsonElement?,
 
     @field:SerializedName("message")
-    val message: String
+    val message: String?
 )
 
 data class SkinConditions(

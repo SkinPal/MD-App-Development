@@ -99,10 +99,15 @@ class Repository(
             val response = apiService.getProduct()
 
             // Map response items to entities
-            val productEntities = response.map { item ->
+            val productEntities = response.map { product ->
+                val isBookmarked = productDao.isProductBookmarked(product.name)
                 ProductEntity(
-                    name = item.name,
-                    imageUrl = item.imageUrl
+                    name = product.name,
+                    imageUrl = product.imageUrl,
+                    description = product.description,
+                    ingredients = product.ingredients,
+                    type = product.type,
+                    isBookmarked
                 )
             }
 
@@ -233,7 +238,9 @@ class Repository(
                         serum = result.recommendations.serum,
                         facialWash = result.recommendations.facialWash,
                         timestamp = System.currentTimeMillis(),
-                        publicUrl = result.publicUrl// Can adjust based on how you want to display recommendations
+                        publicUrl = result.publicUrl,
+                        percentage = result.progress.percentage?.toPercent(),
+                        message = result.progress.message
                     )
                     emit(Result.Success(analysisResult))
 
@@ -384,7 +391,9 @@ class Repository(
                         serum = result.recommendations.serum,
                         facialWash = result.recommendations.facialWash,
                         timestamp = System.currentTimeMillis(),
-                        publicUrl = result.publicUrl// Can adjust based on how you want to display recommendations
+                        publicUrl = result.publicUrl,
+                        percentage = result.progress.percentage?.toPercent(),
+                        message = result.progress.message
                     )
                     emit(Result.Success(analysisResult))
 
@@ -407,6 +416,55 @@ class Repository(
         }
     }
 
+    fun getDetailProduct(name : String): LiveData<Result<ProductEntity>> = liveData {
+        emit(Result.Loading)
+        try {
+            val eventDetail = apiService.getProductDetail()
+            eventDetail?.let { product ->
+                val isBookmarked = productDao.isProductBookmarked(product.name)
+                val productEntity = ProductEntity(
+                    product.name,
+                    product.imageUrl,
+                    product.description,
+                    product.ingredients,
+                    product.type,
+                    isBookmarked
+                )
+                productDao.insertProduct(listOf(productEntity))
+            }
+        }
+        catch (e: kotlin.Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+        val localData = productDao.getProductsByName(name).map { eventEntity ->
+            Result.Success(eventEntity) as Result<ProductEntity>
+        }
+        emitSource(localData)
+    }
+
+    suspend fun setBookmarkedProduct(product: ProductEntity, bookmarkState: Boolean) {
+        withContext(Dispatchers.IO) {
+            product.isBookmarked = bookmarkState
+            productDao.updateProduct(product)
+        }
+    }
+
+    fun getFavoriteProduct(): LiveData<Result<List<ProductEntity>>> {
+        val result = MediatorLiveData<Result<List<ProductEntity>>>()
+        result.value = Result.Loading
+        val localData = productDao.getBookmarkedProduct()
+        result.addSource(localData) { events ->
+            if (events.isNotEmpty()) {
+                result.value = Result.Success(events)
+            } else {
+                result.value = Result.Error("No favorite events found")
+            }
+        }
+
+        return result
+    }
+
+
     suspend fun removePrediction(id: Int) {
         withContext(Dispatchers.IO) {
             imageDao.deleteItem(id)
@@ -424,8 +482,6 @@ class Repository(
     suspend fun uploadProfileImage(image: MultipartBody.Part, userId: String): UploadProfileResponse {
         return apiService.uploadProfileImage(userId, image)
     }
-
-
 
     companion object {
         fun getInstance(

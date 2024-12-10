@@ -14,4 +14,19 @@ import kotlinx.coroutines.launch
 class ProductViewModel(private val repository: Repository): ViewModel() {
     val products: LiveData<Result<List<ProductEntity>>> = repository.getProducts()
     fun searchProducts(query: String) = repository.searchProducts(query)
+
+    fun getDetailProduct(query: String) = repository.getDetailProduct(query)
+    fun saveEvent(product: ProductEntity) {
+        viewModelScope.launch {
+            repository.setBookmarkedProduct(product, true)
+        }
+    }
+
+    fun getBookmarkedNews() = repository.getFavoriteProduct()
+    fun deleteEvent(product: ProductEntity) {
+        viewModelScope.launch {
+            repository.setBookmarkedProduct(product, false)
+        }
+    }
+    fun findFavoriteProducts() = repository.getFavoriteProduct()
 }

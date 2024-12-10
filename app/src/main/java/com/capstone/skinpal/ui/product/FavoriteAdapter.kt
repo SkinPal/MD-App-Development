@@ -12,14 +12,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.databinding.ItemProductBinding
+import com.capstone.skinpal.databinding.ItemProductFavoriteBinding
 
-class ProductAdapter(
+class FavoriteAdapter(
     private val onItemClick: (ProductEntity) -> Unit
-): ListAdapter<ProductEntity, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
+): ListAdapter<ProductEntity, FavoriteAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
-    inner class ProductViewHolder(private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ProductViewHolder(private val binding: ItemProductFavoriteBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(product: ProductEntity) {
-            binding.titleProducts.text = product.name
+            binding.productName.text = product.name
             Glide.with(itemView.context)
                 .load(product.imageUrl)
                 .into(binding.productPhoto)
@@ -30,7 +31,7 @@ class ProductAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemProductFavoriteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(binding)
     }
 

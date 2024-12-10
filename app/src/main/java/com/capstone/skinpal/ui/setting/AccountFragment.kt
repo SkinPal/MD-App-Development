@@ -97,11 +97,11 @@ class AccountFragment : Fragment() {
     }
 
     private fun setupSettings() {
-             binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             settingViewModel.saveNotificationSetting(isChecked)
             if (isChecked) {
                 scheduleNotificationsAt(listOf(
-                    Pair(6, 0),  // 6:00 AM
+                    Pair(10, 0),  // 6:00 AM
                     Pair(22, 15) // 10:15 PM
                 ))
             } else {

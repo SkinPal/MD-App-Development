@@ -36,6 +36,12 @@ data class AnalysisResult(
     val serum: List<SerumItem>,
 
     @field:SerializedName("facial_wash")
-    val facialWash: List<FacialWashItem>
+    val facialWash: List<FacialWashItem>,
+
+    @field:SerializedName("percentage")
+    val percentage: String?,
+
+    @field:SerializedName("message")
+    val message: String?
 
 )

@@ -1,5 +1,6 @@
 package com.capstone.skinpal.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.capstone.skinpal.data.remote.response.FacialWashItem
@@ -42,6 +43,6 @@ data class AnalysisEntity(
     val serum: List<SerumItem>,
 
     @field:SerializedName("facial_wash")
-    val facialWash: List<FacialWashItem>
+    val facialWash: List<FacialWashItem>,
 
 )

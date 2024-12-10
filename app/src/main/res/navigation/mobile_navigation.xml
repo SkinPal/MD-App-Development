@@ -28,6 +28,9 @@
         android:name="com.capstone.skinpal.ui.product.ProductFragment"
         android:label="@string/title_product"
         tools:layout="@layout/fragment_product" >
+        <action
+            android:id="@+id/action_navigation_product_to_navigation_favorite"
+            app:destination="@id/navigation_favorite" />
     </fragment>
 
     <fragment
@@ -43,6 +46,12 @@
         android:id="@+id/navigation_account"
         android:name="com.capstone.skinpal.ui.setting.AccountFragment"
         android:label="@string/title_account"
+        tools:layout="@layout/fragment_account" >
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="com.capstone.skinpal.ui.product.FavoriteFragment"
+        android:label="@string/title_favorite"
         tools:layout="@layout/fragment_account" >
     </fragment>
 </navigation>

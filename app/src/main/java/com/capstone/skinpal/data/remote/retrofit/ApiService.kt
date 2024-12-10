@@ -34,6 +34,9 @@ interface ApiService {
     @GET("skincare")
     suspend fun getProduct(): List<ProductResponseItem>
 
+    @GET("skincare")
+    suspend fun getProductDetail(): ProductResponseItem
+
     @Multipart
     @POST("users/upload")
     fun uploadImage(

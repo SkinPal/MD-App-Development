@@ -146,16 +146,47 @@ class ResultFragment : BottomSheetDialogFragment() {
 
     private fun displayResult(analysis: AnalysisResult) {
         showLoading(false)
-        binding.skinTypeValue.text = analysis.skinType
-        binding.acneValue.text = analysis.acne
-        binding.rednessValue.text = analysis.redness
-        binding.wrinklesValue.text = analysis.wrinkles
+        val week = arguments?.getString("week") ?: getString(R.string.default_week)
+        if (week == "pekan4") {
+            // Tampilkan hanya percentage dan message
+            binding.skinTypeValue.text = analysis.skinType
+            binding.acneValue.text = analysis.acne
+            binding.rednessValue.text = analysis.redness
+            binding.wrinklesValue.text = analysis.wrinkles
+
+            binding.progressPercentage.visibility = View.VISIBLE
+            binding.progressMessage.visibility = View.VISIBLE
+
+            binding.progress.visibility = View.VISIBLE
+            binding.progressPercentage.text = analysis.percentage
+            binding.progressMessage.text = analysis.message
+        } else {
+            // Tampilkan data analisis lainnya
+            binding.skinTypeValue.visibility = View.VISIBLE
+            binding.acneValue.visibility = View.VISIBLE
+            binding.rednessValue.visibility = View.VISIBLE
+            binding.wrinklesValue.visibility = View.VISIBLE
+
+            binding.progressPercentage.visibility = View.GONE
+            binding.progressMessage.visibility = View.GONE
+
+            binding.skinTypeValue.text = analysis.skinType
+            binding.acneValue.text = analysis.acne
+            binding.rednessValue.text = analysis.redness
+            binding.wrinklesValue.text = analysis.wrinkles
+        }
 
        // val recommendations = analysis.sunscreenItem ?: emptyList()
         val moisturizerEntities = analysis.moisturizer?.map { moisturizerItem ->
-            ProductEntity( // Map fields appropriately
+            ProductEntity(
+                // Map fields appropriately
                 name = moisturizerItem.name,
-                imageUrl = moisturizerItem.imageUrl
+                imageUrl = moisturizerItem.imageUrl,
+                description = TODO(),
+                ingredients = TODO(),
+                isBookmarked = TODO(),
+                type = TODO(),
+
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -165,7 +196,11 @@ class ResultFragment : BottomSheetDialogFragment() {
         val sunscreenEntities = analysis.sunscreen?.map { sunscreenItem ->
             ProductEntity( // Map fields appropriately
                 name = sunscreenItem.name,
-                imageUrl = sunscreenItem.imageUrl
+                imageUrl = sunscreenItem.imageUrl,
+                description = TODO(),
+                ingredients = TODO(),
+                isBookmarked = TODO(),
+                type = TODO()
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -175,7 +210,11 @@ class ResultFragment : BottomSheetDialogFragment() {
         val tonerEntities = analysis.toner?.map { tonerItem ->
             ProductEntity( // Map fields appropriately
                 name = tonerItem.name,
-                imageUrl = tonerItem.imageUrl
+                imageUrl = tonerItem.imageUrl,
+                description = TODO(),
+                ingredients = TODO(),
+                isBookmarked = TODO(),
+                type = TODO()
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -185,7 +224,11 @@ class ResultFragment : BottomSheetDialogFragment() {
         val serumEntities = analysis.serum?.map { serumItem ->
             ProductEntity( // Map fields appropriately
                 name = serumItem.name,
-                imageUrl = serumItem.imageUrl
+                imageUrl = serumItem.imageUrl,
+                description = TODO(),
+                ingredients = TODO(),
+                isBookmarked = TODO(),
+                type = TODO()
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -195,7 +238,11 @@ class ResultFragment : BottomSheetDialogFragment() {
         val facialWashEntities = analysis.facialWash?.map { facialWashItem ->
             ProductEntity( // Map fields appropriately
                 name = facialWashItem.name,
-                imageUrl = facialWashItem.imageUrl
+                imageUrl = facialWashItem.imageUrl,
+                description = TODO(),
+                ingredients = TODO(),
+                isBookmarked = TODO(),
+                type = TODO()
                 // Add any other required fields
             )
         } ?: emptyList()
@@ -205,7 +252,11 @@ class ResultFragment : BottomSheetDialogFragment() {
         val treatmentEntities = analysis.treatment?.map { treatmentItem ->
             ProductEntity( // Map fields appropriately
                 name = treatmentItem.name,
-                imageUrl = treatmentItem.imageUrl
+                imageUrl = treatmentItem.imageUrl,
+                description = TODO(),
+                ingredients = TODO(),
+                isBookmarked = TODO(),
+                type = TODO()
                 // Add any other required fields
             )
         } ?: emptyList()
