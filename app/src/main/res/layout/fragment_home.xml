@@ -73,42 +73,38 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/skin_condition_box"
+                android:layout_width="350dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/square_stroke"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.531"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_greetings">
 
                 <TextView
-                    android:id="@+id/skin_condition_title"
+                    android:id="@+id/skinCondition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:fontFamily="sans-serif-light"
-                    android:text="@string/skin_type_title"
-                    android:textColor="@color/dark_red"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/skinTypeViewPager" />
 
-                <TextView
-                    android:id="@+id/skin_condition"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="@string/skin_condition"
-                    android:textColor="@color/dark_red"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@id/skin_condition_title"
-                    app:layout_constraintStart_toStartOf="@id/skin_condition_title"
-                    app:layout_constraintTop_toBottomOf="@id/skin_condition_title" />
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/skinTypeViewPager"
+                    android:layout_width="350dp"
+                    android:layout_height="90dp"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="-16dp"
+                    tools:layout_editor_absoluteY="-6dp" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
+            <TextView
             android:id="@+id/tv_article"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
