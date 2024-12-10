@@ -28,6 +28,9 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
+            android:name=".ui.product.DetailActivity"
+            android:exported="false"/>
+        <activity
             android:name=".ui.history.CameraWeeklyActivity"
             android:exported="false">
         </activity>
