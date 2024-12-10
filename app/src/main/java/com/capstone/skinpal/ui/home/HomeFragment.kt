@@ -70,7 +70,7 @@ class HomeFragment : BottomSheetDialogFragment() {
             Log.e("AccountFragment", "User ID kosong atau belum login")
         }
 
-        val photoUrl = homeViewModel.fetchUserProfile()
+        homeViewModel.fetchUserProfile()
         val username = userPreference.getSession().user ?:
         getString(R.string.default_username)
         binding.tvName.text = getString(R.string.greeting_format, username)

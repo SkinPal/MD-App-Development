@@ -8,7 +8,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.skinpal.R
 import com.capstone.skinpal.ui.login.LoginActivity
-import com.capstone.skinpal.ui.register.RegisterActivity
+import com.capstone.skinpal.ui.onboarding.OnboardingActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -17,22 +17,28 @@ class SplashScreenActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_splash)
 
-        val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
-        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch", true)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            when {
-                isLoggedIn -> {
-                    // User sudah login dan belum logout
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                else -> {
-                    // User sudah mendaftar tetapi belum login
-                    startActivity(Intent(this, LoginActivity::class.java))
+            if (isFirstLaunch) {
+                // Jika pertama kali, arahkan ke OnboardingActivity
+                startActivity(Intent(this, OnboardingActivity::class.java))
+                sharedPreferences.edit().putBoolean("isFirstLaunch", false).apply()
+            } else {
+                val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+                when {
+                    isLoggedIn -> {
+                        // User sudah login dan belum logout
+                        startActivity(Intent(this, MainActivity::class.java))
+                    }
+                    else -> {
+                        // User belum login
+                        startActivity(Intent(this, LoginActivity::class.java))
+                    }
                 }
             }
             finish()
         }, 2000) // Durasi splash screen 2 detik
     }
 }
-

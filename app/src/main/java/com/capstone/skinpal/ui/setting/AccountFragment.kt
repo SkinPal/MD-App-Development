@@ -102,7 +102,7 @@ class AccountFragment : Fragment() {
             if (isChecked) {
                 scheduleNotificationsAt(listOf(
                     Pair(10, 0),  // 6:00 AM
-                    Pair(22, 15) // 10:15 PM
+                    Pair(16, 30) // 10:15 PM
                 ))
             } else {
                 cancelNotificationTasks()
