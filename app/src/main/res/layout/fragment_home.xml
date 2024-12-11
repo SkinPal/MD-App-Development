@@ -125,18 +125,46 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/skinTypeViewPager"/>
+
+                    <TextView
+                        android:id="@+id/title_slogan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FYI"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:drawableStart="@drawable/ic_awesome"
+                        android:layout_marginEnd="20dp"
+                        android:fontFamily="@font/dancing_script"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/skinTypeViewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_height="140dp"
+                        android:layout_marginTop="12dp"
                         app:layout_constraintTop_toBottomOf="@id/title_skintype"/>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider3"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        app:layout_constraintTop_toBottomOf="@id/skinTypeViewPager"/>
 
                     <TextView
                         android:id="@+id/slide_hint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="← Geser untuk melihat lebih banyak →"
+                        android:text="← Slide to see more →"
                         android:textSize="12sp"
                         android:textColor="@color/secondary"
                         android:layout_marginTop="8dp"
@@ -214,6 +242,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="100dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_article"/>
 
             <TextView

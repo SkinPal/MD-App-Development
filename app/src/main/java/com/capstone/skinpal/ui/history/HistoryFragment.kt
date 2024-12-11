@@ -6,30 +6,28 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.databinding.FragmentHistoryBinding
 import com.capstone.skinpal.di.Injection
+import com.capstone.skinpal.ui.BaseFragment
 import com.capstone.skinpal.ui.ViewModelFactory
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment(), BaseFragment {
 
     private var _binding: FragmentHistoryBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var userPreference: UserPreference
+    private val viewLifecycleScope = lazy { viewLifecycleOwner.lifecycleScope }
     private val cameraWeeklyViewModel: CameraWeeklyViewModel by viewModels {
         ViewModelFactory(Injection.provideRepository(requireActivity()))
     }
@@ -37,6 +35,7 @@ class HistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -44,6 +43,7 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        userPreference = UserPreference(requireContext())
         //checkAllWeekAnalysis()
         binding.uploadPhoto0.setOnClickListener { cameraPreview0() }
         binding.uploadPhoto1.setOnClickListener { cameraPreview1() }
@@ -72,60 +72,58 @@ class HistoryFragment : Fragment() {
     private fun checkWeekAnalysis(userId: String, week: String) {
         Log.d("CameraWeeklyActivity", "Loading preview for userId: $userId, week: $week")
 
-        cameraWeeklyViewModel.getAnalysis(userId, week).observe(requireContext() as LifecycleOwner) { result ->
-            when (result) {
-                is Result.Success -> {
-                    showLoading(false)
-                    updateUIForWeek(week, result.data)
-                }
-                is Result.Error -> {
-                    showLoading(false)
+        viewLifecycleOwner.lifecycleScope.launch {
+            cameraWeeklyViewModel.getAnalysis(userId, week).observe(viewLifecycleOwner) { result ->
+                if (!isAdded || _binding == null) return@observe
 
-                    Log.e("CameraWeeklyActivity", "Error loading preview for $week: ${result.error}")
+                when (result) {
+                    is Result.Success -> {
+                        showLoading(false)
+                        result.data.let { data ->
+                            updateUIForWeek(week, data)
+                        }
+                    }
+                    is Result.Error -> {
+                        handleApiError(result.error, requireContext())
+                        showLoading(false)
+                    }
+                    is Result.Loading -> showLoading(true)
                 }
-                is Result.Loading -> showLoading(true)
             }
         }
     }
 
-    private fun updateUIForWeek(week: String, data: AnalysisResult?) {
+    private fun updateUIForWeek(week: String, data: AnalysisResult) {
+        if (!isAdded || _binding == null) return
+
         val button = when (week) {
-            "pekan0" -> binding.uploadPhoto0.apply {
-                text = "View Result"
-                setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-                setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green)))
-            }
-            "pekan1" -> binding.uploadPhoto1.apply {
-                text = "View Result"
-                setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green)))
-            }
-            "pekan2" -> binding.uploadPhoto2.apply {
-                text = "View Result"
-                setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green)))
-            }
-            "pekan3" -> binding.uploadPhoto3.apply {
-                text = "View Result"
-                setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green)))
-            }
-            "pekan4" -> binding.uploadPhoto4.apply {
-                text = "View Result"
-                setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green)))
-            }
+            "pekan0" -> binding.uploadPhoto0
+            "pekan1" -> binding.uploadPhoto1
+            "pekan2" -> binding.uploadPhoto2
+            "pekan3" -> binding.uploadPhoto3
+            "pekan4" -> binding.uploadPhoto4
             else -> null
         }
 
-
-        val imageView = when (week) {
-            "pekan0" -> binding.checkboxWeek0.setImageResource(R.drawable.baseline_check_box_24)
-            "pekan1" -> binding.checkboxWeek1.setImageResource(R.drawable.baseline_check_box_24)
-            "pekan2" -> binding.checkboxWeek2.setImageResource(R.drawable.baseline_check_box_24)
-            "pekan3" -> binding.checkboxWeek3.setImageResource(R.drawable.baseline_check_box_24)
-            "pekan4" -> binding.checkboxWeek4.setImageResource(R.drawable.baseline_check_box_24)
-            else -> null
+        button?.apply {
+            text = "View Result"
+            setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green)))
         }
+
+        when (week) {
+            "pekan0" -> binding.checkboxWeek0
+            "pekan1" -> binding.checkboxWeek1
+            "pekan2" -> binding.checkboxWeek2
+            "pekan3" -> binding.checkboxWeek3
+            "pekan4" -> binding.checkboxWeek4
+            else -> null
+        }?.setImageResource(R.drawable.baseline_check_box_24)
     }
 
     private fun showLoading(isLoading: Boolean) {
+        _binding?.let { binding ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
@@ -158,5 +156,6 @@ class HistoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewLifecycleScope.value.cancel()
     }
 }

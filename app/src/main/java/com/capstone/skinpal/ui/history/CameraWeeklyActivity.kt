@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -32,14 +33,17 @@ import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
 import com.capstone.skinpal.di.Injection
+import com.capstone.skinpal.ui.BaseFragment
 import com.capstone.skinpal.ui.camera.getImageUri
 import com.capstone.skinpal.ui.camera.reduceFileImage
 import com.capstone.skinpal.ui.camera.uriToFile
+import com.capstone.skinpal.ui.login.LoginActivity
+import kotlinx.coroutines.launch
 
-class CameraWeeklyActivity : AppCompatActivity() {
+class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
     private var _binding: ActivityWeeklyCameraBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var userPreference: UserPreference
     private var currentImageUri: Uri? = null
     private val cameraWeeklyViewModel by viewModels<CameraWeeklyViewModel> {
         ViewModelFactory(Injection.provideRepository(this))
@@ -78,6 +82,10 @@ class CameraWeeklyActivity : AppCompatActivity() {
         _binding = ActivityWeeklyCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        lifecycleScope.launch {
+            observeUserSession()
+        }
+        userPreference = UserPreference(this)
         val week = intent.getStringExtra("WEEK") ?: "pekan1" // Use a default string value
         title = "Week $week"
 
@@ -124,6 +132,22 @@ class CameraWeeklyActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeUserSession() {
+        userPreference = UserPreference(this)
+        val session = userPreference.getSession()
+        val token = session.token
+        if (token == "") {
+            navigateToLoginActivity()
+        }
+    }
+
+    private fun navigateToLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
+    }
+
     private fun loadPreviewImage(week: String) {
         val userPreference = UserPreference(this)
         val userId = userPreference.getSession().user ?: getString(R.string.default_user)
@@ -135,7 +159,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
             when (result) {
                 is Result.Success -> {
                     showLoading(false)
-                    if (result.data != null && result.data.publicUrl.isNotEmpty()) {
+                    if (result.data.publicUrl.isNotEmpty() == true) {
                         Log.d("CameraWeeklyActivity", "Found image URL: ${result.data.publicUrl}")
 
                         Glide.with(this)
@@ -190,7 +214,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
                 }
                 is Result.Error -> {
                     showLoading(false)
-                    Log.e("CameraWeeklyActivity", "Error loading preview: ${result.error}")
                     binding.previewImageView.setImageResource(R.drawable.ic_place_holder)
                     resetButtons()
                 }
@@ -279,6 +302,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
                         if (result.error.contains("authorized", ignoreCase = true)) {
                             showToast("Session expired. Please login again")
                         } else {
+                            handleApiError(result.error, this)
                             showToast(result.error)
                         }
                         resetButtons()

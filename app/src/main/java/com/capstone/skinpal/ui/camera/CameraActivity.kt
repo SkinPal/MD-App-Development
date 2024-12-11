@@ -1,6 +1,7 @@
 package com.capstone.skinpal.ui.camera
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -12,7 +13,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.capstone.skinpal.BuildConfig
 import com.capstone.skinpal.ui.ViewModelFactory
@@ -25,15 +28,19 @@ import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.databinding.ActivityCameraBinding
 import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
 import com.capstone.skinpal.di.Injection
+import com.capstone.skinpal.ui.BaseFragment
+import com.capstone.skinpal.ui.MainActivity
 import com.capstone.skinpal.ui.camera.getImageUri
 import com.capstone.skinpal.ui.camera.reduceFileImage
 import com.capstone.skinpal.ui.camera.uriToFile
 import com.capstone.skinpal.ui.history.ResultFragment
+import com.capstone.skinpal.ui.login.LoginActivity
+import kotlinx.coroutines.launch
 
-class CameraActivity : AppCompatActivity() {
+class CameraActivity : AppCompatActivity(), BaseFragment {
     private var _binding: ActivityCameraBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var userPreference: UserPreference
     private var currentImageUri: Uri? = null
     private val cameraViewModel by viewModels<CameraViewModel> {
         ViewModelFactory(Injection.provideRepository(this))
@@ -69,6 +76,11 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            observeUserSession()
+        }
+        userPreference = UserPreference(this)
         _binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -103,6 +115,22 @@ class CameraActivity : AppCompatActivity() {
                 analyzeImage(uri.toString(), week)
             } ?: showToast("Failed to save image. No image captured.")
         }
+    }
+
+    private fun observeUserSession() {
+        userPreference = UserPreference(this)
+        val session = userPreference.getSession()
+        val token = session.token
+        if (token == "") {
+            navigateToLoginActivity()
+        }
+    }
+
+    private fun navigateToLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
     }
 
     private fun loadPreviewImage(week: String) {
@@ -237,6 +265,7 @@ class CameraActivity : AppCompatActivity() {
                     is Result.Error -> {
                         showLoading(false)
                         if (result.error.contains("authorized", ignoreCase = true)) {
+                            handleApiError(result.error, this)
                             showToast("Session expired. Please login again")
                             // Optional: Navigate to login screen
                         } else {

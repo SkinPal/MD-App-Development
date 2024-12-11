@@ -17,10 +17,11 @@ import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.local.entity.AnalysisEntity
 import com.capstone.skinpal.databinding.FragmentHomeBinding
 import com.capstone.skinpal.di.Injection
+import com.capstone.skinpal.ui.BaseFragment
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class HomeFragment : BottomSheetDialogFragment() {
+class HomeFragment : BottomSheetDialogFragment(), BaseFragment {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -63,9 +64,9 @@ class HomeFragment : BottomSheetDialogFragment() {
     private fun setupSlider() {
         // Data untuk slider skin type
         val images = listOf(
-            R.drawable.pic2, // Ganti dengan resource gambar Anda
-            R.drawable.pic3,
-            R.drawable.pic
+            R.drawable.oily, // Ganti dengan resource gambar Anda
+            R.drawable.dry,
+            R.drawable.combi
         )
         val titles = listOf(
             "Oily Skin",
@@ -87,15 +88,16 @@ class HomeFragment : BottomSheetDialogFragment() {
         userPreference = UserPreference(requireContext())
         val session = userPreference.getSession()
 
-        val userId = session?.user
+        val userId = session.user
         if (!userId.isNullOrEmpty()) {
             homeViewModel.fetchUserProfile()
         } else {
+            handleApiError("User not authenticated", requireContext())
             Log.e("AccountFragment", "User ID kosong atau belum login")
         }
 
         homeViewModel.fetchUserProfile()
-        val username = session?.user ?: getString(R.string.default_username)
+        val username = session.user ?: getString(R.string.default_username)
         binding.tvName.text = getString(R.string.greeting_format, username)
         homeViewModel.userProfile.observe(viewLifecycleOwner) { profileResponse ->
             profileResponse?.data?.let { data ->
@@ -126,6 +128,7 @@ class HomeFragment : BottomSheetDialogFragment() {
                     }
                 }
                 is Result.Error -> {
+                    handleApiError(result.error, requireContext())
                     binding.progressBar.visibility = View.GONE
                     binding.tvNoArticle.visibility = View.GONE
                 }

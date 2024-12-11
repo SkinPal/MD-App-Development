@@ -19,10 +19,11 @@ import com.capstone.skinpal.data.local.entity.ArticleEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.databinding.FragmentProductBinding
 import com.capstone.skinpal.di.Injection
+import com.capstone.skinpal.ui.BaseFragment
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.capstone.skinpal.ui.home.HomeViewModel
 
-class ProductFragment : Fragment() {
+class ProductFragment : Fragment(), BaseFragment {
 
     private var _binding: FragmentProductBinding? = null
     private val binding get() = _binding!!
@@ -104,7 +105,10 @@ class ProductFragment : Fragment() {
                 showLoading(false)
                 updateProductList(result.data)
             }
-            is Result.Error -> showError()
+            is Result.Error -> {
+                showError()
+                handleApiError(result.error, requireContext())
+            }
         }
     }
 

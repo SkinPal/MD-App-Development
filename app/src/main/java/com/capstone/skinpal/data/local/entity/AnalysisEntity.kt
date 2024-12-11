@@ -23,7 +23,7 @@ data class AnalysisEntity(
     val redness : String,
     val wrinkles: String,
     val recommendations: String,
-    val imageUri: String?,
+    val imageUri: String,
     val publicUrl: String,
     // Store as JSON string
     val timestamp: Long = System.currentTimeMillis(),
