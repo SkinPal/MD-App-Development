@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: Repository): ViewModel() {
 
-    //fun getArticle() = repository.getArticle()
+    fun getArticle() = repository.getArticle()
     private val _userProfile = MutableLiveData<ProfileResponse?>()
     val userProfile: MutableLiveData<ProfileResponse?> = _userProfile
 

@@ -10,33 +10,54 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class ApiConfig {
-    companion object{
-        fun getApiService(token: String): ApiService {
-            val loggingInterceptor = if(BuildConfig.DEBUG) {
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-            } else {
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
-            }
-            val authInterceptor = Interceptor { chain ->
-                val req = chain.request()
-                val requestHeaders = req.newBuilder()
+    companion object {
+        private fun createLoggingInterceptor() = HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+            else HttpLoggingInterceptor.Level.NONE
+        }
+
+        private fun createAuthClient(token: String) = OkHttpClient.Builder()
+            .addInterceptor(createLoggingInterceptor())
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
                     .addHeader("Authorization", "Bearer $token")
                     .build()
-                chain.proceed(requestHeaders)
+                chain.proceed(request)
             }
-            val client = OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.SECONDS) // Waktu koneksi
-                .readTimeout(60, TimeUnit.SECONDS)    // Waktu membaca
-                .writeTimeout(60, TimeUnit.SECONDS)   // Waktu menulis
-                .addInterceptor(loggingInterceptor)
-                .addInterceptor(authInterceptor)
-                .build()
-            val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+            .apply {
+                connectTimeout(60, TimeUnit.SECONDS)
+                readTimeout(60, TimeUnit.SECONDS)
+                writeTimeout(60, TimeUnit.SECONDS)
+            }
+            .build()
+
+        private fun createBasicClient() = OkHttpClient.Builder()
+            .addInterceptor(createLoggingInterceptor())
+            .apply {
+                connectTimeout(60, TimeUnit.SECONDS)
+                readTimeout(60, TimeUnit.SECONDS)
+                writeTimeout(60, TimeUnit.SECONDS)
+            }
+            .build()
+
+        private inline fun <reified T> createService(
+            baseUrl: String,
+            client: OkHttpClient
+        ): T {
+            return Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
-            return retrofit.create(ApiService::class.java)
+                .create(T::class.java)
         }
+
+        // API dengan auth
+        fun getApiService(token: String): ApiService =
+            createService(BuildConfig.BASE_URL, createAuthClient(token))
+
+        // API tanpa auth
+        fun getApiService2(): ApiService2 =
+            createService(BuildConfig.BASE_URL_2, createBasicClient())
     }
 }

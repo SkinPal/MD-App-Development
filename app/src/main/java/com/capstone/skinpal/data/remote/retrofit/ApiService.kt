@@ -28,9 +28,6 @@ interface ApiService {
         @Body loginRequest: LoginRequest
     ): LoginResponse
 
-    @GET("everything?q=skincare&from=2024-11-10&to=2024-11-30&sortBy=relevant")
-    suspend fun getArticle(@Query("apiKey") apiKey: String): ArticleResponse
-
     @GET("skincare")
     suspend fun getProduct(): List<ProductResponseItem>
 

@@ -45,6 +45,7 @@ class HomeFragment : BottomSheetDialogFragment() {
 
         setupUI()
         setupRecyclerView()
+        observeArticles()
         setupSlider() // Tambahkan setupSlider untuk slider skin type
         binding.buttonProgress.setOnClickListener {
             navigateToHistoryFragment()
@@ -103,6 +104,31 @@ class HomeFragment : BottomSheetDialogFragment() {
                     .placeholder(R.drawable.icon_person)
                     .error(R.drawable.icon_person)
                     .into(binding.profile)
+            }
+        }
+    }
+
+    private fun observeArticles() {
+        homeViewModel.getArticle().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.tvNoArticle.visibility = View.GONE
+                }
+                is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    val articles = result.data.takeLast(6)
+                    if (articles.isEmpty()) {
+                        binding.tvNoArticle.visibility = View.VISIBLE
+                    } else {
+                        binding.tvNoArticle.visibility = View.GONE
+                        articleAdapter.submitList(articles)
+                    }
+                }
+                is Result.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.tvNoArticle.visibility = View.GONE
+                }
             }
         }
     }

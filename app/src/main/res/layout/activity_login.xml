@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="34dp"
         android:alpha="0"
         android:text="@string/Username"
         android:textColor="@color/secondary"

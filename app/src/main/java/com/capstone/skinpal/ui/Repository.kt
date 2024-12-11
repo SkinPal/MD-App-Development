@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.capstone.skinpal.BuildConfig
 import com.capstone.skinpal.data.local.room.ArticleDao
 import com.capstone.skinpal.data.remote.retrofit.ApiService
 import com.capstone.skinpal.data.Result
@@ -14,6 +15,7 @@ import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.data.local.entity.AnalysisEntity
+import com.capstone.skinpal.data.local.entity.ArticleEntity
 import com.capstone.skinpal.data.local.room.AnalysisDatabase
 import com.capstone.skinpal.data.local.room.ImageDao
 import com.capstone.skinpal.data.local.room.ProductDao
@@ -22,6 +24,7 @@ import com.capstone.skinpal.data.remote.response.ErrorResponse
 import com.capstone.skinpal.data.remote.response.FileUploadResponse
 import com.capstone.skinpal.data.remote.response.ProfileResponse
 import com.capstone.skinpal.data.remote.response.UploadProfileResponse
+import com.capstone.skinpal.data.remote.retrofit.ApiService2
 import com.capstone.skinpal.data.remote.retrofit.LoginRequest
 import com.capstone.skinpal.data.remote.retrofit.RegisterRequest
 import com.capstone.skinpal.ui.history.AnalysisResult
@@ -40,6 +43,7 @@ import java.util.Locale
 
 class Repository(
     private val apiService: ApiService,
+    private val apiService2: ApiService2,
     private val articleDao: ArticleDao,
     private val productDao: ProductDao,
     private val userPreference: UserPreference,
@@ -280,10 +284,10 @@ class Repository(
         userPreference.saveSession(user)
     }
 
-    /*fun getArticle(): LiveData<Result<List<ArticleEntity>>> = liveData {
+    fun getArticle(): LiveData<Result<List<ArticleEntity>>> = liveData {
         emit(Result.Loading)
         try {
-            val response = apiService.getArticle(BuildConfig.API_KEY)
+            val response = apiService2.getArticle(BuildConfig.API_KEY)
             val articles = response.articles.map { article ->
                 ArticleEntity(
                     title = article?.title ?: "Unknown Title",
@@ -300,7 +304,7 @@ class Repository(
         val localData: LiveData<Result<List<ArticleEntity>>> =
             articleDao.getArticle().map { Result.Success(it) }
         emitSource(localData)
-    }*/
+    }
 
     suspend fun deleteAll() {
         articleDao.deleteAll()
@@ -486,12 +490,13 @@ class Repository(
     companion object {
         fun getInstance(
             apiService: ApiService,
+            apiService2: ApiService2,
             articleDao: ArticleDao,
             productDao: ProductDao,
             userPreference: UserPreference,
             imageDao: ImageDao,
             skinAnalysisDao: SkinAnalysisDao,
             analysisDatabase: AnalysisDatabase
-        ): Repository = Repository(apiService, articleDao, productDao, userPreference, imageDao, skinAnalysisDao, analysisDatabase)
+        ): Repository = Repository(apiService, apiService2, articleDao, productDao, userPreference, imageDao, skinAnalysisDao, analysisDatabase)
     }
 }
