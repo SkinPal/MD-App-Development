@@ -3,6 +3,7 @@ package com.capstone.skinpal.ui.history
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +18,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.capstone.skinpal.BuildConfig
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.yalantis.ucrop.UCrop
@@ -91,12 +95,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
         val imageUriString = intent.getStringExtra("IMAGE_URI")
 
         loadPreviewImage(week)
-        /*if (imageUriString.isNullOrEmpty()) {
-            loadPreviewImage(week)
-        } else {
-            displaySavedImage(imageUriString)
-            disableButtons()
-        }*/
 
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.cameraButton.setOnClickListener { startCamera() }
@@ -124,7 +122,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
                 analyzeImage(uri.toString(), week)
             } ?: showToast("Failed to save image. No image captured.")
         }
-
     }
 
     private fun loadPreviewImage(week: String) {
@@ -133,6 +130,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
         Log.d("CameraWeeklyActivity", "Loading preview for userId: $userId, week: $week")
 
+        showLoading(true)
         cameraWeeklyViewModel.getAnalysis(userId, week).observe(this) { result ->
             when (result) {
                 is Result.Success -> {
@@ -145,6 +143,28 @@ class CameraWeeklyActivity : AppCompatActivity() {
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true)
                             .error(R.drawable.ic_place_holder)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: com.bumptech.glide.request.target.Target<Drawable?>,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    showLoading(false)
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: com.bumptech.glide.request.target.Target<Drawable?>?,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    showLoading(false)
+                                    return false
+                                }
+                            })
                             .into(binding.previewImageView)
 
                         // Update UI untuk menampilkan showResult
@@ -207,8 +227,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
         showToast("Ready to upload a new image")
     }
 
-
-    // Add this new function to handle button visibility
     private fun toggleAnalysisButtons(hasAnalysis: Boolean) {
         binding.apply {
             if (hasAnalysis) {
@@ -221,7 +239,6 @@ class CameraWeeklyActivity : AppCompatActivity() {
         }
     }
 
-    // Update analyzeImage function to toggle buttons after successful analysis
     private fun analyzeImage(imageUriString: String, week: String) {
         val userPreference = UserPreference(this)
         val session = userPreference.getSession()
@@ -255,7 +272,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
                         showLoading(false)
                         showImage()
                         showImageInfo()
-                        disableButtons() // Gunakan disableButtons() setelah analisis berhasil
+                        disableButtons()
                     }
                     is Result.Error -> {
                         showLoading(false)
@@ -264,7 +281,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
                         } else {
                             showToast(result.error)
                         }
-                        resetButtons() // Gunakan resetButtons() saat error
+                        resetButtons()
                     }
                 }
             }
@@ -333,7 +350,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
         val week = intent.getStringExtra("WEEK") ?: "pekan1"
         val userPreference = UserPreference(this)
         val userId = userPreference.getSession().user ?: getString(R.string.default_user)
-
+        showLoading(true)
         // Tambahkan log untuk debugging
         Log.d("CameraWeeklyActivity", "Showing image info for userId: $userId, week: $week")
 
@@ -346,6 +363,7 @@ class CameraWeeklyActivity : AppCompatActivity() {
 
         try {
             bottomSheet.show(supportFragmentManager, "ResultFragment")
+            showLoading(false)
         } catch (e: Exception) {
             Log.e("CameraWeeklyActivity", "Error showing bottom sheet: ${e.message}")
             showToast("Error showing results")

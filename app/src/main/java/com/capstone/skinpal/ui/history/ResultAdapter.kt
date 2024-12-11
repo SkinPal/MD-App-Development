@@ -12,7 +12,6 @@ import com.capstone.skinpal.data.remote.response.MoisturizerItem
 import com.capstone.skinpal.R
 import androidx.recyclerview.widget.DiffUtil
 
-// Add DiffUtil.ItemCallback for optimal list updates
 class ResultAdapter : ListAdapter<MoisturizerItem, ResultAdapter.ResultAdapterViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultAdapterViewHolder {
@@ -21,11 +20,11 @@ class ResultAdapter : ListAdapter<MoisturizerItem, ResultAdapter.ResultAdapterVi
     }
 
     override fun onBindViewHolder(holder: ResultAdapterViewHolder, position: Int) {
-        val product = getItem(position) // Use getItem(position) for ListAdapter
+        val product = getItem(position)
         holder.bind(product)
     }
 
-    override fun getItemCount(): Int = currentList.size // ListAdapter uses currentList
+    override fun getItemCount(): Int = currentList.size
 
     class ResultAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val nameTextView: TextView = view.findViewById(R.id.nameTextView)
@@ -39,15 +38,12 @@ class ResultAdapter : ListAdapter<MoisturizerItem, ResultAdapter.ResultAdapterVi
         }
     }
 
-    // DiffUtil callback to compare items
     class ProductDiffCallback : DiffUtil.ItemCallback<MoisturizerItem>() {
         override fun areItemsTheSame(oldItem: MoisturizerItem, newItem: MoisturizerItem): Boolean {
-            // Compare by unique identifier, for example `id`
             return oldItem.name == newItem.name
         }
 
         override fun areContentsTheSame(oldItem: MoisturizerItem, newItem: MoisturizerItem): Boolean {
-            // Check if the content of the items are the same
             return oldItem == newItem
         }
     }

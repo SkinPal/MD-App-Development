@@ -192,25 +192,6 @@ class CameraActivity : AppCompatActivity() {
                 putString("week", "test")
             }
         }
-
-
-
-        /*currentImageUri?.let { uri ->
-            // Create an instance of ResultFragment
-            val bottomSheet = ResultFragment()
-
-            val bundle = Bundle()
-            bundle.putString("imageUri", uri.toString()) // Example of passing data
-            bottomSheet.arguments = bundle
-
-            // Show the ResultFragment as a BottomSheet
-            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
-        }*/
-
-        // Create an instance of ResultFragment
-        //val bottomSheet = ResultFragment()
-
-        // Show the ResultFragment as a BottomSheet
         bottomSheet.show(supportFragmentManager, bottomSheet.tag)
 
     }
@@ -219,55 +200,6 @@ class CameraActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
-    /*private fun saveImage(imageUriString: String, week: String) {
-        val userPreference = UserPreference(this)
-        val session = userPreference.getSession()
-
-        val user_id = session.user ?: run {
-            showToast("User ID not found")
-            return
-        }
-
-        currentImageUri?.let { uri ->
-            val imageFile = uriToFile(uri, this).reduceFileImage()
-
-            // Add logging for debugging
-            if (BuildConfig.DEBUG) {
-                Log.d("CameraWeeklyActivity", """
-                Uploading image:
-                userId: $user_id
-                week: $week
-                token: ${session.token!!.take(10)}...
-                file: ${imageFile.name}
-            """.trimIndent())
-            }
-
-            cameraWeeklyViewModel.uploadImage(
-                imageFile = imageFile,
-                user_id = user_id,
-                week = week.toString()
-            ).observe(this) { result ->
-                when (result) {
-                    is Result.Loading -> showLoading(true)
-                    is Result.Success -> {
-                        showLoading(false)
-                        showToast("Image uploaded successfully")
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        if (result.error.contains("authorized", ignoreCase = true)) {
-                            showToast("Session expired. Please login again")
-                            // Optional: Navigate to login screen
-                        } else {
-                            showToast("Debug - Saved Token: ${session.token?.take(10) ?: "null"}")
-                            showToast(result.error)
-                        }
-                    }
-                }
-            }
-        } ?: showToast(getString(R.string.empty_image_warning))
-    }*/
 
     private fun analyzeImage(imageUriString: String, week: String) {
         val userPreference = UserPreference(this)

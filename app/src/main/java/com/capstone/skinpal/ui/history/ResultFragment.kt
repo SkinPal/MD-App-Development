@@ -54,7 +54,6 @@ class ResultFragment : BottomSheetDialogFragment() {
 
         userPreference = UserPreference(requireContext())
 
-        // Retrieve userId and week from session and arguments
         val session = userPreference.getSession()
         val userId = session.user ?: getString(R.string.default_user)
         val week = arguments?.getString("week") ?: getString(R.string.default_week)
@@ -148,7 +147,6 @@ class ResultFragment : BottomSheetDialogFragment() {
         showLoading(false)
         val week = arguments?.getString("week") ?: getString(R.string.default_week)
         if (week == "pekan4") {
-            // Tampilkan hanya percentage dan message
             binding.skinTypeValue.text = analysis.skinType
             binding.acneValue.text = analysis.acne
             binding.rednessValue.text = analysis.redness
@@ -161,7 +159,6 @@ class ResultFragment : BottomSheetDialogFragment() {
             binding.progressPercentage.text = analysis.percentage
             binding.progressMessage.text = analysis.message
         } else {
-            // Tampilkan data analisis lainnya
             binding.skinTypeValue.visibility = View.VISIBLE
             binding.acneValue.visibility = View.VISIBLE
             binding.rednessValue.visibility = View.VISIBLE
@@ -176,90 +173,81 @@ class ResultFragment : BottomSheetDialogFragment() {
             binding.wrinklesValue.text = analysis.wrinkles
         }
 
-        // val recommendations = analysis.sunscreenItem ?: emptyList()
-        val moisturizerEntities = analysis.moisturizer?.map { moisturizerItem ->
+        val moisturizerEntities = analysis.moisturizer.map { moisturizerItem ->
             ProductEntity(
-                // Map fields appropriately
                 name = moisturizerItem.name,
                 imageUrl = moisturizerItem.imageUrl,
                 description = null,
                 ingredients = null,
                 isBookmarked = null,
                 type = null
-
-                // Add any other required fields
             )
-        } ?: emptyList()
+        }
 
         moisturizerAdapter.submitList(moisturizerEntities)
 
-        val sunscreenEntities = analysis.sunscreen?.map { sunscreenItem ->
-            ProductEntity( // Map fields appropriately
+        val sunscreenEntities = analysis.sunscreen.map { sunscreenItem ->
+            ProductEntity(
                 name = sunscreenItem.name,
                 imageUrl = sunscreenItem.imageUrl,
                 description = null,
                 ingredients = null,
                 isBookmarked = null,
                 type = null
-                // Add any other required fields
             )
-        } ?: emptyList()
+        }
 
         sunscreenAdapter.submitList(sunscreenEntities)
 
-        val tonerEntities = analysis.toner?.map { tonerItem ->
-            ProductEntity( // Map fields appropriately
+        val tonerEntities = analysis.toner.map { tonerItem ->
+            ProductEntity(
                 name = tonerItem.name,
                 imageUrl = tonerItem.imageUrl,
                 description = null,
                 ingredients = null,
                 isBookmarked = null,
                 type = null
-                // Add any other required fields
             )
-        } ?: emptyList()
+        }
 
         tonerAdapter.submitList(tonerEntities)
 
         val serumEntities = analysis.serum.map { serumItem ->
-            ProductEntity( // Map fields appropriately
+            ProductEntity(
                 name = serumItem.name,
                 imageUrl = serumItem.imageUrl,
                 description = null,
                 ingredients = null,
                 isBookmarked = null,
                 type = null
-                // Add any other required fields
             )
-        } ?: emptyList()
+        }
 
         serumAdapter.submitList(serumEntities)
 
-        val facialWashEntities = analysis.facialWash?.map { facialWashItem ->
-            ProductEntity( // Map fields appropriately
+        val facialWashEntities = analysis.facialWash.map { facialWashItem ->
+            ProductEntity(
                 name = facialWashItem.name,
                 imageUrl = facialWashItem.imageUrl,
                 description = null,
                 ingredients = null,
                 isBookmarked = null,
                 type = null
-                // Add any other required fields
             )
-        } ?: emptyList()
+        }
 
         facialWashAdapter.submitList(facialWashEntities)
 
-        val treatmentEntities = analysis.treatment?.map { treatmentItem ->
-            ProductEntity( // Map fields appropriately
+        val treatmentEntities = analysis.treatment.map { treatmentItem ->
+            ProductEntity(
                 name = treatmentItem.name,
                 imageUrl = treatmentItem.imageUrl,
                 description = null,
                 ingredients = null,
                 isBookmarked = null,
                 type = null
-                // Add any other required fields
             )
-        } ?: emptyList()
+        }
 
         treatmentAdapter.submitList(treatmentEntities)
 
@@ -271,14 +259,8 @@ class ResultFragment : BottomSheetDialogFragment() {
 
 
     fun Float.toPercent(): String {
-        return String.format("%.2f%%", this * 100) // Mengalikan nilai dengan 100 dan menambahkan simbol %
+        return String.format("%.2f%%", this * 100)
     }
-    /*private fun showDefaultResult() {
-        showLoading(false)
-        binding.skinConditions.text = getString(R.string.no_skin_conditions)
-        binding.skinType.text = getString(R.string.no_skin_type)
-        resultAdapter.submitList(emptyList())
-    }*/
 
     private fun showError(error: String) {
         showLoading(false)

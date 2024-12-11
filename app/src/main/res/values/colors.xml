@@ -12,4 +12,5 @@
     <color name="error_container">#ffdad6</color>
     <color name="surface_dim">#FEF7FF</color>
     <color name="placeholder">#6FB6B6B6</color>
+    <color name="green">#87c1ab</color>
 </resources>

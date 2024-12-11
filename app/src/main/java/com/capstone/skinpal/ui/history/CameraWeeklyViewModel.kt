@@ -10,16 +10,6 @@ import java.io.File
 
 class CameraWeeklyViewModel(private val repository: Repository) : ViewModel(){
 
-    fun uploadImage(
-        imageFile: File,
-        user_id: String,
-        week: String
-    ) = repository.uploadImage(
-        imageFile = imageFile,
-        user_id = user_id,
-        week = week
-    )
-
     fun analyzeImage(
         imageFile: File,
         user_id: String,
