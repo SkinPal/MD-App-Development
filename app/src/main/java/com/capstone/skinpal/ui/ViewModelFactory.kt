@@ -31,10 +31,6 @@ class ViewModelFactory(
                 com.capstone.skinpal.ui.register.RegisterViewModel(repository) as T
             }
 
-            modelClass.isAssignableFrom(com.capstone.skinpal.ui.history.HistoryViewModel::class.java) -> {
-                com.capstone.skinpal.ui.history.HistoryViewModel(repository) as T
-            }
-
             modelClass.isAssignableFrom(com.capstone.skinpal.ui.camera.CameraViewModel::class.java) -> {
                 com.capstone.skinpal.ui.camera.CameraViewModel(repository) as T
             }
