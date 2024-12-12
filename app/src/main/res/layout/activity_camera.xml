@@ -76,7 +76,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
     </LinearLayout>
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/analyzeButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,6 +86,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/showResult"
         android:textSize="20sp"
+        app:cornerRadius="8dp"
         app:layout_constraintTop_toBottomOf="@id/image_options"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"/>
