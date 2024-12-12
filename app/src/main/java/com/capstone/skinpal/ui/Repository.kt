@@ -211,6 +211,7 @@ class Repository(
 
     fun getAnalysis(user_id: String, week: String) = liveData(Dispatchers.IO) {
         try {
+            // Get user session
             val userSession = userPreference.getSession()
             val userId = userSession.user ?: throw Exception("User session is invalid")
             // Make API call
