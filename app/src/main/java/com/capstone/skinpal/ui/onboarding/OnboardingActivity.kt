@@ -20,9 +20,10 @@ class OnboardingActivity : AppCompatActivity() {
     private lateinit var btnNext: Button
     private lateinit var indicatorLayout: LinearLayout
     private val onboardingItems = listOf(
-        OnboardingItem(R.drawable.pic2, "Welcome", "Your personalized skincare assistant!"),
-        OnboardingItem(R.drawable.pic, "Analyze Your Skin", "Get insights about your skin condition."),
-        OnboardingItem(R.drawable.pic3, "Stay on Track", "Receive daily reminders for skincare routine.")
+        OnboardingItem(R.drawable.skinpal_pink, "Welcome to SkinPal", "Your personalized skincare assistant!"),
+        OnboardingItem(R.drawable.skintype_ob, "Analyze Your Skin", "Get insights about your skin condition and skincare routine ✨"),
+        OnboardingItem(R.drawable.pic7, "Stay on Track", "Receive your daily reminders for skincare routine ⏰"),
+        OnboardingItem(R.drawable.pic10, "Monitor Your Skin Condition", "Upload your skin photo and get the progress after 1 month!")
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

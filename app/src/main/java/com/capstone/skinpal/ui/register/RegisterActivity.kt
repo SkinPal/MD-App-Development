@@ -77,12 +77,9 @@ class RegisterActivity : AppCompatActivity() {
                         showLoading(false)
                         Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
                     }
-
                     is Result.Success -> {
                     showLoading(false)
-                    showConfirmationDialog(binding.edRegisterEmail.text.toString())
-                        navigateToLoginctivity()
-
+                    showConfirmationDialog(email)
                 }
                 }
             }
@@ -124,11 +121,17 @@ class RegisterActivity : AppCompatActivity() {
             setMessage(message)
             setPositiveButton("Continue") { _, _ ->
                 confirmationDialog?.dismiss()
-                finish()
+                navigateToLoginctivity()
             }
         }.create()
 
         confirmationDialog?.show()
+    }
+
+    override fun onDestroy() {
+        confirmationDialog?.dismiss()
+        confirmationDialog = null
+        super.onDestroy()
     }
 
     private fun playAnimation() {

@@ -11,7 +11,7 @@
         android:id="@+id/ivOnboardingImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/pic"
+        android:src="@drawable/pic0"
         android:contentDescription="Onboarding Image"
         android:layout_gravity="center_horizontal"/>
 

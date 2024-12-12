@@ -52,9 +52,7 @@ class LoginActivity : AppCompatActivity() {
             observeUserSession()
         }
         binding.registerButton.setOnClickListener {
-            Intent(this, RegisterActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            }.also { startActivity(it) }
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
 
         setupView()

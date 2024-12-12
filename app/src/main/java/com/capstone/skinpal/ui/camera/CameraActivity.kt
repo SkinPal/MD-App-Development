@@ -238,6 +238,7 @@ class CameraActivity : AppCompatActivity(), BaseFragment {
             return
         }
 
+        showLoading(true)
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
 
@@ -259,6 +260,7 @@ class CameraActivity : AppCompatActivity(), BaseFragment {
                 when (result) {
                     is Result.Loading -> showLoading(true)
                     is Result.Success -> {
+                        showLoading(false)
                         showImage() // Refresh the image after successful analysis
                         showImageInfo() // Display analysis info (if needed)
                     }
