@@ -254,7 +254,7 @@ class Repository(
                 emit(Result.Error("Analysis failed: ${response.code()} - $errorBody"))
             }
         } catch (e: Exception) {
-            emit(Result.Error("An error occurred: ${e.message}"))
+            Log.e("Analysis", "Error: ${e.message}")
         }
     }
 

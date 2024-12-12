@@ -16,7 +16,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        buildConfigField ("String", "BASE_URL", "\"https://skinpal-api-989761954410.asia-southeast2.run.app/api/v1/\"")
+        buildConfigField ("String", "BASE_URL", "\"https://skinpal-api-backend-989761954410.asia-southeast2.run.app/api/v1/\"")
         buildConfigField("String", "BASE_URL_2", "\"https://newsapi.org/v2/\"")
         buildConfigField ("String", "API_KEY", "\"873ff49adf6b42ebadf01bbeeec22e78\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
