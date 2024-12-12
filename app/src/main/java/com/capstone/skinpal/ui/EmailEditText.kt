@@ -36,7 +36,7 @@ class EmailEditText @JvmOverloads constructor(
                 if (s.toString().isNotEmpty()) showClearButton() else hideClearButton()
                 val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
                 if (!s.matches(emailPattern.toRegex())) {
-                    setError(context.getString(com.capstone.skinpal.R.string.email_error), null)
+                    setError(context.getString(R.string.email_error), null)
                 } else {
                     error = null
                 }

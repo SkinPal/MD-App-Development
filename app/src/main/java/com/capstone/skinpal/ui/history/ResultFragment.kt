@@ -25,6 +25,7 @@ import com.capstone.skinpal.ui.product.ProductAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import java.util.Locale
 
 class ResultFragment : BottomSheetDialogFragment() {
 
@@ -55,6 +56,7 @@ class ResultFragment : BottomSheetDialogFragment() {
         userPreference = UserPreference(requireContext())
 
         val session = userPreference.getSession()
+        session.user ?: getString(R.string.default_user)
         val userId = session.user ?: getString(R.string.default_user)
         val week = arguments?.getString("week") ?: getString(R.string.default_week)
 
@@ -255,11 +257,6 @@ class ResultFragment : BottomSheetDialogFragment() {
         // val recommendations = analysis.recommendations ?: emptyList()
         //resultAdapter.submitList(recommendations)
         Log.d("ResultFragment", "Analysis: $analysis")
-    }
-
-
-    fun Float.toPercent(): String {
-        return String.format("%.2f%%", this * 100)
     }
 
     private fun showError(error: String) {

@@ -17,7 +17,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_splash)
 
-        val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
         val isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch", true)
 
         Handler(Looper.getMainLooper()).postDelayed({

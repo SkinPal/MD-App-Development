@@ -114,7 +114,6 @@ class ProductFragment : Fragment(), BaseFragment {
 
     private fun updateProductList(productData: List<ProductEntity>) {
         if (productData.isEmpty()) {
-            binding.tvNoItem.visibility = View.VISIBLE
             binding.rvProduct.visibility = View.GONE
         } else {
             binding.tvNoItem.visibility = View.GONE
@@ -144,12 +143,7 @@ class ProductFragment : Fragment(), BaseFragment {
                 is Result.Success -> {
                     binding.progressBar.visibility = View.GONE
                     val product = result.data
-                    if (product.isEmpty()) {
-                        binding.tvNoItem.visibility = View.VISIBLE
-                    } else {
-                        binding.tvNoItem.visibility = View.GONE
-                        productAdapter.submitList(product)
-                    }
+                    productAdapter.submitList(product)
                 }
                 is Result.Error -> {
                     binding.progressBar.visibility = View.GONE

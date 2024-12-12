@@ -210,10 +210,7 @@ class Repository(
     }
 
     fun getAnalysis(user_id: String, week: String) = liveData(Dispatchers.IO) {
-        emit(Result.Loading)
-
         try {
-            // Get user session
             val userSession = userPreference.getSession()
             val userId = userSession.user ?: throw Exception("User session is invalid")
             // Make API call
@@ -254,7 +251,6 @@ class Repository(
                 emit(Result.Error("Analysis failed: ${response.code()} - $errorBody"))
             }
         } catch (e: Exception) {
-            Log.e("Analysis", "Error: ${e.message}")
         }
     }
 
@@ -319,7 +315,7 @@ class Repository(
         try {
             // Get user session data from UserPreference
             val userSession = userPreference.getSession()
-            val user_id = userSession.user // Make sure this returns just the userId string
+            userSession.user // Make sure this returns just the userId string
 
             // Create multipart request
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
@@ -414,7 +410,7 @@ class Repository(
 
     fun JsonElement.toPercent(): String {
         return if (this.isJsonPrimitive && this.asJsonPrimitive.isNumber) {
-            String.format(Locale.US, "%.2f%%", this.asDouble * 100) // Specify the locale explicitly
+            String.format(Locale.US, "%.2f%%", this.asDouble ) // Specify the locale explicitly
         } else {
             "N/A" // Handle cases where the JsonElement is not a number
         }

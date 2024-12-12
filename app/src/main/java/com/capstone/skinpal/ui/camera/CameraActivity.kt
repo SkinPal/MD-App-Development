@@ -3,6 +3,7 @@ package com.capstone.skinpal.ui.camera
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -31,7 +32,6 @@ import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.BaseFragment
 import com.capstone.skinpal.ui.MainActivity
 import com.capstone.skinpal.ui.camera.getImageUri
-import com.capstone.skinpal.ui.camera.reduceFileImage
 import com.capstone.skinpal.ui.camera.uriToFile
 import com.capstone.skinpal.ui.history.ResultFragment
 import com.capstone.skinpal.ui.login.LoginActivity
@@ -182,7 +182,11 @@ class CameraActivity : AppCompatActivity(), BaseFragment {
         val destinationUri = Uri.fromFile(File(this.cacheDir, "cropped_image_${UUID.randomUUID()}.jpg"))
         val uCropIntent = UCrop.of(uri, destinationUri)
             .withAspectRatio(1f, 1f)
-            .withMaxResultSize(224, 224)
+            .withMaxResultSize(1920, 1080)
+            .withOptions(UCrop.Options().apply {
+                setCompressionFormat(Bitmap.CompressFormat.JPEG)
+                setCompressionQuality(100)
+            })
             .getIntent(this)
         cropImageLauncher.launch(uCropIntent)
     }
@@ -240,8 +244,7 @@ class CameraActivity : AppCompatActivity(), BaseFragment {
 
         showLoading(true)
         currentImageUri?.let { uri ->
-            val imageFile = uriToFile(uri, this).reduceFileImage()
-
+            val imageFile = uriToFile(uri, this)
             if (BuildConfig.DEBUG) {
                 Log.d("CameraWeeklyActivity", """
             Uploading image:

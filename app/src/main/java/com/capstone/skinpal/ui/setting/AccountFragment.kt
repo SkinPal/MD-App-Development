@@ -108,8 +108,8 @@ class AccountFragment : Fragment() {
             settingViewModel.saveNotificationSetting(isChecked)
             if (isChecked) {
                 scheduleNotificationsAt(listOf(
-                    Pair(13, 30),  // 6:00 AM
-                    Pair(16, 30) // 10:15 PM
+                    Pair(6, 30),  // 6:00 AM
+                    Pair(22, 0) // 10:15 PM
                 ))
             } else {
                 cancelNotificationTasks()
@@ -253,7 +253,7 @@ class AccountFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == Activity.RESULT_OK && data != null) {
+        if (resultCode == RESULT_OK && data != null) {
             when (requestCode) {
                 galleryRequestCode -> {
                     val imageUri = data.data

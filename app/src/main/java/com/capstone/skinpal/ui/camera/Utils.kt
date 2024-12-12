@@ -20,7 +20,7 @@ import java.util.Locale
 import kotlin.also
 import kotlin.apply
 
-private const val MAXIMAL_SIZE = 1000000
+private const val MAXIMAL_SIZE = 5000000
 private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
 private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
 
@@ -58,16 +58,13 @@ private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).for
 
     fun uriToFile(imageUri: Uri, context: Context): File {
         val myFile = createCustomTempFile(context)
-        val inputStream = context.contentResolver.openInputStream(imageUri) as InputStream
-        val outputStream = FileOutputStream(myFile)
-        val buffer = ByteArray(1024)
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) outputStream.write(buffer, 0, length)
-        outputStream.close()
-        inputStream.close()
+        context.contentResolver.openInputStream(imageUri).use { inputStream ->
+            FileOutputStream(myFile).use { outputStream ->
+                inputStream?.copyTo(outputStream)
+            }
+        }
         return myFile
     }
-
 
     fun File.reduceFileImage(): File {
         val file = this

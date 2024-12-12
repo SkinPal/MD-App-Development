@@ -54,7 +54,7 @@ class ApiConfig {
 
         // API dengan auth
         fun getApiService(token: String): ApiService =
-            createService(BuildConfig.BASE_URL, createAuthClient(token))
+            createService(BASE_URL, createAuthClient(token))
 
         // API tanpa auth
         fun getApiService2(): ApiService2 =
