@@ -102,4 +102,6 @@
     <string name="no_product_found">No favorite products found.</string>
     <string name="reupload_photo">Reupload Photo</string>
     <string name="app_logo">SkinPal</string>
+    <string name="SkinType">Skin Type Title</string>
+    <string name="description_of_skin_type_goes_here">Description of skin type goes here</string>
 </resources>
