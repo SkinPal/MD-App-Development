@@ -1,7 +1,5 @@
 package com.capstone.skinpal.ui.splash
 
-
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.capstone.skinpal.data.UserModel
 import com.capstone.skinpal.ui.Repository

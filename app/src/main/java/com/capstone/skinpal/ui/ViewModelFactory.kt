@@ -2,11 +2,8 @@
 
 package com.capstone.skinpal.ui
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.capstone.skinpal.ui.setting.SettingPreferences
-import kotlin.also
 import kotlin.jvm.java
 
 class ViewModelFactory(

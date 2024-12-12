@@ -11,17 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.capstone.skinpal.data.Result
-import com.capstone.skinpal.data.local.entity.ArticleEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.databinding.FragmentProductBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.BaseFragment
 import com.capstone.skinpal.ui.ViewModelFactory
-import com.capstone.skinpal.ui.home.HomeViewModel
 
 class ProductFragment : Fragment(), BaseFragment {
 
@@ -55,9 +52,6 @@ class ProductFragment : Fragment(), BaseFragment {
         setupRecyclerView()
         observeProducts()
         setupSearchView()
-        //productViewModel.products.observe(viewLifecycleOwner) { products ->
-         //   productAdapter.submitList(products)
-        //}
     }
 
     private fun setupRecyclerView() {
@@ -154,34 +148,6 @@ class ProductFragment : Fragment(), BaseFragment {
             }
         }
     }
-
-    /*private fun observeProduct() {
-        productViewModel.getProduct().observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Result.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.tvNoItem.visibility = View.GONE
-                }
-                is Result.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    val product = result.data
-                    if (product.isEmpty()) {
-                        binding.tvNoItem.visibility = View.VISIBLE
-                    } else {
-                        binding.tvNoItem.visibility = View.GONE
-                        productAdapter.submitList(product)
-                    }
-                }
-                is Result.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.tvNoItem.visibility = View.GONE
-                    Log.e("ProductFragment", "Error loading products")
-                }
-            }
-        }
-
-    }*/
-
 
     fun navigateToHistoryFragment() {
         findNavController().navigate(

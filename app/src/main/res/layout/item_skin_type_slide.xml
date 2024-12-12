@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:text="Skin Type Title"
+            android:text="@string/SkinType"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -60,7 +60,7 @@
             android:id="@+id/slideDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description of skin type goes here"
+            android:text="@string/description_of_skin_type_goes_here"
             android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>

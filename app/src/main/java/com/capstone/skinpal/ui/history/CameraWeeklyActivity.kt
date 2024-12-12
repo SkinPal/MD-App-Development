@@ -126,7 +126,6 @@ class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
             userPreference.getSession().user ?: getString(R.string.default_user)
             val week = intent.getStringExtra("WEEK") ?: "pekan1"
             currentImageUri?.let { uri ->
-                //saveImage(uri.toString(), week)
                 analyzeImage(uri.toString(), week)
             } ?: showToast("Failed to save image. No image captured.")
         }

@@ -1,17 +1,12 @@
 package com.capstone.skinpal.ui.product
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.capstone.skinpal.R
 import com.capstone.skinpal.data.local.entity.ProductEntity
-import com.capstone.skinpal.databinding.ItemProductBinding
 import com.capstone.skinpal.databinding.ItemProductFavoriteBinding
 
 class FavoriteAdapter(
