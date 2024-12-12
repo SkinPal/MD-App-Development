@@ -4,13 +4,11 @@ import androidx.room.TypeConverter
 import com.capstone.skinpal.data.remote.response.FacialWashItem
 import com.capstone.skinpal.data.remote.response.MoisturizerItem
 import com.capstone.skinpal.data.remote.response.SerumItem
-import com.capstone.skinpal.data.remote.response.SkinConditions
 import com.capstone.skinpal.data.remote.response.SunscreenItem
 import com.capstone.skinpal.data.remote.response.TonerItem
 import com.capstone.skinpal.data.remote.response.TreatmentItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.Date
 
 class Converters {
 

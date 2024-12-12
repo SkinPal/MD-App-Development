@@ -6,8 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.capstone.skinpal.R
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.databinding.ItemProductBinding
 
@@ -19,11 +17,6 @@ class TonerAdapter : ListAdapter<ProductEntity, TonerAdapter.ProductViewHolder>(
             Glide.with(itemView.context)
                 .load(product.imageUrl)
                 .into(binding.productPhoto)
-            /*itemView.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(product.url)
-                itemView.context.startActivity(intent)
-            }*/
         }
     }
 

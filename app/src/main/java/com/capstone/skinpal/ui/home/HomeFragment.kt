@@ -10,11 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
-import com.capstone.skinpal.data.local.entity.AnalysisEntity
 import com.capstone.skinpal.databinding.FragmentHomeBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.BaseFragment

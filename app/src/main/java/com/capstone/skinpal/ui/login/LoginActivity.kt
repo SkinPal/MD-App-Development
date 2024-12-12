@@ -19,8 +19,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.capstone.skinpal.databinding.ActivityLoginBinding
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserModel
@@ -32,7 +30,6 @@ import com.capstone.skinpal.ui.register.RegisterActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -129,20 +126,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
             observeSession()
-
-            /*if (validateInput(userId, password)) {
-                if (isConnectedToInternet()) {
-                    showLoading(true)
-                    loginViewModel.login(userId, password)
-                    navigateToMainActivity()
-                } else {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.no_internet_connection),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }*/
         }
     }
 
@@ -192,11 +175,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun playAnimation() {
-        /*ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()*/
 
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
         val userIdTextView = ObjectAnimator.ofFloat(binding.userIdTextView, View.ALPHA, 1f).setDuration(100)

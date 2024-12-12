@@ -126,7 +126,6 @@ class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
             val userId = userPreference.getSession().user ?: getString(R.string.default_user)
             val week = intent.getStringExtra("WEEK") ?: "pekan1"
             currentImageUri?.let { uri ->
-                //saveImage(uri.toString(), week)
                 analyzeImage(uri.toString(), week)
             } ?: showToast("Failed to save image. No image captured.")
         }
@@ -201,7 +200,7 @@ class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
                             }
                             analyzeButton.visibility = GONE
                             binding.uploadButton.apply {
-                                visibility = View.VISIBLE
+                                visibility = VISIBLE
                                 setOnClickListener {
                                     resetToInitialState() // Panggil fungsi baru ini
                                 }
@@ -233,18 +232,18 @@ class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
         binding.apply {
             galleryButton.apply {
                 isEnabled = true
-                visibility = View.VISIBLE
+                visibility = VISIBLE
             }
             cameraButton.apply {
                 isEnabled = true
-                visibility = View.VISIBLE
+                visibility = VISIBLE
             }
             analyzeButton.apply {
-                visibility = View.VISIBLE
+                visibility = VISIBLE
                 isEnabled = true
             }
-            showResult.visibility = View.GONE
-            uploadButton.visibility = View.GONE
+            showResult.visibility = GONE
+            uploadButton.visibility = GONE
         }
 
         showToast("Ready to upload a new image")
@@ -253,11 +252,11 @@ class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
     private fun toggleAnalysisButtons(hasAnalysis: Boolean) {
         binding.apply {
             if (hasAnalysis) {
-                showResult.visibility = View.VISIBLE
-                analyzeButton.visibility = View.GONE
+                showResult.visibility = VISIBLE
+                analyzeButton.visibility = GONE
             } else {
-                showResult.visibility = View.GONE
-                analyzeButton.visibility = View.VISIBLE
+                showResult.visibility = GONE
+                analyzeButton.visibility = VISIBLE
             }
         }
     }
@@ -403,10 +402,10 @@ class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
         binding.apply {
             galleryButton.isEnabled = false
             cameraButton.isEnabled = false
-            analyzeButton.visibility = View.GONE
-            showResult.visibility = View.VISIBLE
+            analyzeButton.visibility = GONE
+            showResult.visibility = VISIBLE
             uploadButton.apply {
-                visibility = View.VISIBLE
+                visibility = VISIBLE
                 setOnClickListener {
                     currentImageUri = null
                     previewImageView.setImageResource(R.drawable.ic_place_holder)
@@ -422,9 +421,9 @@ class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
         binding.apply {
             galleryButton.isEnabled = true
             cameraButton.isEnabled = true
-            analyzeButton.visibility = View.VISIBLE
-            showResult.visibility = View.GONE
-            uploadButton.visibility = View.GONE
+            analyzeButton.visibility = VISIBLE
+            showResult.visibility = GONE
+            uploadButton.visibility = GONE
         }
     }
 
@@ -434,7 +433,7 @@ class CameraWeeklyActivity : AppCompatActivity(), BaseFragment {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.progressBar.visibility = if (isLoading) VISIBLE else GONE
     }
 
     override fun onDestroy() {

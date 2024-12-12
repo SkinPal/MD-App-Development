@@ -108,8 +108,8 @@ class AccountFragment : Fragment() {
             settingViewModel.saveNotificationSetting(isChecked)
             if (isChecked) {
                 scheduleNotificationsAt(listOf(
-                    Pair(13, 30),  // 6:00 AM
-                    Pair(16, 30) // 10:15 PM
+                    Pair(8, 30),  // 6:00 AM
+                    Pair(16, 0) // 10:15 PM
                 ))
             } else {
                 cancelNotificationTasks()

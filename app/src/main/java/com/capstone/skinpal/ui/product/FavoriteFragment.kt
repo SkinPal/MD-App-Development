@@ -1,7 +1,6 @@
 package com.capstone.skinpal.ui.product
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,6 @@ import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.databinding.FragmentFavoriteBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.ViewModelFactory
-import com.capstone.skinpal.ui.product.DetailActivity
 
 class FavoriteFragment : Fragment() {
 

@@ -85,7 +85,7 @@ class CameraActivity : AppCompatActivity(), BaseFragment {
         setContentView(binding.root)
 
         val week = intent.getStringExtra("WEEK") ?: "test"
-        //title = "Week $week"
+
 
         val resultFragment = ResultFragment()
 
@@ -209,7 +209,6 @@ class CameraActivity : AppCompatActivity(), BaseFragment {
 
     private fun showImageInfo() {
         val week = intent.getStringExtra("WEEK") ?: "test" // Use a default string value
-        //title = "Week $week"
         val  userPreference = UserPreference(this)
         val userId = userPreference.getSession().user ?: getString(R.string.default_user)
 

@@ -20,10 +20,26 @@ class OnboardingActivity : AppCompatActivity() {
     private lateinit var btnNext: Button
     private lateinit var indicatorLayout: LinearLayout
     private val onboardingItems = listOf(
-        OnboardingItem(R.drawable.skinpal_pink, "Welcome to SkinPal", "Your personalized skincare assistant!"),
-        OnboardingItem(R.drawable.skintype_ob, "Analyze Your Skin", "Get insights about your skin condition and skincare routine ✨"),
-        OnboardingItem(R.drawable.pic7, "Stay on Track", "Receive your daily reminders for skincare routine ⏰"),
-        OnboardingItem(R.drawable.pic10, "Monitor Your Skin Condition", "Upload your skin photo and get the progress after 1 month!")
+        OnboardingItem(
+            R.drawable.skinpal_pink,
+            "Welcome to SkinPal",
+            "Your personalized skincare assistant!. SkinPal is here to revolutionize your skincare journey. From personalized product recommendations to tracking your skin's progress, we’ve got everything you need to achieve healthy, glowing skin. Let SkinPal be your trusted companion in understanding and caring for your unique skin needs."
+        ),
+        OnboardingItem(
+            R.drawable.skintype_ob,
+            "Analyze Your Skin",
+            "Get insights about your skin condition and skincare routine ✨. SkinPal uses advanced facial scanning technology to analyze your skin and provide accurate results tailored to your needs. Discover personalized recommendations and take the guesswork out of your skincare journey."
+        ),
+        OnboardingItem(
+            R.drawable.pic7,
+            "Stay on Track",
+            "Receive your daily reminders for skincare routine ⏰. SkinPal helps you build consistency by sending notifications for your morning and evening skincare steps. Stay committed, stay glowing, and let us guide you toward healthier skin every day."
+        ),
+        OnboardingItem(
+            R.drawable.pic10,
+            "Monitor Your Skin Condition",
+            "Upload your skin photo and get detailed progress updates after 1 month! With SkinPal, you can track changes in your skin condition over time and see how your skincare routine makes a difference. Stay informed and motivated on your journey to healthier skin."
+        )
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

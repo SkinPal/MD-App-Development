@@ -19,7 +19,6 @@ import com.capstone.skinpal.R
 import com.capstone.skinpal.databinding.ActivityRegisterBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.data.Result
-import com.capstone.skinpal.ui.MainActivity
 import com.capstone.skinpal.ui.ViewModelFactory
 import com.capstone.skinpal.ui.login.LoginActivity
 import kotlin.getValue
@@ -135,11 +134,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun playAnimation() {
-        /*ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()*/
 
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(100)
         val nameTextView =
