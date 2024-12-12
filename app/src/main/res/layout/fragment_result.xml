@@ -137,6 +137,7 @@
             android:visibility="gone"
             android:layout_gravity="center"
             android:text="progress value"/>
+
         <TextView
             android:layout_marginTop="10dp"
             android:id="@+id/progress_message"
@@ -159,43 +160,6 @@
             android:textStyle="bold"/>
         <!-- Product Recommendation Lists -->
         <TextView
-            android:id="@+id/sunscreen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/icon_more"
-            android:drawablePadding="8dp"
-            android:text="Sunscreen"
-            android:textColor="@color/secondary"
-            android:padding="8dp"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sunscreen_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/moisturizer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/icon_more"
-            android:drawablePadding="8dp"
-            android:text="Moisturizer"
-            android:textColor="@color/secondary"
-            android:padding="8dp"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/moisturizer_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:visibility="gone" />
-
-
-        <TextView
             android:id="@+id/facial_wash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -209,24 +173,6 @@
             android:background="?android:attr/selectableItemBackground" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/facial_wash_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/treatment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/icon_more"
-            android:drawablePadding="8dp"
-            android:text="Treatment"
-            android:textColor="@color/secondary"
-            android:padding="8dp"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/treatment_recycler"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:visibility="gone" />
@@ -266,6 +212,64 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/moisturizer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Moisturizer"
+            android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:background="?android:attr/selectableItemBackground" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/moisturizer_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/sunscreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Sunscreen"
+            android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:background="?android:attr/selectableItemBackground" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sunscreen_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/treatment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_more"
+            android:drawablePadding="8dp"
+            android:text="Treatment"
+            android:textColor="@color/secondary"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:background="?android:attr/selectableItemBackground" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/treatment_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:visibility="gone" />
+
+
+
+
 
     </LinearLayout>
 </ScrollView>
