@@ -29,9 +29,8 @@ class AccountViewModel(
     fun fetchUserProfile() {
         viewModelScope.launch {
             try {
-                // Ambil userId dari sesi
                 val userId = repository.getUserSession().user
-                Log.d("DEBUG", "userId sebelum request: $userId") // Log userId
+                Log.d("DEBUG", "userId sebelum request: $userId")
 
                 if (userId!!.isEmpty()) {
                     _error.postValue("User ID kosong!")
@@ -48,7 +47,7 @@ class AccountViewModel(
     }
 
     fun uploadProfile(imagePart: MultipartBody.Part) {
-        val userId = repository.getUserSession().user // Ambil userId dari sesi
+        val userId = repository.getUserSession().user
         if (userId.isNullOrEmpty()) {
             _error.postValue("User ID tidak ditemukan")
             return

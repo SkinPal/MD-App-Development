@@ -44,7 +44,6 @@ class HistoryFragment : Fragment(), BaseFragment {
         super.onViewCreated(view, savedInstanceState)
 
         userPreference = UserPreference(requireContext())
-        //checkAllWeekAnalysis()
         binding.uploadPhoto0.setOnClickListener { cameraPreview0() }
         binding.uploadPhoto1.setOnClickListener { cameraPreview1() }
         binding.uploadPhoto2.setOnClickListener { cameraPreview2() }
@@ -61,7 +60,6 @@ class HistoryFragment : Fragment(), BaseFragment {
         val userPreference = UserPreference(requireContext())
         val userId = userPreference.getSession().user ?: getString(R.string.default_user)
 
-        // List of weeks to check
         val weeks = listOf("pekan0", "pekan1", "pekan2", "pekan3", "pekan4")
 
         weeks.forEach { week ->

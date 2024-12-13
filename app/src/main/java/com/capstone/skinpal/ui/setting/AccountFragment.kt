@@ -81,7 +81,7 @@ class AccountFragment : Fragment() {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
 
-        binding.toolbar.title = "Setting"
+        binding.toolbar.title = getString(R.string.title_setting)
         binding.toolbar.setTitleTextColor(Color.WHITE)
 
         if (!allPermissionsGranted()) {
@@ -125,7 +125,7 @@ class AccountFragment : Fragment() {
         if (!userId.isNullOrEmpty()) {
             accountViewModel.fetchUserProfile()
         } else {
-            Log.e("AccountFragment", "User ID kosong atau belum login")
+            Log.e("AccountFragment", getString(R.string.user_id_kosong_atau_belum_login))
         }
 
         binding.logoutButton.setOnClickListener { signOut() }
@@ -159,9 +159,10 @@ class AccountFragment : Fragment() {
     }
 
     private fun showImagePickerDialog() {
-        val options = arrayOf("Ambil Foto Baru", "Pilih dari Galeri")
+        val options = arrayOf(getString(R.string.ambil_foto_baru),
+            getString(R.string.pilih_dari_galeri))
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Pilih Foto")
+            .setTitle(getString(R.string.pilih_foto))
             .setItems(options) { _, which ->
                 when (which) {
                     0 -> requestCameraPermission()
@@ -192,8 +193,8 @@ class AccountFragment : Fragment() {
 
     private fun showPermissionDeniedDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Izin Kamera Diperlukan")
-            .setMessage("Aplikasi memerlukan akses kamera untuk mengambil foto profil.")
+            .setTitle(getString(R.string.izin_kamera_diperlukan))
+            .setMessage(getString(R.string.akses_kamera))
             .setPositiveButton("OK") { _, _ -> }
             .show()
     }
@@ -321,8 +322,7 @@ class AccountFragment : Fragment() {
                 set(Calendar.SECOND, 0)
             }
 
-            // If the notification time is before the current time, schedule for the next day
-            if (notificationTime.before(currentTime)) {
+             if (notificationTime.before(currentTime)) {
                 notificationTime.add(Calendar.DAY_OF_MONTH, 1)
             }
 

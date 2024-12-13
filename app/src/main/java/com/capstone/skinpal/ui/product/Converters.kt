@@ -25,7 +25,6 @@ class Converters {
         return gson.fromJson(value, type)
     }
 
-    // Tambahkan converter serupa untuk setiap tipe daftar (TreatmentItem, SunscreenItem, dll.)
     @TypeConverter
     fun fromTreatmentList(value: List<TreatmentItem>): String {
         return gson.toJson(value)

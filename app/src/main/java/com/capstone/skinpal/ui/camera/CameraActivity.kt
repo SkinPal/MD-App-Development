@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -27,12 +26,8 @@ import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
 import com.capstone.skinpal.databinding.ActivityCameraBinding
-import com.capstone.skinpal.databinding.ActivityWeeklyCameraBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.BaseFragment
-import com.capstone.skinpal.ui.MainActivity
-import com.capstone.skinpal.ui.camera.getImageUri
-import com.capstone.skinpal.ui.camera.uriToFile
 import com.capstone.skinpal.ui.history.ResultFragment
 import com.capstone.skinpal.ui.login.LoginActivity
 import kotlinx.coroutines.launch
@@ -263,8 +258,8 @@ class CameraActivity : AppCompatActivity(), BaseFragment {
                     is Result.Loading -> showLoading(true)
                     is Result.Success -> {
                         showLoading(false)
-                        showImage() // Refresh the image after successful analysis
-                        showImageInfo() // Display analysis info (if needed)
+                        showImage()
+                        showImageInfo()
                     }
                     is Result.Error -> {
                         showLoading(false)

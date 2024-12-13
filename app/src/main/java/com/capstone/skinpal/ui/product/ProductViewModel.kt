@@ -19,7 +19,6 @@ class ProductViewModel(private val repository: Repository): ViewModel() {
         }
     }
 
-    fun getBookmarkedNews() = repository.getFavoriteProduct()
     fun deleteEvent(product: ProductEntity) {
         viewModelScope.launch {
             repository.setBookmarkedProduct(product, false)

@@ -3,7 +3,6 @@ package com.capstone.skinpal.ui
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.capstone.skinpal.BuildConfig
@@ -12,7 +11,6 @@ import com.capstone.skinpal.data.remote.retrofit.ApiService
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserModel
 import com.capstone.skinpal.data.UserPreference
-import com.capstone.skinpal.data.local.entity.ImageEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
 import com.capstone.skinpal.data.local.entity.AnalysisEntity
 import com.capstone.skinpal.data.local.entity.ArticleEntity
@@ -21,7 +19,6 @@ import com.capstone.skinpal.data.local.room.ImageDao
 import com.capstone.skinpal.data.local.room.ProductDao
 import com.capstone.skinpal.data.local.room.SkinAnalysisDao
 import com.capstone.skinpal.data.remote.response.ErrorResponse
-import com.capstone.skinpal.data.remote.response.FileUploadResponse
 import com.capstone.skinpal.data.remote.response.ProfileResponse
 import com.capstone.skinpal.data.remote.response.UploadProfileResponse
 import com.capstone.skinpal.data.remote.retrofit.ApiService2
@@ -56,20 +53,6 @@ class Repository(
         userPreference.logout()
     }
 
-    /*fun getImage(week: String): LiveData<Result<ImageEntity>> {
-        return imageDao.getItem().asLiveData().map { items ->
-            val weekInt = week.toIntOrNull()
-            if (weekInt == null) {
-                Result.Error("Invalid week format: $week")
-            } else {
-                val filteredItem = items.find { it.week == weekInt }
-                filteredItem?.let {
-                    Result.Success(it)
-                } ?: Result.Error("No saved item for week $week")
-            }
-        }
-    }*/
-
     fun getImage(userId: String, week: String): LiveData<Result<AnalysisEntity>> {
         return skinAnalysisDao.getImageByUserIdAndWeek(userId, week).map { analysisImageUri ->
             if (analysisImageUri != null) {
@@ -96,13 +79,10 @@ class Repository(
     fun getProducts(): LiveData<Result<List<ProductEntity>>> = liveData {
         emit(Result.Loading)
         try {
-            // Emit database content first
             emitSource(productDao.getProduct().map { Result.Success(it) })
 
-            // Fetch from API
             val response = apiService.getProduct()
 
-            // Map response items to entities
             val productEntities = response.map { product ->
                 val isBookmarked = productDao.isProductBookmarked(product.name)
                 ProductEntity(
@@ -115,7 +95,6 @@ class Repository(
                 )
             }
 
-            // Save to database
             withContext(Dispatchers.IO) {
                 productDao.insertProduct(productEntities)
             }
@@ -130,7 +109,6 @@ class Repository(
         emit(Result.Loading)
         try {
             withContext(Dispatchers.IO) {
-                // Create RegisterRequest object
                 val registerRequest = RegisterRequest(
                     name = name,
                     user_id = user_id,
@@ -143,7 +121,6 @@ class Repository(
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorMessage = try {
-                // Parse the specific error message from server
                 Gson().fromJson(errorBody, ErrorResponse::class.java).detail
                     ?: "Register failed"
             } catch (jsonException: Exception) {
@@ -176,7 +153,6 @@ class Repository(
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorMessage = try {
-                // Parse the specific error message from server
                 Gson().fromJson(errorBody, ErrorResponse::class.java).detail
                     ?: "Login failed"
             } catch (jsonException: Exception) {
@@ -192,7 +168,7 @@ class Repository(
     }
 
     fun getAnalysisByUserId(userId: String): LiveData<Result<AnalysisEntity>> = liveData {
-        emit(Result.Loading) // Emit a loading state
+        emit(Result.Loading)
 
         try {
             val analysis = withContext(Dispatchers.IO) {
@@ -200,9 +176,8 @@ class Repository(
             }
 
             if (analysis != null) {
-                emit(Result.Success(analysis)) // Emit the successful result
+                emit(Result.Success(analysis))
             } else {
-                //emit(Result.Error("No analysis found for userId: $userId")) // Emit an error if no analysis is found
             }
         } catch (e: Exception) {
             emit(Result.Error("Error fetching analysis: ${e.message}")) // Emit an error if an exception occurs
@@ -211,19 +186,15 @@ class Repository(
 
     fun getAnalysis(user_id: String, week: String) = liveData(Dispatchers.IO) {
         try {
-            // Get user session
             val userSession = userPreference.getSession()
             val userId = userSession.user ?: throw Exception("User session is invalid")
-            // Make API call
             val response = apiService.getAnalysis(userId, week).execute()
 
             if (response.isSuccessful) {
                 response.body()?.let { result ->
 
-                    // Map API response to model
                     val skinHealthData = result.resultYourSkinhealth
 
-                    // Prepare AnalysisEntity to store in the database
                     val analysisResult = AnalysisResult(
                         userId = userId,
                         week = week,
@@ -256,25 +227,18 @@ class Repository(
     }
 
     fun getResult(): LiveData<Result<AnalysisEntity>> = liveData {
-        emit(Result.Loading) // Emit a loading state
-
+        emit(Result.Loading)
         try {
             val analysis = withContext(Dispatchers.IO) {
                 skinAnalysisDao.getResult() // Fetch from database
             }
 
             if (analysis != null) {
-                emit(Result.Success(analysis)) // Emit the successful result
-            } else {
-                //emit(Result.Error("No analysis found for userId: $userId")) // Emit an error if no analysis is found
+                emit(Result.Success(analysis))
             }
         } catch (e: Exception) {
             emit(Result.Error("Error fetching analysis: ${e.message}")) // Emit an error if an exception occurs
         }
-    }
-
-    fun getAnalysis() {
-
     }
 
     fun saveSession(user: UserModel) {
@@ -303,70 +267,16 @@ class Repository(
         emitSource(localData)
     }
 
-    suspend fun deleteAll() {
-        articleDao.deleteAll()
-    }
-
-    fun uploadImage(
-        user_id: String,
-        imageFile: File,
-        week: String
-    ) = liveData(Dispatchers.IO) {
-        emit(Result.Loading)
-        try {
-            // Get user session data from UserPreference
-            val userSession = userPreference.getSession()
-            userSession.user // Make sure this returns just the userId string
-
-            // Create multipart request
-            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            val imagePart = MultipartBody.Part.createFormData(
-                "file",
-                imageFile.name,
-                requestImageFile
-            )
-
-            // Make API call
-            val response = apiService.uploadImage(
-                user_id = userPreference.getSession().user.toString(),
-                week = week,
-                file = imagePart
-            ).execute()
-
-            if (response.isSuccessful) {
-                emit(Result.Success(FileUploadResponse(false, "Image uploaded successfully")))
-            } else {
-                /* val errorBody = response.errorBody()?.string()
-                 Log.e("Repository", """
-                 Upload failed:
-                 Code: ${response.code()}
-                 Error: $errorBody
-              """.trimIndent())
-                 emit(Result.Error("Upload failed: ${response.code()} - $errorBody"))*/
-            }
-        } catch (e: Exception) {
-            Log.e("Repository", "Upload exception", e)
-            //emit(Result.Error("Error: ${e.message}"))
-        }
-    }
-
-    suspend fun insertSkinAnalysis(skinAnalysis: AnalysisEntity) {
-        skinAnalysisDao.insertAnalysis(skinAnalysis)
-    }
-
     fun analyzeImage(user_id: String, imageFile: File, week: String) = liveData(Dispatchers.IO) {
         emit(Result.Loading)
 
         try {
-            // Get user session
             val userSession = userPreference.getSession()
             val userId = userSession.user ?: throw Exception("User session is invalid")
 
-            // Prepare image for upload
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
             val imagePart = MultipartBody.Part.createFormData("file", imageFile.name, requestImageFile)
 
-            // Make API call
             val response = apiService.analyzeImage(userId, week, imagePart).execute()
 
             if (response.isSuccessful) {
@@ -411,9 +321,9 @@ class Repository(
 
     fun JsonElement.toPercent(): String {
         return if (this.isJsonPrimitive && this.asJsonPrimitive.isNumber) {
-            String.format(Locale.US, "%.2f%%", this.asDouble ) // Specify the locale explicitly
+            String.format(Locale.US, "%.2f%%", this.asDouble )
         } else {
-            "N/A" // Handle cases where the JsonElement is not a number
+            "N/A"
         }
     }
 
@@ -421,7 +331,7 @@ class Repository(
         emit(Result.Loading)
         try {
             val eventDetail = apiService.getProductDetail()
-            eventDetail?.let { product ->
+            eventDetail.let { product ->
                 val isBookmarked = productDao.isProductBookmarked(product.name)
                 val productEntity = ProductEntity(
                     product.name,
@@ -463,13 +373,6 @@ class Repository(
         }
 
         return result
-    }
-
-
-    suspend fun removePrediction(id: Int) {
-        withContext(Dispatchers.IO) {
-            imageDao.deleteItem(id)
-        }
     }
 
     suspend fun getUserProfile(userId: String): ProfileResponse {

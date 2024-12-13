@@ -45,7 +45,7 @@ class HomeFragment : BottomSheetDialogFragment(), BaseFragment {
         setupUI()
         setupRecyclerView()
         observeArticles()
-        setupSlider() // Tambahkan setupSlider untuk slider skin type
+        setupSlider()
         binding.buttonProgress.setOnClickListener {
             navigateToHistoryFragment()
         }
@@ -60,24 +60,22 @@ class HomeFragment : BottomSheetDialogFragment(), BaseFragment {
     }
 
     private fun setupSlider() {
-        // Data untuk slider skin type
         val images = listOf(
-            R.drawable.oily, // Ganti dengan resource gambar Anda
+            R.drawable.oily,
             R.drawable.dry,
             R.drawable.combi
         )
         val titles = listOf(
-            "Oily Skin",
-            "Dry Skin",
-            "Combination Skin"
+            getString(R.string.oily_skin),
+            getString(R.string.dry_skin),
+            getString(R.string.combination_skin)
         )
         val descriptions = listOf(
-            "Your skin produces excess oil, leading to shine and acne.",
-            "Your skin feels tight and lacks moisture.",
-            "Your skin is oily in some areas and dry in others."
+            getString(R.string.oily_skin_desc),
+            getString(R.string.dry_skin_desc),
+            getString(R.string.combi_skin_desc)
         )
 
-        // Inisialisasi adapter ViewPager2
         val skinTypeAdapter = SkinTypeAdapter(images, titles, descriptions)
         binding.skinTypeViewPager.adapter = skinTypeAdapter
     }
@@ -90,8 +88,8 @@ class HomeFragment : BottomSheetDialogFragment(), BaseFragment {
         if (!userId.isNullOrEmpty()) {
             homeViewModel.fetchUserProfile()
         } else {
-            handleApiError("User not authenticated", requireContext())
-            Log.e("AccountFragment", "User ID kosong atau belum login")
+            handleApiError(getString(R.string.user_not_authenticated), requireContext())
+            Log.e(getString(R.string.accountfragment), getString(R.string.user_id_kosong_atau_belum_login))
         }
 
         homeViewModel.fetchUserProfile()
@@ -139,7 +137,6 @@ class HomeFragment : BottomSheetDialogFragment(), BaseFragment {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        // Placeholder untuk progress bar
     }
 
     fun navigateToHistoryFragment() {

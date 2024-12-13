@@ -149,16 +149,6 @@ class ProductFragment : Fragment(), BaseFragment {
         }
     }
 
-    fun navigateToHistoryFragment() {
-        findNavController().navigate(
-            R.id.navigation_reminder,
-            null,
-            androidx.navigation.NavOptions.Builder()
-                .setPopUpTo(R.id.navigation_home, true)
-                .build()
-        )
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

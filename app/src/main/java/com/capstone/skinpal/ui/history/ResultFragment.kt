@@ -252,10 +252,6 @@ class ResultFragment : BottomSheetDialogFragment() {
         }
 
         treatmentAdapter.submitList(treatmentEntities)
-
-        // Update the RecyclerView data
-        // val recommendations = analysis.recommendations ?: emptyList()
-        //resultAdapter.submitList(recommendations)
         Log.d("ResultFragment", "Analysis: $analysis")
     }
 

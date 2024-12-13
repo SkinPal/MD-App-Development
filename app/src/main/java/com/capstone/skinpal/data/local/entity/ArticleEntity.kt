@@ -8,13 +8,8 @@ import com.google.gson.annotations.SerializedName
 data class ArticleEntity(
 
     @field:PrimaryKey
-    @field:SerializedName("title")
     val title: String,
-
-    @field:SerializedName("urlToImage")
     val urlToImage: String,
-
-    @field:SerializedName("url")
     val url: String? = null,
 
 )

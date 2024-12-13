@@ -30,7 +30,6 @@ class HomeViewModel(private val repository: Repository): ViewModel() {
     fun fetchUserProfile() {
         viewModelScope.launch {
             try {
-                // Ambil userId dari sesi
                 val userId = repository.getUserSession().user
                 Log.d("DEBUG", "userId sebelum request: $userId") // Log userId
 

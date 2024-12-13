@@ -18,30 +18,13 @@ data class AnalysisResult(
     val recommendations: String,
     val imageUri: String?,
     val publicUrl: String,
-    // Store as JSON string
     val timestamp: Long = System.currentTimeMillis(),
-    @field:SerializedName("moisturizer")
     val moisturizer: List<MoisturizerItem>,
-
-    @field:SerializedName("treatment")
     val treatment: List<TreatmentItem>,
-
-    @field:SerializedName("sunscreen")
     val sunscreen: List<SunscreenItem>,
-
-    @field:SerializedName("toner")
     val toner: List<TonerItem>,
-
-    @field:SerializedName("serum")
     val serum: List<SerumItem>,
-
-    @field:SerializedName("facial_wash")
     val facialWash: List<FacialWashItem>,
-
-    @field:SerializedName("percentage")
     val percentage: String?,
-
-    @field:SerializedName("message")
     val message: String?
-
 )

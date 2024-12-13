@@ -37,7 +37,6 @@ class OnboardingAdapter(private val items: List<OnboardingItem>) :
         }
 
         fun animateImage(imageView: ImageView) {
-            // Buat animasi bergoyang
             val animator = ObjectAnimator.ofFloat(imageView, "translationX", -20f, 20f).apply {
                 duration = 1000
                 repeatCount = ObjectAnimator.INFINITE

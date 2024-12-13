@@ -22,23 +22,20 @@ class SplashScreenActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (isFirstLaunch) {
-                // Jika pertama kali, arahkan ke OnboardingActivity
                 startActivity(Intent(this, OnboardingActivity::class.java))
                 sharedPreferences.edit().putBoolean("isFirstLaunch", false).apply()
             } else {
                 val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
                 when {
                     isLoggedIn -> {
-                        // User sudah login dan belum logout
                         startActivity(Intent(this, MainActivity::class.java))
                     }
                     else -> {
-                        // User belum login
                         startActivity(Intent(this, LoginActivity::class.java))
                     }
                 }
             }
             finish()
-        }, 2000) // Durasi splash screen 2 detik
+        }, 2000)
     }
 }
