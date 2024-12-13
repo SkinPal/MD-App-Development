@@ -8,24 +8,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.skinpal.R
 import com.capstone.skinpal.data.Result
 import com.capstone.skinpal.data.UserPreference
-import com.capstone.skinpal.data.local.entity.AnalysisEntity
 import com.capstone.skinpal.data.local.entity.ProductEntity
-import com.capstone.skinpal.data.remote.response.MoisturizerItem
 import com.capstone.skinpal.databinding.FragmentResultBinding
 import com.capstone.skinpal.di.Injection
 import com.capstone.skinpal.ui.ViewModelFactory
-import com.capstone.skinpal.ui.product.ProductAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.util.Locale
 
 class ResultFragment : BottomSheetDialogFragment() {
 

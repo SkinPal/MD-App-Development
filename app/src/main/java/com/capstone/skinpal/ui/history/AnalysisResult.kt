@@ -6,7 +6,6 @@ import com.capstone.skinpal.data.remote.response.SerumItem
 import com.capstone.skinpal.data.remote.response.SunscreenItem
 import com.capstone.skinpal.data.remote.response.TonerItem
 import com.capstone.skinpal.data.remote.response.TreatmentItem
-import com.google.gson.annotations.SerializedName
 
 data class AnalysisResult(
     val userId: String,

@@ -1,6 +1,5 @@
 package com.capstone.skinpal.ui.product
 
-import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle

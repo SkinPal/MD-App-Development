@@ -2,7 +2,6 @@ package com.capstone.skinpal.data.remote.retrofit
 
 import com.capstone.skinpal.BuildConfig
 import com.capstone.skinpal.BuildConfig.BASE_URL
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

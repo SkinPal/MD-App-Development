@@ -40,7 +40,8 @@
             android:scaleType="centerCrop"
             android:src="@drawable/profile_bg"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
+            tools:layout_editor_absoluteX="0dp"
+            tools:ignore="ContentDescription" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/photo_profile"

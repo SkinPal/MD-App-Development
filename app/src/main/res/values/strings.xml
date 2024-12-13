@@ -15,7 +15,7 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="title_register_page">Welcome to SkinPal!</string>
-    <string name="register">Register</string>
+    <string name="register">REGISTER</string>
     <string name="fill_name">Enter your name</string>
     <string name="name">Name</string>
     <string name="title_product">Product Recommendations</string>
@@ -151,4 +151,6 @@
     <string name="sunscreen">Sunscreen</string>
     <string name="treatment">Treatment</string>
     <string name="skin_type_result">Skin Type:</string>
+    <string name="welcome_to_skinpal">Welcome to SkinPal</string>
+    <string name="your_personalized_skincare_assistant">Your personalized skincare assistant!</string>
 </resources>

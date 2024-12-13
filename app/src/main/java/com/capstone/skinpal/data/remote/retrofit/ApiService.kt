@@ -1,7 +1,6 @@
 package com.capstone.skinpal.data.remote.retrofit
 
 import com.capstone.skinpal.data.remote.response.AnalyzeResponse
-import com.capstone.skinpal.data.remote.response.ArticleResponse
 import com.capstone.skinpal.data.remote.response.LoginResponse
 import com.capstone.skinpal.data.remote.response.ProductResponseItem
 import com.capstone.skinpal.data.remote.response.ProfileResponse

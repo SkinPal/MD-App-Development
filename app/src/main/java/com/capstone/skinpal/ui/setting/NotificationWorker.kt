@@ -23,7 +23,7 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) : Wor
     private var resultStatus: Result? = null
 
     override fun doWork(): Result {
-        showNotification("Scheduled Notification", "This is your scheduled notification.")
+        showNotification("Daily Reminder", "This is your scheduled notification.")
         return Result.success()
     }
 

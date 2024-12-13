@@ -1,12 +1,12 @@
-package com.capstone.skinpal.ui
+package com.capstone.skinpal.ui.splash
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.skinpal.R
+import com.capstone.skinpal.ui.MainActivity
 import com.capstone.skinpal.ui.login.LoginActivity
 import com.capstone.skinpal.ui.onboarding.OnboardingActivity
 

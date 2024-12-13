@@ -12,8 +12,6 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.capstone.skinpal.R
 import kotlin.text.isNotEmpty
-import kotlin.text.matches
-import kotlin.text.toRegex
 
 class UserIdEditText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
