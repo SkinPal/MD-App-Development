@@ -13,10 +13,10 @@
 This project is a Kotlin-based application designed to run on Android Studio. The application provides features such as skin analysis, skin recommendations, and skin tracking by leveraging AI. Additionally, this SkinPal app provides daily notifications to remind users to follow their daily skincare routine.
 
 ## Tools
-•	Android Studio.
-•	Kotlin.
-•	Retrofit.
-•	Room.
+-	Android Studio
+-	Kotlin
+-	Retrofit
+-	Room
 
 ## Prequisities
 Before starting, ensure you have:
