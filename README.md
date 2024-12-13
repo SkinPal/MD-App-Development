@@ -57,4 +57,10 @@ Follow these steps to run this project:
 - **Minimum Android Version:** Perangkat target harus memenuhi persyaratan versi minimum yang ditentukan dalam file `build.gradle`.
 - **Debugging:**  If the app fails to run, use "Logcat" to trace errors.
 
+## Demo Link
+https://youtu.be/taxuwjVi_RE
+
+## Download Our App
+
+
 
