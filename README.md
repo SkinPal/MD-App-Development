@@ -9,57 +9,52 @@
 | A312B4KX3218 | Nadzira Karimantika Atsarirahmati |  Mobile Development | Universitas Sebelas Maret | [![text](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nadzira-karimantika-atsarirahmati-211b62271) |
 
 
-## Deskripsi Proyek
-Proyek ini adalah aplikasi berbasis Kotlin yang dirancang untuk dijalankan di Android Studio. Aplikasi ini menyediakan fitur seperti skin analysis, skin recommendation, and skin tracking dengan memanfaatkan AI.
+## Project Description
+This project is a Kotlin-based application designed to run on Android Studio. The application provides features such as skin analysis, skin recommendations, and skin tracking by leveraging AI. Additionally, this SkinPal app provides daily notifications to remind users to follow their daily skincare routine.
 
-## Prasyarat
-Sebelum memulai, pastikan Anda memiliki:
+## Tools
+•	Android Studio
+•	Kotlin
+•	Retrofit
+•	Room
 
-1. **Android Studio** (versi terbaru) - IDE utama untuk mengembangkan dan menjalankan aplikasi Android.
-2. **JDK (Java Development Kit)** - Sebaiknya gunakan versi terbaru.
-3. **Gradle** - Terintegrasi dalam Android Studio, tetapi pastikan sinkronisasi berjalan lancar.
-4. **Koneksi Internet** - Diperlukan untuk mengunduh dependensi proyek.
-5. **Perangkat Android atau Emulator** - Untuk menjalankan aplikasi.
+## Prequisities
+Before starting, ensure you have:
 
-## Cara Menggunakan
-Ikuti langkah-langkah berikut untuk menjalankan proyek ini:
+1. **Android Studio** (latest version) - The primary IDE for developing and running Android applications.
+2. **JDK (Java Development Kit)** - It's recommended to use the latest version.
+3. **Gradle** - Integrated into Android Studio, but make sure synchronization works properly.
+4. **Koneksi Internet** - Required to download project dependencies.
+5. **Perangkat Android atau Emulator** - To run the application.
 
-### 1. Ekstrak File
-- Unduh file zip proyek dan ekstrak ke direktori pilihan Anda.
+## How to Use
+Follow these steps to run this project:
 
-### 2. Buka Proyek di Android Studio
-- Jalankan Android Studio.
-- Pilih "Open an Existing Project".
-- Arahkan ke folder hasil ekstraksi, lalu pilih folder utama proyek.
+### 1. Extract Files
+- Download the project zip file and extract it to your preferred directory.
 
-### 3. Sinkronisasi Proyek
-- Android Studio akan secara otomatis memulai sinkronisasi Gradle.
-- Pastikan tidak ada error selama proses ini. Jika terjadi error, periksa koneksi internet atau file `build.gradle`.
+### 2. Open the Project in Android Studio
+- Launch Android Studio.
+- Select "Open an Existing Project."
+- Navigate to the extracted folder and select the main project folder.
 
-### 4. Jalankan Aplikasi
-- Hubungkan perangkat Android Anda dengan mode developer (aktifkan "USB Debugging") atau siapkan emulator melalui Android Studio.
-- Klik tombol "Run" (ikon segitiga hijau) di toolbar.
-- Pilih perangkat target, lalu tunggu hingga aplikasi berjalan.
+### 3. Sync the Project
+- Android Studio will automatically start Gradle synchronization.
+- Ensure there are no errors during this process. If errors occur, check your internet connection or the `build.gradle` file.
 
-### 5. Debugging dan Pengujian
-- Gunakan fitur "Logcat" di Android Studio untuk memantau log selama aplikasi berjalan.
-- Pastikan semua fitur berfungsi seperti yang diharapkan.
+### 4. Run the Application
+- Connect your Android device in developer mode (enable "USB Debugging") or set up an emulator in Android Studio.
+- Click the "Run" button (green triangle icon) in the toolbar.
+- Select the target device and wait for the application to launch.
 
-## Struktur Folder
-Proyek ini memiliki struktur folder berikut:
+### 5. Debugging and Testing
+- Use the "Logcat" feature in Android Studio to monitor logs while the application runs.
+- Ensure all features work as expected.
 
-- `app/`: 
-  - Berisi kode sumber aplikasi termasuk file XML (UI) dan file Kotlin (logika aplikasi).
-- `gradle/`: 
-  - Berisi konfigurasi Gradle untuk pengelolaan dependensi dan build.
-- `build.gradle`: 
-  - File utama untuk mengelola versi SDK, dependensi, dan konfigurasi proyek.
-- `manifest/`:
-  - Berisi file `AndroidManifest.xml` yang mengatur izin aplikasi, aktivitas, dan metadata lainnya.
 
-## Catatan Penting
-- **Masalah Sinkronisasi:** Jika terjadi error selama sinkronisasi Gradle, pastikan Anda memiliki koneksi internet stabil dan versi Gradle yang kompatibel.
-- **Versi Minimum Android:** Perangkat target harus memenuhi persyaratan versi minimum yang ditentukan dalam file `build.gradle`.
-- **Debugging:** Jika aplikasi tidak berjalan, gunakan "Logcat" untuk melacak error.
+## Important Notes
+- **Synchronization Issues:**  If errors occur during Gradle synchronization, ensure you have a stable internet connection and a compatible Gradle version.
+- **Minimum Android Version:** Perangkat target harus memenuhi persyaratan versi minimum yang ditentukan dalam file `build.gradle`.
+- **Debugging:**  If the app fails to run, use "Logcat" to trace errors.
 
 
