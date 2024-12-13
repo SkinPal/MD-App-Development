@@ -30,7 +30,7 @@
             android:textColor="@color/secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Skin Type: "
+            android:text="@string/skin_type_result"
             android:gravity="center"
             android:textSize="18sp" />
 
@@ -55,7 +55,7 @@
                     android:id="@+id/acne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Acne: "
+                    android:text="@string/acne"
                     android:textColor="@color/secondary"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -74,9 +74,10 @@
 
                 <TextView
                     android:id="@+id/redness"
-                    android:text="Redness: "
+                    android:text="@string/redness"
                     android:textColor="@color/secondary"
                     android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="@id/acne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
@@ -95,8 +96,9 @@
 
                 <TextView
                     android:id="@+id/wrinkles"
-                    android:text="Wrinkles: "
+                    android:text="@string/wrinkles"
                     android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="@id/acne"
                     android:textColor="@color/secondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -124,7 +126,7 @@
             android:textColor="@color/secondary"
             android:textSize="16sp"
             android:layout_gravity="center"
-            android:text="Monthly Progress"
+            android:text="@string/monthly_progress"
             android:visibility="gone"
             android:textStyle="bold"/>
         <TextView
@@ -136,7 +138,7 @@
             android:textSize="16sp"
             android:visibility="gone"
             android:layout_gravity="center"
-            android:text="progress value"/>
+            android:text="@string/progress_value"/>
 
         <TextView
             android:layout_marginTop="10dp"
@@ -147,7 +149,7 @@
             android:textSize="16sp"
             android:visibility="gone"
             android:layout_gravity="center"
-            android:text="message"/>
+            android:text="@string/message"/>
 
         <TextView
             android:layout_marginTop="20dp"
@@ -156,7 +158,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/secondary"
             android:textSize="16sp"
-            android:text="Product Recommendations"
+            android:text="@string/product_recommendations"
             android:textStyle="bold"/>
         <!-- Product Recommendation Lists -->
         <TextView
@@ -165,12 +167,13 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/icon_more"
             android:drawablePadding="8dp"
-            android:text="Facial Wash"
+            android:text="@string/facial_wash"
             android:textColor="@color/secondary"
             android:padding="8dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="?android:attr/selectableItemBackground"
+            tools:ignore="UseCompatTextViewDrawableXml" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/facial_wash_recycler"
             android:layout_width="match_parent"
@@ -183,12 +186,13 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/icon_more"
             android:drawablePadding="8dp"
-            android:text="Toner"
+            android:text="@string/toner"
             android:textColor="@color/secondary"
             android:padding="8dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="?android:attr/selectableItemBackground"
+            tools:ignore="UseCompatTextViewDrawableXml" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/toner_recycler"
             android:layout_width="match_parent"
@@ -201,12 +205,13 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/icon_more"
             android:drawablePadding="8dp"
-            android:text="Serum"
+            android:text="@string/serum"
             android:textColor="@color/secondary"
             android:padding="8dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="?android:attr/selectableItemBackground"
+            tools:ignore="UseCompatTextViewDrawableXml" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/serum_recycler"
             android:layout_width="match_parent"
@@ -219,12 +224,13 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/icon_more"
             android:drawablePadding="8dp"
-            android:text="Moisturizer"
+            android:text="@string/moisturizer"
             android:textColor="@color/secondary"
             android:padding="8dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="?android:attr/selectableItemBackground"
+            tools:ignore="UseCompatTextViewDrawableXml" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/moisturizer_recycler"
             android:layout_width="match_parent"
@@ -237,12 +243,13 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/icon_more"
             android:drawablePadding="8dp"
-            android:text="Sunscreen"
+            android:text="@string/sunscreen"
             android:textColor="@color/secondary"
             android:padding="8dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="?android:attr/selectableItemBackground"
+            tools:ignore="UseCompatTextViewDrawableXml" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sunscreen_recycler"
             android:layout_width="match_parent"
@@ -255,12 +262,13 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/icon_more"
             android:drawablePadding="8dp"
-            android:text="Treatment"
+            android:text="@string/treatment"
             android:textColor="@color/secondary"
             android:padding="8dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="?android:attr/selectableItemBackground"
+            tools:ignore="UseCompatTextViewDrawableXml" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/treatment_recycler"
             android:layout_width="match_parent"

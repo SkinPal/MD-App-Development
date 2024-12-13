@@ -119,7 +119,7 @@
                         android:id="@+id/title_skintype"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="The Skin Types"
+                        android:text="@string/the_skin_types"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         app:layout_constraintTop_toTopOf="parent"
@@ -137,7 +137,7 @@
                         android:id="@+id/title_slogan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="FYI"
+                        android:text="@string/fyi"
                         android:textColor="@color/primary"
                         android:textStyle="bold"
                         android:textSize="20sp"
@@ -145,7 +145,8 @@
                         android:layout_marginEnd="20dp"
                         android:fontFamily="@font/dancing_script"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
 
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/skinTypeViewPager"
@@ -164,7 +165,7 @@
                         android:id="@+id/slide_hint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="← Slide to see more →"
+                        android:text="@string/slide_to_see_more"
                         android:textSize="12sp"
                         android:textColor="@color/secondary"
                         android:layout_marginTop="8dp"

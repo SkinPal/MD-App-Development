@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -13,7 +14,8 @@
         app:layout_constraintBottom_toBottomOf="@id/imageView"
         app:layout_constraintStart_toStartOf="@id/imageView"
         app:layout_constraintEnd_toEndOf="@id/imageView"
-        android:background="@drawable/square_primary"/>
+        android:background="@drawable/square_primary"
+        tools:ignore="ContentDescription" />
     <!-- Gambar di sebelah kiri -->
     <ImageView
         android:id="@+id/imageView"
@@ -28,7 +30,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/linearLayout" />
+        app:layout_constraintEnd_toStartOf="@id/linearLayout"
+        tools:ignore="ContentDescription" />
 
     <!-- Teks di sebelah kanan -->
     <LinearLayout
@@ -38,6 +41,7 @@
         android:orientation="vertical"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
