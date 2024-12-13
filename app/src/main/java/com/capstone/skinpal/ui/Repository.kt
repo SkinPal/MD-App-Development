@@ -44,9 +44,7 @@ class Repository(
     private val articleDao: ArticleDao,
     private val productDao: ProductDao,
     private val userPreference: UserPreference,
-    private val imageDao: ImageDao,
-    private val skinAnalysisDao: SkinAnalysisDao,
-    private val analysisDatabase: AnalysisDatabase
+    private val skinAnalysisDao: SkinAnalysisDao
 ) {
 
     fun clearSession() {
@@ -125,7 +123,7 @@ class Repository(
                     ?: "Register failed"
             } catch (jsonException: Exception) {
                 Log.e("Repository", "Error parsing error response: ${jsonException.message}")
-                "REgister failed"
+                "Register failed"
             }
             emit(Result.Error(errorMessage))
         } catch (e: IOException) {
@@ -397,6 +395,8 @@ class Repository(
             imageDao: ImageDao,
             skinAnalysisDao: SkinAnalysisDao,
             analysisDatabase: AnalysisDatabase
-        ): Repository = Repository(apiService, apiService2, articleDao, productDao, userPreference, imageDao, skinAnalysisDao, analysisDatabase)
+        ): Repository = Repository(apiService, apiService2, articleDao, productDao, userPreference,
+            skinAnalysisDao
+        )
     }
 }

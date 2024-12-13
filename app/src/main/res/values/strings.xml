@@ -128,4 +128,9 @@
     <string name="pilih_foto">Pilih Foto</string>
     <string name="izin_kamera_diperlukan">Izin Kamera Diperlukan</string>
     <string name="akses_kamera">Aplikasi memerlukan akses kamera untuk mengambil foto profil.</string>
+    <string name="next">Next</string>
+    <string name="skin_type_normal">Skin Type: Normal</string>
+    <string name="conditions_acne_redness_wrinkles">Conditions: Acne, Redness, Wrinkles</string>
+    <string name="_32_41_progress">32.41% progress</string>
+    <string name="notes">Notes</string>
 </resources>
